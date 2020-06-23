@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PictureMaker</string>
-    <string name="menu_item_favorite">Favorite</string>
     <string name="menu_item_recently">Recently</string>
-    <string name="menu_item_persone">Profile</string>
+    <string name="menu_item_profile">Profile</string>
+    <string name="menu_item_home">Home</string>
+    <string name="menu_item_gallery">Gallery</string>
 </resources>
