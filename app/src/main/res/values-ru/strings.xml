@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PictureMaker</string>
+    <string name="menu_item_favorite">Любимое</string>
+    <string name="menu_item_recently">Недавние</string>
+    <string name="menu_item_persone">Профиль</string>
+</resources>
