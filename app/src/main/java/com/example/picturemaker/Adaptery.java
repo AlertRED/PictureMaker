@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,11 @@ public class Adaptery extends RecyclerView.Adapter<MyViewHolder> {
         });
         holder.image.setImageResource(images[position]);
         holder.text.setText(texts[position]);
+        if (position>0){
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 20, 0, 0);
+            holder.itemView.setLayoutParams(params);
+        }
     }
 
     @Override
