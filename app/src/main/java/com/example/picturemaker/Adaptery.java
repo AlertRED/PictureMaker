@@ -1,53 +1,56 @@
 package com.example.picturemaker;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class Adaptery extends BaseAdapter {
+import androidx.recyclerview.widget.RecyclerView;
 
-    private Context mContext;
-    private final String [] values;
-    private final int [] images;
 
-    public Adaptery(Context mContext, String[] values, int[] images) {
-        this.mContext = mContext;
-        this.values = values;
-        this.images = images;
-        for (String s: values) {
-            Log.i("", s);
-        }
+class MyViewHolder extends RecyclerView.ViewHolder{
+    public ImageView image;
+    public TextView text;
+
+    public MyViewHolder(View itemView) {
+        super(itemView);
+        image = (ImageView)itemView.findViewById(R.id.imageview);
+        text = (TextView)itemView.findViewById(R.id.textview);
+    }
+}
+
+public class Adaptery extends RecyclerView.Adapter<MyViewHolder> {
+
+    String[] texts;
+    int[] images;
+
+    public Adaptery(String[] texts, int[] logoList) {
+        this.texts = texts;
+        this.images = logoList;
     }
 
     @Override
-    public int getCount(){
-        return values.length;
-    }
-
-    public Object getItem(int position){
-        return values[position];
-    }
-
-    public long getItemId(int position){
-        return position;
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.gallery_item, parent, false);
+        return new MyViewHolder(v);
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if  (view == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.item_gallery, null);
-            ImageView imageView = (ImageView) view.findViewById(R.id.imageview);
-            TextView textView = (TextView) view.findViewById(R.id.textview);
-            imageView.setImageResource(images[i]);
-            textView.setText(values[i]);
-        }
-        return view;
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), texts[position], Toast.LENGTH_SHORT).show();
+            }
+        });
+        holder.image.setImageResource(images[position]);
+        holder.text.setText(texts[position]);
+    }
+
+    @Override
+    public int getItemCount() {
+        return texts.length;
     }
 }

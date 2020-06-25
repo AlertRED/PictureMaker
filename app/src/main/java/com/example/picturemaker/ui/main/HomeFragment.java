@@ -7,7 +7,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import com.example.picturemaker.R;
 public class HomeFragment extends Fragment {
 
     private MainViewModel mViewModel;
+    RecyclerView rvMain;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -52,8 +56,9 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         // TODO: Use the ViewModel
-        GridView gridView = this.getView().findViewById(R.id.grid_gallery);
-        gridView.setAdapter(new Adaptery(this.getContext(), values, images));
-        gridView.setNumColumns(1);
+        rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rvMain);
+        Adaptery adapter = new Adaptery(values, images);
+        rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 1));
+        rvMain.setAdapter(adapter);
     }
 }
