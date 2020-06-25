@@ -24,12 +24,6 @@ public class HomeFragment extends Fragment {
         return new HomeFragment();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -37,13 +31,21 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.home_fragment, container, false);
     }
 
-    int[] images = {R.drawable.ic_baseline_gallery_24,
-            R.drawable.ic_baseline_favorite_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_profile_24,
-            R.drawable.ic_baseline_recently_24};
+    int[] images = {
+            R.drawable.image1,
+            R.drawable.image2,
+            R.drawable.image3,
+            R.drawable.image4,
+            R.drawable.image5,
+            R.drawable.image6,
+            R.drawable.image7,
+            R.drawable.image8,
+            R.drawable.image9,
+            R.drawable.image10};
 
-    String[] values = {"слово", "слово", "слово", "слово", "слово"};
+    String[] values = {"Картина№1", "Картина№2", "Картина№3",
+            "Картина№4","Картина№5","Картина№6",
+            "Картина№7","Картина№8","Картина№9","Картина№10"};
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -52,7 +54,6 @@ public class HomeFragment extends Fragment {
         // TODO: Use the ViewModel
         GridView gridView = this.getView().findViewById(R.id.grid_gallery);
         gridView.setAdapter(new Adaptery(this.getContext(), values, images));
-        gridView.setNumColumns(2);
+        gridView.setNumColumns(1);
     }
-
 }

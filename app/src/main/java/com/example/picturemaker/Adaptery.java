@@ -1,6 +1,7 @@
 package com.example.picturemaker;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,14 @@ public class Adaptery extends BaseAdapter {
     private Context mContext;
     private final String [] values;
     private final int [] images;
-    View view;
-    LayoutInflater layoutInflater;
 
     public Adaptery(Context mContext, String[] values, int[] images) {
         this.mContext = mContext;
         this.values = values;
         this.images = images;
+        for (String s: values) {
+            Log.i("", s);
+        }
     }
 
     @Override
@@ -29,18 +31,17 @@ public class Adaptery extends BaseAdapter {
     }
 
     public Object getItem(int position){
-        return null;
+        return values[position];
     }
 
     public long getItemId(int position){
-        return 0;
+        return position;
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if  (view == null) {
-//            view = new View(mContext);
+            LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.item_gallery, null);
             ImageView imageView = (ImageView) view.findViewById(R.id.imageview);
             TextView textView = (TextView) view.findViewById(R.id.textview);
