@@ -34,22 +34,17 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                CharSequence name = item.getTitle();
                 switch (item.getItemId()) {
                     case R.id.action_home:
-                        Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
                         openFragment(HomeFragment.newInstance());
                         break;
                     case R.id.action_gallery:
-                        Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
                         openFragment(GalleryFragment.newInstance());
                         break;
                     case R.id.action_recently:
-                        Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
                         openFragment(RecentlyFragment.newInstance());
                         break;
                     case R.id.action_profile:
-                        Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
                         openFragment(ProfileFragment.newInstance());
                         break;
                 }
