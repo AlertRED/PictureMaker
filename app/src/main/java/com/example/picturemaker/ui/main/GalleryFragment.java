@@ -1,7 +1,10 @@
 package com.example.picturemaker.ui.main;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,8 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.picturemaker.Adaptery;
+import com.example.picturemaker.MainActivity;
 import com.example.picturemaker.R;
 
 public class GalleryFragment extends Fragment {
@@ -56,6 +61,15 @@ public class GalleryFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 //        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         // TODO: Use the ViewModel
+
+        TextView filter_view = (TextView) this.getActivity().findViewById(R.id.filter_view);
+
+        filter_view.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FilterGalleryActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Spinner category = (Spinner) this.getActivity().findViewById(R.id.spinner);
         String[] items = new String[]{"Сначало популярное","Оценки по убыванию", "Оценки по возрастанию", "Сложность по убыванию", "Сложность по возрастанию"};
