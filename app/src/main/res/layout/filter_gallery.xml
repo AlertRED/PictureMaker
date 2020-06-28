@@ -6,14 +6,98 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.FilterGalleryActivity">
 
+    <Spinner
+        android:id="@+id/spin_filter_genre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:spinnerMode="dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filter_gallery_toolbar" />
+
+    <Spinner
+        android:id="@+id/spin_filter_level"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:spinnerMode="dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spin_filter_act" />
+
+    <TextView
+        android:id="@+id/tv_filter_act"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Художник"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/spin_filter_act"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spin_filter_genre"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <TextView
+        android:id="@+id/tv_filter_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Сложность"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/spin_filter_level"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spin_filter_act"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <Spinner
+        android:id="@+id/spin_filter_act"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:spinnerMode="dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spin_filter_genre" />
+
+    <TextView
+        android:id="@+id/tv_filter_genre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Жанр"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/spin_filter_genre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filter_gallery_toolbar"
+        app:layout_constraintVertical_bias="0.75" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/filter_gallery_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="#536DFE"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:background="#536DFE"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="Применить"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
