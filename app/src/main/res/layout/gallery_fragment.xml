@@ -18,9 +18,22 @@
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:entries="@android:array/imProtocols"
+            android:foregroundTint="#FFFFFF"
             android:spinnerMode="dropdown" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="right"
+            android:paddingRight="20dp"
+            android:text="Фильтр"
+            android:textColor="@color/colorPanelNavigateButton"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -28,10 +41,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:scrollbarStyle="outsideOverlay" />
+        android:orientation="vertical" />
+
+    <!--    android:clipToPadding="false"-->
+<!--    android:paddingTop="8dp"-->
+<!--    android:paddingBottom="8dp"-->
+
 
 </LinearLayout>

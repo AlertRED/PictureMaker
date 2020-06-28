@@ -58,7 +58,7 @@ public class GalleryFragment extends Fragment {
         // TODO: Use the ViewModel
 
         Spinner category = (Spinner) this.getActivity().findViewById(R.id.spinner);
-        String[] items = new String[]{"Все","Кубизм", "Импрессионизм", "Реализм", "Портрет"};
+        String[] items = new String[]{"Сначало популярное","Оценки по убыванию", "Оценки по возрастанию", "Сложность по убыванию", "Сложность по возрастанию"};
         ArrayAdapter<String> category_adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         category.setAdapter(category_adapter);
 
