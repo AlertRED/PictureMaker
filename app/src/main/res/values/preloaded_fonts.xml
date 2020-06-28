@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/abeezee</item>
+        <item>@font/advent_pro</item>
+        <item>@font/aldrich</item>
+        <item>@font/arimo</item>
+        <item>@font/mate_sc</item>
+        <item>@font/simonetta</item>
+    </array>
+</resources>

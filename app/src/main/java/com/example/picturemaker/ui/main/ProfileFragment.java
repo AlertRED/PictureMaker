@@ -16,7 +16,7 @@ import com.example.picturemaker.R;
 
 public class ProfileFragment extends Fragment {
 
-    private MainViewModel mViewModel;
+//    private MainViewModel mViewModel;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -32,7 +32,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+//        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         // TODO: Use the ViewModel
     }
 

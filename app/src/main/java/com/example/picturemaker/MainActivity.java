@@ -2,6 +2,7 @@ package com.example.picturemaker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.Fragment;
 
@@ -17,35 +18,43 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    final Fragment fragment1 = new HomeFragment();
+    final Fragment fragment2 = new GalleryFragment();
+    final Fragment fragment3 = new RecentlyFragment();
+    final Fragment fragment4 = new ProfileFragment();
+    final FragmentManager fm = getSupportFragmentManager();
+    Fragment active = fragment2;
 
     public void openFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
-//        transaction.addToBackStack(null);
-        transaction.commit();
+        fm.beginTransaction().hide(active).show(fragment).commit();
+        active = fragment;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        openFragment(HomeFragment.newInstance());
+        fm.beginTransaction().add(R.id.container, fragment4, "4").hide(fragment4).commit();
+        fm.beginTransaction().add(R.id.container, fragment3, "3").hide(fragment3).commit();
+        fm.beginTransaction().add(R.id.container, fragment1, "1").hide(fragment1).commit();
+        fm.beginTransaction().add(R.id.container,fragment2, "2").commit();
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_home:
-                        openFragment(HomeFragment.newInstance());
+                        openFragment(fragment1);
                         break;
                     case R.id.action_gallery:
-                        openFragment(GalleryFragment.newInstance());
+                        openFragment(fragment2);
                         break;
                     case R.id.action_recently:
-                        openFragment(RecentlyFragment.newInstance());
+                        openFragment(fragment3);
                         break;
                     case R.id.action_profile:
-                        openFragment(ProfileFragment.newInstance());
+                        openFragment(fragment4);
                         break;
                 }
                 return true;

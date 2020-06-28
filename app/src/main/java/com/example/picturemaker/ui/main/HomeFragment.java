@@ -22,8 +22,7 @@ import com.example.picturemaker.R;
 
 public class HomeFragment extends Fragment {
 
-    private MainViewModel mViewModel;
-    RecyclerView rvMain;
+//    private MainViewModel mViewModel;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -34,32 +33,5 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.home_fragment, container, false);
-    }
-
-    int[] images = {
-            R.drawable.image1,
-            R.drawable.image2,
-            R.drawable.image3,
-            R.drawable.image4,
-            R.drawable.image5,
-            R.drawable.image6,
-            R.drawable.image7,
-            R.drawable.image8,
-            R.drawable.image9,
-            R.drawable.image10};
-
-    String[] values = {"Картина№1", "Картина№2", "Картина№3",
-            "Картина№4","Картина№5","Картина№6",
-            "Картина№7","Картина№8","Картина№9","Картина№10"};
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        // TODO: Use the ViewModel
-        rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rvMain);
-        Adaptery adapter = new Adaptery(values, images);
-        rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 1));
-        rvMain.setAdapter(adapter);
     }
 }
