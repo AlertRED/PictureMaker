@@ -3,10 +3,14 @@ package com.example.picturemaker.ui.main;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.picturemaker.R;
 
@@ -19,10 +23,17 @@ public class FilterGalleryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.filter_gallery_toolbar);
         setSupportActionBar(toolbar);
 
+        Button accept_button = (Button) findViewById(R.id.accept_filter);
+        accept_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("");
-
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
