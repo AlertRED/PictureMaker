@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Arrays;
 
-class MyViewHolder extends RecyclerView.ViewHolder{
+class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
     public ImageView image;
     public TextView text;
     public ImageButton favorite;
 
-    public MyViewHolder(View itemView) {
+    public ViewHolderGalleryRV(View itemView) {
         super(itemView);
         image = (ImageView)itemView.findViewById(R.id.imageview);
         text = (TextView)itemView.findViewById(R.id.textview);
@@ -26,27 +26,41 @@ class MyViewHolder extends RecyclerView.ViewHolder{
     }
 }
 
-public class Adaptery extends RecyclerView.Adapter<MyViewHolder> {
+public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> {
 
     String[] texts;
     int[] images;
     boolean[] is_favorites;
+    int layout_item;
+    int spacing_vertical = 0;
+    int spacing_horizontal = 0;
 
-    public Adaptery(String[] texts, int[] images) {
+    public AdapterGalleryRV(String[] texts, int[] images, int layout_item) {
         this.texts = texts;
         this.images = images;
+        this.layout_item = layout_item;
         this.is_favorites  = new boolean[texts.length];
         Arrays.fill(this.is_favorites, false);
     }
 
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.gallery_item, parent, false);
-        return new MyViewHolder(v);
+    public AdapterGalleryRV(String[] texts, int[] images, int layout_item, int spacing_vertical, int spacing_horizontal) {
+        this.texts = texts;
+        this.images = images;
+        this.layout_item = layout_item;
+        this.is_favorites  = new boolean[texts.length];
+        this.spacing_horizontal = spacing_horizontal;
+        this.spacing_vertical = spacing_vertical;
+        Arrays.fill(this.is_favorites, false);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+    public ViewHolderGalleryRV onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(this.layout_item, parent, false);
+        return new ViewHolderGalleryRV(v);
+    }
+
+    @Override
+    public void onBindViewHolder(final ViewHolderGalleryRV holder, final int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,11 +80,12 @@ public class Adaptery extends RecyclerView.Adapter<MyViewHolder> {
                 is_favorites[position] = !is_favorites[position];
             }
         });
-//        if (position>0){
-//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//            params.setMargins(0, 20, 0, 0);
-//            holder.itemView.setLayoutParams(params);
-//        }
+
+        if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && position > 0){
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
+            params.setMargins(this.spacing_horizontal, this.spacing_vertical, 0, 0);
+            holder.itemView.setLayoutParams(params);
+        }
     }
 
     @Override

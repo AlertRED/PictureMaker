@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     final Fragment fragment3 = new RecentlyFragment();
     final Fragment fragment4 = new ProfileFragment();
     final FragmentManager fm = getSupportFragmentManager();
-    Fragment active = fragment2;
+    Fragment active = fragment1;
 
     public void openFragment(Fragment fragment) {
         fm.beginTransaction().hide(active).show(fragment).commit();
@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         fm.beginTransaction().add(R.id.container, fragment4, "4").hide(fragment4).commit();
         fm.beginTransaction().add(R.id.container, fragment3, "3").hide(fragment3).commit();
-        fm.beginTransaction().add(R.id.container, fragment1, "1").hide(fragment1).commit();
-        fm.beginTransaction().add(R.id.container,fragment2, "2").commit();
+        fm.beginTransaction().add(R.id.container, fragment2, "2").hide(fragment2).commit();
+        fm.beginTransaction().add(R.id.container,fragment1, "1").commit();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

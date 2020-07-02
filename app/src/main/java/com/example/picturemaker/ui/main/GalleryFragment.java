@@ -1,16 +1,11 @@
 package com.example.picturemaker.ui.main;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,8 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.picturemaker.Adaptery;
-import com.example.picturemaker.MainActivity;
+import com.example.picturemaker.AdapterGalleryRV;
 import com.example.picturemaker.R;
 
 public class GalleryFragment extends Fragment {
@@ -76,8 +70,8 @@ public class GalleryFragment extends Fragment {
         ArrayAdapter<String> category_adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         category.setAdapter(category_adapter);
 
-        rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rvMain);
-        Adaptery rvMain_adapter = new Adaptery(values, images);
+        rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
+        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(values, images, R.layout.gallery_item_rectangle);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain.setAdapter(rvMain_adapter);
 
