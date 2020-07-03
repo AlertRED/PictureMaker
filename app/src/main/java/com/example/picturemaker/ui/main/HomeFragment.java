@@ -45,15 +45,15 @@ public class HomeFragment extends Fragment {
             R.drawable.image9,
             R.drawable.image10};
 
-    String[] values = {"Картина№1", "Картина№2", "Картина№3",
-            "Картина№4","Картина№5","Картина№6",
-            "Картина№7","Картина№8","Картина№9","Картина№10"};
+    String[] values = {"Звездная ночь", "Черный квадрат", "Мона Лиза",
+            "Утро в сосновом бору","Девятый вал","Девочка с персиками",
+            "Тайная вечеря","Постоянство памяти","Боярыня Морозова","Рождение Венеры"};
 
     private void addView(int drawable){
         LinearLayout home_ll = (LinearLayout) this.getActivity().findViewById(R.id.home_ll);
         LayoutInflater inflater = getLayoutInflater();
 
-        View layer1 = inflater.inflate(R.layout.gallery_item_rectangle, null);
+        View layer1 = inflater.inflate(R.layout.pictute_item_popular, null);
         ImageView im = layer1.findViewById(R.id.imageview);
         im.setImageResource(drawable);
 
@@ -75,7 +75,7 @@ public class HomeFragment extends Fragment {
         RecyclerView rv_last = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_last.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        AdapterHomeRV rvMain_adapter = new AdapterHomeRV(getContext(), values, images, R.layout.gallery_item_square, 0, 20);
+        AdapterHomeRV rvMain_adapter = new AdapterHomeRV(getContext(), values, images, R.layout.pictute_item_top, 0, 20);
 //        rv_last.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rv_last.setAdapter(rvMain_adapter);
     }

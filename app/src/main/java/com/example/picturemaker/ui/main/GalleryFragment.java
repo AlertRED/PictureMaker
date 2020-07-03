@@ -71,7 +71,7 @@ public class GalleryFragment extends Fragment {
         category.setAdapter(category_adapter);
 
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
-        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(values, images, R.layout.gallery_item_rectangle);
+        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(values, images, R.layout.pictute_item_popular);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain.setAdapter(rvMain_adapter);
 
