@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.picturemaker.AdapterGalleryRV;
 import com.example.picturemaker.R;
+import com.example.picturemaker.TestData;
 
 public class GalleryFragment extends Fragment {
 
@@ -71,7 +72,7 @@ public class GalleryFragment extends Fragment {
         category.setAdapter(category_adapter);
 
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
-        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(values, images, R.layout.pictute_item_popular);
+        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(TestData.names, TestData.pictures, R.layout.pictute_item_gallery,30,30,false);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain.setAdapter(rvMain_adapter);
 

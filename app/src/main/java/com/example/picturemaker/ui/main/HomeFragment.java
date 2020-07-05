@@ -15,8 +15,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.example.picturemaker.AdapterHomeRV;
+import com.example.picturemaker.AdapterHomeTopRV;
+import com.example.picturemaker.ImageHelper;
 import com.example.picturemaker.R;
+import com.example.picturemaker.TestData;
 
 public class HomeFragment extends Fragment {
 
@@ -32,22 +34,6 @@ public class HomeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.home_fragment, container, false);
     }
-
-    int[] images = {
-            R.drawable.image1,
-            R.drawable.image2,
-            R.drawable.image3,
-            R.drawable.image4,
-            R.drawable.image5,
-            R.drawable.image6,
-            R.drawable.image7,
-            R.drawable.image8,
-            R.drawable.image9,
-            R.drawable.image10};
-
-    String[] values = {"Звездная ночь", "Черный квадрат", "Мона Лиза",
-            "Утро в сосновом бору","Девятый вал","Девочка с персиками",
-            "Тайная вечеря","Постоянство памяти","Боярыня Морозова","Рождение Венеры"};
 
     private void addView(int drawable){
         LinearLayout home_ll = (LinearLayout) this.getActivity().findViewById(R.id.home_ll);
@@ -74,8 +60,7 @@ public class HomeFragment extends Fragment {
 
         RecyclerView rv_last = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_last.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        AdapterHomeRV rvMain_adapter = new AdapterHomeRV(getContext(), values, images, R.layout.pictute_item_top, 0, 20);
+        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), TestData.names, TestData.pictures, R.layout.pictute_item_top, 0, 20);
 //        rv_last.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rv_last.setAdapter(rvMain_adapter);
     }

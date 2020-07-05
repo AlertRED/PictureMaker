@@ -3,11 +3,9 @@ package com.example.picturemaker;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,18 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Arrays;
 
-class ViewHolderHomeRV extends RecyclerView.ViewHolder{
+class ViewHolderHomeTopRV extends RecyclerView.ViewHolder{
     public ImageView image;
     public TextView text;
 
-    public ViewHolderHomeRV(View itemView) {
+    public ViewHolderHomeTopRV(View itemView) {
         super(itemView);
         image = (ImageView)itemView.findViewById(R.id.imageview);
         text = (TextView)itemView.findViewById(R.id.textview);
     }
 }
 
-public class AdapterHomeRV extends RecyclerView.Adapter<ViewHolderHomeRV> {
+public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> {
 
     String[] texts;
     int[] images;
@@ -38,7 +36,7 @@ public class AdapterHomeRV extends RecyclerView.Adapter<ViewHolderHomeRV> {
     int spacing_horizontal = 0;
     Context context;
 
-    public AdapterHomeRV(Context context, String[] texts, int[] images, int layout_item) {
+    public AdapterHomeTopRV(Context context, String[] texts, int[] images, int layout_item) {
         this.context = context;
         this.texts = texts;
         this.images = images;
@@ -47,7 +45,7 @@ public class AdapterHomeRV extends RecyclerView.Adapter<ViewHolderHomeRV> {
         Arrays.fill(this.is_favorites, false);
     }
 
-    public AdapterHomeRV(Context context, String[] texts, int[] images, int layout_item, int spacing_vertical, int spacing_horizontal) {
+    public AdapterHomeTopRV(Context context, String[] texts, int[] images, int layout_item, int spacing_vertical, int spacing_horizontal) {
         this.context = context;
         this.texts = texts;
         this.images = images;
@@ -59,13 +57,13 @@ public class AdapterHomeRV extends RecyclerView.Adapter<ViewHolderHomeRV> {
     }
 
     @Override
-    public ViewHolderHomeRV onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolderHomeTopRV onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(this.layout_item, parent, false);
-        return new ViewHolderHomeRV(v);
+        return new ViewHolderHomeTopRV(v);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolderHomeRV holder, final int position) {
+    public void onBindViewHolder(final ViewHolderHomeTopRV holder, final int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
