@@ -14,9 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.picturemaker.AdapterHomeTopRV;
 import com.example.picturemaker.ImageHelper;
+import com.example.picturemaker.Item;
 import com.example.picturemaker.R;
 import com.example.picturemaker.TestData;
 
@@ -35,32 +37,49 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.home_fragment, container, false);
     }
 
-    private void addView(int drawable){
+    private void addView(final Item item){
         LinearLayout home_ll = (LinearLayout) this.getActivity().findViewById(R.id.home_ll);
         LayoutInflater inflater = getLayoutInflater();
 
-        View layer1 = inflater.inflate(R.layout.pictute_item_popular, null);
-        ImageView im = layer1.findViewById(R.id.imageview);
-        im.setImageResource(drawable);
+        View layer = inflater.inflate(R.layout.pictute_item_popular, null);
+        final ImageView image = layer.findViewById(R.id.imageview);
+        image.setImageResource(item.picture);
+
+        final ImageView favorite = layer.findViewById(R.id.favorite_image_item_home);
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!item.is_favorite){
+                    favorite.setImageResource(R.drawable.ic_favorite_36x36);
+                    Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
+                } else {
+                    favorite.setImageResource(R.drawable.ic_unfavorite_36x36);
+                    Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
+
+                }
+                item.is_favorite = !item.is_favorite;
+            }
+        });
+
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.setMargins(20,10, 20,10);
-        layer1.setLayoutParams(params);
-        home_ll.addView(layer1);
+        layer.setLayoutParams(params);
+        home_ll.addView(layer);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        this.addView(R.drawable.image1);
-        this.addView(R.drawable.image2);
-        this.addView(R.drawable.image3);
+        while(TestData.iter.hasNext()){
+            this.addView(TestData.iter.next());
+        }
 
 
         RecyclerView rv_last = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_last.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), TestData.names, TestData.pictures, R.layout.pictute_item_top, 0, 20);
+        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.pictute_item_top, 0, 20);
 //        rv_last.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rv_last.setAdapter(rvMain_adapter);
     }

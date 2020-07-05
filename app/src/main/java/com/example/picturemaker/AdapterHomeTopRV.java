@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Arrays;
+import java.util.List;
 
 class ViewHolderHomeTopRV extends RecyclerView.ViewHolder{
     public ImageView image;
@@ -28,32 +29,21 @@ class ViewHolderHomeTopRV extends RecyclerView.ViewHolder{
 
 public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> {
 
-    String[] texts;
-    int[] images;
-    boolean[] is_favorites;
     int layout_item;
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
     Context context;
 
-    public AdapterHomeTopRV(Context context, String[] texts, int[] images, int layout_item) {
+    public AdapterHomeTopRV(Context context, List<Item> items, int layout_item) {
         this.context = context;
-        this.texts = texts;
-        this.images = images;
         this.layout_item = layout_item;
-        this.is_favorites  = new boolean[texts.length];
-        Arrays.fill(this.is_favorites, false);
     }
 
-    public AdapterHomeTopRV(Context context, String[] texts, int[] images, int layout_item, int spacing_vertical, int spacing_horizontal) {
+    public AdapterHomeTopRV(Context context, int layout_item, int spacing_vertical, int spacing_horizontal) {
         this.context = context;
-        this.texts = texts;
-        this.images = images;
         this.layout_item = layout_item;
-        this.is_favorites  = new boolean[texts.length];
         this.spacing_horizontal = spacing_horizontal;
         this.spacing_vertical = spacing_vertical;
-        Arrays.fill(this.is_favorites, false);
     }
 
     @Override
@@ -67,13 +57,13 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), texts[position], Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show();
             }
         });
 
-        Bitmap bm = (Bitmap) BitmapFactory.decodeResource(context.getResources(), images[position]);
+        Bitmap bm = (Bitmap) BitmapFactory.decodeResource(context.getResources(), TestData.get(position).picture);
         holder.image.setImageBitmap(ImageHelper.getRoundedCornerBitmap(bm,10));
-        holder.text.setText(this.texts[position]);
+        holder.text.setText(TestData.get(position).name);
 
         if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && position < this.getItemCount()-1){
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
@@ -84,6 +74,6 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
 
     @Override
     public int getItemCount() {
-        return texts.length;
+        return TestData.size();
     }
 }

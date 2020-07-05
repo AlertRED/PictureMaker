@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         active = fragment;
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().add(R.id.container, fragment3, "3").hide(fragment3).commit();
         fm.beginTransaction().add(R.id.container, fragment2, "2").hide(fragment2).commit();
         fm.beginTransaction().add(R.id.container,fragment1, "1").commit();
+
+        TestData.generate();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

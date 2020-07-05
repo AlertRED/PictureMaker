@@ -18,43 +18,32 @@ import java.util.Arrays;
 class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
     public ImageView image;
     public TextView text;
-    public ImageButton favorite;
+    public ImageView favorite;
 
     public ViewHolderGalleryRV(View itemView) {
         super(itemView);
         image = (ImageView)itemView.findViewById(R.id.imageview);
         text = (TextView)itemView.findViewById(R.id.textview);
-        favorite = (ImageButton) itemView.findViewById(R.id.favorite_button_item2);
+        favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
     }
 }
 
 public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> {
 
-    String[] texts;
-    int[] images;
-    boolean[] is_favorites;
     int layout_item;
     boolean first;
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
 
-    public AdapterGalleryRV(String[] texts, int[] images, int layout_item) {
-        this.texts = texts;
-        this.images = images;
+    public AdapterGalleryRV(int layout_item) {
         this.layout_item = layout_item;
-        this.is_favorites  = new boolean[texts.length];
-        Arrays.fill(this.is_favorites, false);
     }
 
-    public AdapterGalleryRV(String[] texts, int[] images, int layout_item, int spacing_vertical, int spacing_horizontal, boolean first) {
+    public AdapterGalleryRV(int layout_item, int spacing_vertical, int spacing_horizontal, boolean first) {
         this.first = first;
-        this.texts = texts;
-        this.images = images;
         this.layout_item = layout_item;
-        this.is_favorites  = new boolean[texts.length];
         this.spacing_horizontal = spacing_horizontal;
         this.spacing_vertical = spacing_vertical;
-        Arrays.fill(this.is_favorites, false);
     }
 
     @Override
@@ -68,20 +57,23 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), texts[position], Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show();
             }
         });
-        holder.image.setImageResource(images[position]);
-        holder.text.setText(texts[position]);
+        holder.image.setImageResource(TestData.get(position).picture);
+        holder.text.setText(TestData.get(position).name);
         holder.favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!is_favorites[position]){
+                if (!TestData.get(position).is_favorite){
                     holder.favorite.setImageResource(R.drawable.ic_favorite_36x36);
+                    Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
                 } else {
                     holder.favorite.setImageResource(R.drawable.ic_unfavorite_36x36);
+                    Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
+
                 }
-                is_favorites[position] = !is_favorites[position];
+                TestData.get(position).is_favorite = !TestData.get(position).is_favorite;
             }
         });
 
@@ -94,6 +86,6 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
 
     @Override
     public int getItemCount() {
-        return texts.length;
+        return TestData.size();
     }
 }

@@ -54,7 +54,7 @@ public class RecentlyFragment extends Fragment {
                 "Картина№7","Картина№8","Картина№9","Картина№10"};
 
         RecyclerView rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_recently);
-        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(TestData.names, TestData.pictures, R.layout.pictute_item_gallery, 30,30, false);
+        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(R.layout.pictute_item_gallery, 30,30, false);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain.setAdapter(rvMain_adapter);
     }
