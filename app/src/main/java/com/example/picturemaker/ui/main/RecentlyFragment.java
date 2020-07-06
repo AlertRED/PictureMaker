@@ -38,7 +38,7 @@ public class RecentlyFragment extends Fragment {
         // TODO: Use the ViewModel
 
         RecyclerView rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_recently);
-        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(R.layout.pictute_item_gallery, 30,30, false);
+        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(this.getContext() ,R.layout.pictute_item_gallery, 30,30, false);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain.setAdapter(rvMain_adapter);
     }

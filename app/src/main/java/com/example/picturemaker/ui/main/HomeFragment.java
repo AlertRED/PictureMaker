@@ -1,5 +1,6 @@
 package com.example.picturemaker.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,8 +16,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.picturemaker.ActivityPicture;
 import com.example.picturemaker.AdapterHomeTopRV;
 import com.example.picturemaker.ImageHelper;
 import com.example.picturemaker.Item;
@@ -47,6 +50,13 @@ public class HomeFragment extends Fragment {
         LayoutInflater inflater = getLayoutInflater();
 
         View layer = inflater.inflate(R.layout.pictute_item_popular, null);
+
+        layer.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ActivityPicture.class);
+                startActivity(intent);
+            }
+        });
 
         final ImageView image = layer.findViewById(R.id.imageview);
         image.setImageResource(item.picture);

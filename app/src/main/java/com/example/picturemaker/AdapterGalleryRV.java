@@ -1,5 +1,7 @@
 package com.example.picturemaker;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,27 +22,32 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
     public ImageView image;
     public TextView text;
     public ImageView favorite;
+    public View layer;
 
     public ViewHolderGalleryRV(View itemView) {
         super(itemView);
         image = (ImageView)itemView.findViewById(R.id.imageview);
         text = (TextView)itemView.findViewById(R.id.textview);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
+        layer = itemView;
     }
 }
 
 public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> {
 
+    Context context;
     int layout_item;
     boolean first;
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
 
-    public AdapterGalleryRV(int layout_item) {
+    public AdapterGalleryRV(Context context, int layout_item) {
+        this.context = context;
         this.layout_item = layout_item;
     }
 
-    public AdapterGalleryRV(int layout_item, int spacing_vertical, int spacing_horizontal, boolean first) {
+    public AdapterGalleryRV(Context context, int layout_item, int spacing_vertical, int spacing_horizontal, boolean first) {
+        this.context = context;
         this.first = first;
         this.layout_item = layout_item;
         this.spacing_horizontal = spacing_horizontal;
@@ -67,6 +74,13 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         if (TestData.get(position).is_favorite)
             holder.favorite.setImageResource(R.drawable.ic_favorite_36x36);
         else holder.favorite.setImageResource(R.drawable.ic_unfavorite_36x36);
+
+        holder.layer.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ActivityPicture.class);
+                context.startActivity(intent);
+            }
+        });
 
         holder.favorite.setOnClickListener(new View.OnClickListener() {
             @Override

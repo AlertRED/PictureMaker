@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.FilterGalleryActivity">
+    tools:context=".FilterGalleryActivity">
 
     <Spinner
         android:id="@+id/spin_filter_genre"

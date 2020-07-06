@@ -1,6 +1,7 @@
 package com.example.picturemaker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -17,11 +18,14 @@ import java.util.Arrays;
 import java.util.List;
 
 class ViewHolderHomeTopRV extends RecyclerView.ViewHolder{
+
     public ImageView image;
     public TextView text;
+    public View layer;
 
     public ViewHolderHomeTopRV(View itemView) {
         super(itemView);
+        layer = itemView;
         image = (ImageView)itemView.findViewById(R.id.imageview);
         text = (TextView)itemView.findViewById(R.id.textview);
     }
@@ -58,6 +62,13 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        holder.layer.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ActivityPicture.class);
+                context.startActivity(intent);
             }
         });
 

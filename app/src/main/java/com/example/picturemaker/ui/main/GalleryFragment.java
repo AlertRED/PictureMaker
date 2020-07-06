@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.picturemaker.AdapterGalleryRV;
+import com.example.picturemaker.FilterGalleryActivity;
 import com.example.picturemaker.R;
-import com.example.picturemaker.TestData;
 
 public class GalleryFragment extends Fragment {
 
@@ -57,7 +56,7 @@ public class GalleryFragment extends Fragment {
         category.setAdapter(category_adapter);
 
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
-        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(R.layout.pictute_item_gallery,30,30,false);
+        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(this.getContext(), R.layout.pictute_item_gallery,30,30,false);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain.setAdapter(rvMain_adapter);
 

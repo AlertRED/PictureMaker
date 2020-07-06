@@ -1,4 +1,4 @@
-package com.example.picturemaker.ui.main;
+package com.example.picturemaker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
