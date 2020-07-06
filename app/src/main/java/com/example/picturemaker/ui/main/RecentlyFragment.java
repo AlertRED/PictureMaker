@@ -37,22 +37,6 @@ public class RecentlyFragment extends Fragment {
 //        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         // TODO: Use the ViewModel
 
-        int[] images = {
-                R.drawable.image1,
-                R.drawable.image2,
-                R.drawable.image3,
-                R.drawable.image4,
-                R.drawable.image5,
-                R.drawable.image6,
-                R.drawable.image7,
-                R.drawable.image8,
-                R.drawable.image9,
-                R.drawable.image10};
-
-        String[] values = {"Картина№1", "Картина№2", "Картина№3",
-                "Картина№4","Картина№5","Картина№6",
-                "Картина№7","Картина№8","Картина№9","Картина№10"};
-
         RecyclerView rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_recently);
         AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(R.layout.pictute_item_gallery, 30,30, false);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));

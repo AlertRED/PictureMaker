@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,22 +35,6 @@ public class GalleryFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.gallery_fragment, container, false);
     }
-
-    int[] images = {
-            R.drawable.image1,
-            R.drawable.image2,
-            R.drawable.image3,
-            R.drawable.image4,
-            R.drawable.image5,
-            R.drawable.image6,
-            R.drawable.image7,
-            R.drawable.image8,
-            R.drawable.image9,
-            R.drawable.image10};
-
-    String[] values = {"Картина№1", "Картина№2", "Картина№3",
-            "Картина№4","Картина№5","Картина№6",
-            "Картина№7","Картина№8","Картина№9","Картина№10"};
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

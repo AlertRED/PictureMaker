@@ -15,7 +15,6 @@ public class TestData {
 
     static private List<Item> items;
 
-    static public Iterator<Item> iter;
 
     static public Item get(int index){
         return items.get(index);
@@ -40,9 +39,12 @@ public class TestData {
                 "Тайная вечеря","Постоянство памяти","Рождение Венеры","Боярыня Морозова"};
 
         for (int i=0; i<pictures.length; i++){
-            TestData.items.add(new Item(pictures[i], names[i], false));
+            TestData.items.add(new Item(pictures[i], names[i], i,false));
         }
-        TestData.iter = items.iterator();
+    }
+
+    static public Iterator<Item> getIter(){
+        return items.iterator();
     }
 
 }

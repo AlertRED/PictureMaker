@@ -1,5 +1,6 @@
 package com.example.picturemaker;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,11 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         });
         holder.image.setImageResource(TestData.get(position).picture);
         holder.text.setText(TestData.get(position).name);
+
+        if (TestData.get(position).is_favorite)
+            holder.favorite.setImageResource(R.drawable.ic_favorite_36x36);
+        else holder.favorite.setImageResource(R.drawable.ic_unfavorite_36x36);
+
         holder.favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
