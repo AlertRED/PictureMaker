@@ -8,6 +8,7 @@ public class Item{
     public int id;
     public int score;
     public int progress;
+    public int total_score;
 
     public Item(int picture, String name, int id) {
         this.picture = picture;
