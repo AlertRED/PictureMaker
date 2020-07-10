@@ -54,6 +54,7 @@ public class HomeFragment extends Fragment {
         layer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ActivityPicture.class);
+                intent.putExtra("picture_id", item.id);
                 startActivity(intent);
             }
         });

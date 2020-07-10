@@ -78,6 +78,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         holder.layer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(context, ActivityPicture.class);
+                intent.putExtra("picture_id", TestData.get(position).id);
                 context.startActivity(intent);
             }
         });

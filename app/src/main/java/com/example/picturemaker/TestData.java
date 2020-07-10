@@ -20,6 +20,12 @@ public class TestData {
         return items.get(index);
     }
 
+    static public Item get_id(int id) {
+        for (Item item : items)
+            if (item.id == id) return item;
+        return get(0);
+    }
+
     static public int size(){
         return items.size();
     }
@@ -39,7 +45,7 @@ public class TestData {
                 "Тайная вечеря","Постоянство памяти","Рождение Венеры","Боярыня Морозова"};
 
         for (int i=0; i<pictures.length; i++){
-            TestData.items.add(new Item(pictures[i], names[i], i,false));
+            TestData.items.add(new Item(pictures[i], names[i], i));
         }
     }
 
