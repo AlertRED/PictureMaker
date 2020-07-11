@@ -53,24 +53,26 @@
                 android:paddingLeft="4dp">
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/puzzle1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="0"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_puzzle_piece_24x24" />
+
+                <ImageView
+                    android:id="@+id/puzzle2"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_weight="0"
                     app:srcCompat="@drawable/ic_puzzle_piece_24x24" />
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/puzzle3"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_weight="0"
-                    app:srcCompat="@drawable/ic_puzzle_piece_24x24" />
-
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="0"
+                    android:visibility="visible"
                     app:srcCompat="@drawable/ic_puzzle_piece_24x24" />
 
                 <View
@@ -107,7 +109,7 @@
                     android:paddingBottom="4dp"
                     android:text="Рейтинг: 8.1"
                     android:textColor="#000000"
-                    android:textSize="24sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/picture_my_score"
@@ -117,29 +119,37 @@
                     android:paddingTop="4dp"
                     android:paddingRight="4dp"
                     android:paddingBottom="4dp"
-                    android:text="Ваша оценка: 7.9"
+                    android:text="Моя оценка: 7.9"
                     android:textColor="#000000"
                     android:textSize="18sp" />
 
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/textView12"
+            <LinearLayout
+                android:id="@+id/activity_picture_ll_progress"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Прогресс выполнения"
-                android:textSize="18sp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/progressBar3"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="100"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:progress="80" />
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Прогресс выполнения"
+                    android:textSize="18sp" />
+
+                <ProgressBar
+                    android:id="@+id/activity_picture_progress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:progress="80" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <Button
