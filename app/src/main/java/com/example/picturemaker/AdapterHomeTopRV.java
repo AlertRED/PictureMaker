@@ -14,10 +14,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Arrays;
-import java.util.List;
-
-class ViewHolderHomeTopRV extends RecyclerView.ViewHolder{
+class ViewHolderHomeTopRV extends RecyclerView.ViewHolder {
 
     public ImageView image;
     public TextView text;
@@ -26,8 +23,8 @@ class ViewHolderHomeTopRV extends RecyclerView.ViewHolder{
     public ViewHolderHomeTopRV(View itemView) {
         super(itemView);
         layer = itemView;
-        image = (ImageView)itemView.findViewById(R.id.imageview);
-        text = (TextView)itemView.findViewById(R.id.textview);
+        image = (ImageView) itemView.findViewById(R.id.imageview);
+        text = (TextView) itemView.findViewById(R.id.textview);
     }
 }
 
@@ -38,7 +35,7 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
     int spacing_horizontal = 0;
     Context context;
 
-    public AdapterHomeTopRV(Context context, List<Item> items, int layout_item) {
+    public AdapterHomeTopRV(Context context, int layout_item) {
         this.context = context;
         this.layout_item = layout_item;
     }
@@ -74,10 +71,10 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
         });
 
         Bitmap bm = (Bitmap) BitmapFactory.decodeResource(context.getResources(), TestData.get(position).picture);
-        holder.image.setImageBitmap(ImageHelper.getRoundedCornerBitmap(bm,10));
+        holder.image.setImageBitmap(ImageHelper.getRoundedCornerBitmap(bm, 10));
         holder.text.setText(TestData.get(position).name);
 
-        if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && position < this.getItemCount()-1){
+        if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && position < this.getItemCount() - 1) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
             params.setMargins(0, this.spacing_vertical, this.spacing_horizontal, 0);
             holder.itemView.setLayoutParams(params);
