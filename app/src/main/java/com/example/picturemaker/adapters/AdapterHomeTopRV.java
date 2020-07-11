@@ -1,4 +1,4 @@
-package com.example.picturemaker;
+package com.example.picturemaker.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.picturemaker.PictureActivity;
+import com.example.picturemaker.support.ImageHelper;
+import com.example.picturemaker.R;
+import com.example.picturemaker.support.TestData;
 
 class ViewHolderHomeTopRV extends RecyclerView.ViewHolder {
 
@@ -64,7 +69,7 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
 
         holder.layer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(context, ActivityPicture.class);
+                Intent intent = new Intent(context, PictureActivity.class);
                 intent.putExtra("picture_id", TestData.get(position).id);
                 context.startActivity(intent);
             }

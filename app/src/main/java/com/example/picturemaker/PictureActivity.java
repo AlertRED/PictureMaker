@@ -1,7 +1,6 @@
 package com.example.picturemaker;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,10 +17,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.picturemaker.support.Item;
+import com.example.picturemaker.support.TestData;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityPicture extends AppCompatActivity {
+public class PictureActivity extends AppCompatActivity {
 
     private Item item;
     private ImageView picture;

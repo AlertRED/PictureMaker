@@ -12,9 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.picturemaker.AdapterGalleryRV;
+import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.R;
-import com.example.picturemaker.TestData;
 
 public class RecentlyFragment extends Fragment {
 

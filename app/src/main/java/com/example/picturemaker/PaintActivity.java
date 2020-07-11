@@ -6,6 +6,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.example.picturemaker.adapters.AdapterColorsRV;
+import com.example.picturemaker.support.Item;
+import com.example.picturemaker.support.TestData;
+
 public class PaintActivity extends AppCompatActivity {
 
     private Item item;

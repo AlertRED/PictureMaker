@@ -1,4 +1,4 @@
-package com.example.picturemaker;
+package com.example.picturemaker.support;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

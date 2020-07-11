@@ -9,26 +9,21 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.picturemaker.ActivityPicture;
-import com.example.picturemaker.AdapterHomeTopRV;
-import com.example.picturemaker.ImageHelper;
-import com.example.picturemaker.Item;
+import com.example.picturemaker.PictureActivity;
+import com.example.picturemaker.adapters.AdapterHomeTopRV;
+import com.example.picturemaker.support.Item;
 import com.example.picturemaker.R;
-import com.example.picturemaker.TestData;
+import com.example.picturemaker.support.TestData;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -53,7 +48,7 @@ public class HomeFragment extends Fragment {
 
         layer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ActivityPicture.class);
+                Intent intent = new Intent(getActivity(), PictureActivity.class);
                 intent.putExtra("picture_id", item.id);
                 startActivity(intent);
             }

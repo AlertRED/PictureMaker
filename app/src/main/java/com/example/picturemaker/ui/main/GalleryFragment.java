@@ -16,7 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.picturemaker.AdapterGalleryRV;
+import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.FilterGalleryActivity;
 import com.example.picturemaker.R;
 

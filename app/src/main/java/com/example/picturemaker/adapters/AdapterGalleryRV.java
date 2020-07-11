@@ -1,21 +1,20 @@
-package com.example.picturemaker;
+package com.example.picturemaker.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Arrays;
+import com.example.picturemaker.PictureActivity;
+import com.example.picturemaker.R;
+import com.example.picturemaker.support.TestData;
 
 
 class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
@@ -77,7 +76,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
 
         holder.layer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(context, ActivityPicture.class);
+                Intent intent = new Intent(context, PictureActivity.class);
                 intent.putExtra("picture_id", TestData.get(position).id);
                 context.startActivity(intent);
             }
