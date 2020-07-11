@@ -2,34 +2,39 @@ package com.example.picturemaker;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Random;
+
 class ViewHolderColorsRV extends RecyclerView.ViewHolder {
 
-    public ImageView image;
-    public TextView text;
+    private final TextView text;
     public View layer;
 
     public ViewHolderColorsRV(View itemView) {
         super(itemView);
         layer = itemView;
-        image = (ImageView) itemView.findViewById(R.id.imageview);
-        text = (TextView) itemView.findViewById(R.id.textview);
+        text = itemView.findViewById(R.id.color_shape);
+        Random rnd = new Random();
+
+        text.setText(String.valueOf(rnd.nextInt(99)));
+
+        GradientDrawable drawable = (GradientDrawable) text.getBackground();
+        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        drawable.setColor(color);
     }
 }
 
 public class AdapterColorsRV extends RecyclerView.Adapter<ViewHolderColorsRV> {
-
     int layout_item;
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
@@ -55,24 +60,6 @@ public class AdapterColorsRV extends RecyclerView.Adapter<ViewHolderColorsRV> {
 
     @Override
     public void onBindViewHolder(final ViewHolderColorsRV holder, final int position) {
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        holder.layer.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ActivityPicture.class);
-                intent.putExtra("picture_id", TestData.get(position).id);
-                context.startActivity(intent);
-            }
-        });
-
-        Bitmap bm = (Bitmap) BitmapFactory.decodeResource(context.getResources(), TestData.get(position).picture);
-        holder.image.setImageBitmap(ImageHelper.getRoundedCornerBitmap(bm, 10));
-        holder.text.setText(TestData.get(position).name);
 
         if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && position < this.getItemCount() - 1) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
@@ -83,6 +70,6 @@ public class AdapterColorsRV extends RecyclerView.Adapter<ViewHolderColorsRV> {
 
     @Override
     public int getItemCount() {
-        return TestData.size();
+        return 10;
     }
 }
