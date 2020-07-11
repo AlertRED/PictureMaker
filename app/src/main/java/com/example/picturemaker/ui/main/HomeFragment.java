@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.home_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
 
@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
         LinearLayout home_ll = (LinearLayout) this.getActivity().findViewById(R.id.home_ll);
         LayoutInflater inflater = getLayoutInflater();
 
-        View layer = inflater.inflate(R.layout.pictute_item_popular, null);
+        View layer = inflater.inflate(R.layout.item_pictute_popular, null);
 
         layer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -60,18 +60,18 @@ public class HomeFragment extends Fragment {
         final ImageView favorite = layer.findViewById(R.id.favorite_image_item_home);
 
         if (item.is_favorite)
-            favorite.setImageResource(R.drawable.ic_favorite_36x36);
-        else favorite.setImageResource(R.drawable.ic_unfavorite_36x36);
+            favorite.setImageResource(R.drawable.ic_favorite_36);
+        else favorite.setImageResource(R.drawable.ic_unfavorite_36);
 
 
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!item.is_favorite){
-                    favorite.setImageResource(R.drawable.ic_favorite_36x36);
+                    favorite.setImageResource(R.drawable.ic_favorite_36);
                     Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
                 } else {
-                    favorite.setImageResource(R.drawable.ic_unfavorite_36x36);
+                    favorite.setImageResource(R.drawable.ic_unfavorite_36);
                     Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
                 }
                 item.is_favorite = !item.is_favorite;
@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment {
 
         RecyclerView rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.pictute_item_top, 0, 20);
+        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.item_pictute_top, 0, 20);
         rv_top.setAdapter(rvMain_adapter);
     }
 }

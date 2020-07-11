@@ -27,7 +27,7 @@ public class RecentlyFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.recently_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_recently, container, false);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class RecentlyFragment extends Fragment {
         // TODO: Use the ViewModel
 
         RecyclerView rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_recently);
-        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(this.getContext() ,R.layout.pictute_item_gallery, 30,30, false);
+        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(this.getContext() ,R.layout.item_pictute_gallery, 30,30, false);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain.setAdapter(rvMain_adapter);
     }

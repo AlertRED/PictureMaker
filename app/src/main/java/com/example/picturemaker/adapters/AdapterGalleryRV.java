@@ -71,8 +71,8 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         holder.text.setText(TestData.get(position).name);
 
         if (TestData.get(position).is_favorite)
-            holder.favorite.setImageResource(R.drawable.ic_favorite_36x36);
-        else holder.favorite.setImageResource(R.drawable.ic_unfavorite_36x36);
+            holder.favorite.setImageResource(R.drawable.ic_favorite_36);
+        else holder.favorite.setImageResource(R.drawable.ic_unfavorite_36);
 
         holder.layer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -86,10 +86,10 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
             @Override
             public void onClick(View v) {
                 if (!TestData.get(position).is_favorite){
-                    holder.favorite.setImageResource(R.drawable.ic_favorite_36x36);
+                    holder.favorite.setImageResource(R.drawable.ic_favorite_36);
                     Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
                 } else {
-                    holder.favorite.setImageResource(R.drawable.ic_unfavorite_36x36);
+                    holder.favorite.setImageResource(R.drawable.ic_unfavorite_36);
                     Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
 
                 }

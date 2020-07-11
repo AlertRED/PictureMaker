@@ -26,7 +26,7 @@ public class RatingPictureFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.rating_picture_activity, container, false);
+        return inflater.inflate(R.layout.activity_rating_picture, container, false);
     }
 
     @Override

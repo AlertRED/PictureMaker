@@ -39,7 +39,7 @@ public class PictureActivity extends AppCompatActivity {
 
     public void ShowRating() {
         final AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
-        View view = View.inflate(this, R.layout.rating_picture_activity, null);
+        View view = View.inflate(this, R.layout.activity_rating_picture, null);
         popDialog.setView(view);
 
         final RatingBar progress = view.findViewById(R.id.ratingBar);
@@ -68,7 +68,7 @@ public class PictureActivity extends AppCompatActivity {
         this.picture.setImageResource(this.item.picture);
         this.name.setText(this.item.name);
         this.total_score.setText("Рейтинг: ".concat(String.valueOf(this.item.total_score)));
-        this.favorite.setImageResource(this.item.is_favorite ? R.drawable.ic_favorite_36x36 : R.drawable.ic_unfavorite_36x36);
+        this.favorite.setImageResource(this.item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
         this.score.setImageResource(this.item.score > 0 ? R.drawable.ic_baseline_star_24 : R.drawable.ic_baseline_star_border_24);
         for (int i = 0; i < this.puzzles.size(); i++) {
             int state = i > item.level - 1 ? View.GONE : View.VISIBLE;
@@ -142,10 +142,10 @@ public class PictureActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!item.is_favorite) {
-                    favorite.setImageResource(R.drawable.ic_favorite_36x36);
+                    favorite.setImageResource(R.drawable.ic_favorite_36);
                     Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
                 } else {
-                    favorite.setImageResource(R.drawable.ic_unfavorite_36x36);
+                    favorite.setImageResource(R.drawable.ic_unfavorite_36);
                     Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
                 }
                 item.is_favorite = !item.is_favorite;

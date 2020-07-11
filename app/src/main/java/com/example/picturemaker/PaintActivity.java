@@ -24,7 +24,7 @@ public class PaintActivity extends AppCompatActivity {
 
         RecyclerView rv_top = (RecyclerView) this.findViewById(R.id.rv_new);
         rv_top.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        AdapterColorsRV rvMain_adapter = new AdapterColorsRV(this, R.layout.color_brush_item, 0, 20);
+        AdapterColorsRV rvMain_adapter = new AdapterColorsRV(this, R.layout.item_color_brush, 0, 20);
         rv_top.setAdapter(rvMain_adapter);
     }
 }

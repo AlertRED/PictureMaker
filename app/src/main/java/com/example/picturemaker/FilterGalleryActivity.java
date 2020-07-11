@@ -3,16 +3,11 @@ package com.example.picturemaker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-import com.example.picturemaker.R;
 
 public class FilterGalleryActivity extends AppCompatActivity {
 
@@ -41,7 +36,7 @@ public class FilterGalleryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.filter_gallery);
+        setContentView(R.layout.activity_filter_gallery);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.filter_gallery_toolbar);
         setSupportActionBar(toolbar);

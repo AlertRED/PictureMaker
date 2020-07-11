@@ -24,7 +24,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingBottom="4dp"
-        tools:listitem="@layout/color_brush_item">
+        tools:listitem="@layout/item_color_brush">
 
     </androidx.recyclerview.widget.RecyclerView>
 

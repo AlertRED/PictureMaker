@@ -11,7 +11,7 @@
         android:id="@+id/color_shape"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:background="@drawable/color_shape_circle"
+        android:background="@drawable/bg_color_shape_circle"
         android:gravity="center"
         android:text="1"
         android:textSize="30sp" />
