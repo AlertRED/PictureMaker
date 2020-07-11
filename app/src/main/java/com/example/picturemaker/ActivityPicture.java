@@ -1,8 +1,12 @@
 package com.example.picturemaker;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -29,6 +33,7 @@ public class ActivityPicture extends AppCompatActivity {
     private List<ImageView> puzzles;
     private ProgressBar progress;
     private LinearLayout layout_progress;
+    private Button button_start;
 
     public void ShowRating() {
         final AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
@@ -79,6 +84,16 @@ public class ActivityPicture extends AppCompatActivity {
             this.progress.setProgress(this.item.progress);
         }
 
+        final Activity activity = this;
+
+        this.button_start.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, PaintActivity.class);
+                intent.putExtra("picture_id", item.id);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -98,15 +113,15 @@ public class ActivityPicture extends AppCompatActivity {
         this.score = findViewById(R.id.activity_picture_score);
         this.progress = findViewById(R.id.activity_picture_progress);
         this.layout_progress = findViewById(R.id.activity_picture_ll_progress);
+        this.button_start = findViewById(R.id.button_start);
+
 
         this.puzzles = new ArrayList<ImageView>();
         this.puzzles.add((ImageView) findViewById(R.id.puzzle1));
         this.puzzles.add((ImageView) findViewById(R.id.puzzle2));
         this.puzzles.add((ImageView) findViewById(R.id.puzzle3));
 
-
         this.RefreshData();
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.filter_gallery_toolbar2);
         setSupportActionBar(toolbar);

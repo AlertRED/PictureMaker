@@ -98,9 +98,9 @@ public class HomeFragment extends Fragment {
             this.addView(iter.next());
         }
 
-        RecyclerView rv_last = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
-        rv_last.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        RecyclerView rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
+        rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
         AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.pictute_item_top, 0, 20);
-        rv_last.setAdapter(rvMain_adapter);
+        rv_top.setAdapter(rvMain_adapter);
     }
 }

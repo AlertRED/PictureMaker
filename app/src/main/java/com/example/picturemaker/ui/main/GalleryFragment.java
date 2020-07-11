@@ -59,9 +59,6 @@ public class GalleryFragment extends Fragment {
         AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(this.getContext(), R.layout.pictute_item_gallery,30,30,false);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain.setAdapter(rvMain_adapter);
-
-//        DividerItemDecoration itemDecor = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
-//        rvMain.addItemDecoration(itemDecor);
     }
 
 }
