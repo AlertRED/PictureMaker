@@ -30,6 +30,7 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
         layer = itemView;
     }
+
 }
 
 public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> {
@@ -53,11 +54,13 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         this.spacing_vertical = spacing_vertical;
     }
 
+
     @Override
     public ViewHolderGalleryRV onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(this.layout_item, parent, false);
         return new ViewHolderGalleryRV(v);
     }
+
 
     @Override
     public void onBindViewHolder(final ViewHolderGalleryRV holder, final int position) {

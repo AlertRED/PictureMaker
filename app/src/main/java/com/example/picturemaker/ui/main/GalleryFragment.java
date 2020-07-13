@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.example.picturemaker.R;
 public class GalleryFragment extends Fragment {
 
     RecyclerView rvMain;
+    private AdapterGalleryRV rvMain_adapter;
 
     public static GalleryFragment newInstance() {
         return new GalleryFragment();
@@ -33,6 +35,12 @@ public class GalleryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_gallery, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        rvMain_adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -56,7 +64,7 @@ public class GalleryFragment extends Fragment {
         category.setAdapter(category_adapter);
 
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
-        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(this.getContext(), R.layout.item_pictute_gallery,30,30,false);
+        rvMain_adapter = new AdapterGalleryRV(this.getContext(), R.layout.item_pictute_gallery,30,30,false);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain.setAdapter(rvMain_adapter);
     }

@@ -16,6 +16,7 @@ import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.R;
 
 public class RecentlyFragment extends Fragment {
+    private AdapterGalleryRV rvMain_adapter;
 
 //    private MainViewModel mViewModel;
 
@@ -31,13 +32,19 @@ public class RecentlyFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        rvMain_adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 //        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         // TODO: Use the ViewModel
 
         RecyclerView rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_recently);
-        AdapterGalleryRV rvMain_adapter = new AdapterGalleryRV(this.getContext() ,R.layout.item_pictute_gallery, 30,30, false);
+        rvMain_adapter = new AdapterGalleryRV(this.getContext() ,R.layout.item_pictute_gallery, 30,30, false);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain.setAdapter(rvMain_adapter);
     }
