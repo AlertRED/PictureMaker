@@ -14,6 +14,8 @@ import com.example.picturemaker.ui.main.HomeFragment;
 import com.example.picturemaker.ui.main.ProfileFragment;
 import com.example.picturemaker.ui.main.RecentlyFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
 //        fm.beginTransaction().add(R.id.container,fragment1, "1").commit();
 
         TestData.generate();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+
+        myRef.setValue("111");
+
+
 
         openFragment(new HomeFragment());
 
