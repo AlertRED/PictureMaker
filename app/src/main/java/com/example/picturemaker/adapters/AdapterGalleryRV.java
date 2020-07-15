@@ -2,6 +2,7 @@ package com.example.picturemaker.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +13,18 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.picturemaker.Firebase;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
+import com.example.picturemaker.support.Item;
 import com.example.picturemaker.support.TestData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
-    public ImageView image;
+    private ImageView image;
     public TextView text;
     public ImageView favorite;
     public View layer;
@@ -26,12 +32,21 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
     public ViewHolderGalleryRV(View itemView) {
         super(itemView);
         image = (ImageView)itemView.findViewById(R.id.imageview);
-        text = (TextView)itemView.findViewById(R.id.textview);
+        text = (TextView)itemView.findViewById(R.id.picture_name);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
         layer = itemView;
     }
 
+    public void loadImage(String name) {
+        Firebase.loadPicture(name, this::setImage);
+    }
+
+    private void setImage(Bitmap bitmap){
+        this.image.setImageBitmap(bitmap);
+    }
+
 }
+
 
 public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> {
 
@@ -40,18 +55,20 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
     boolean first;
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
+    List<Item> items = new ArrayList<>();
 
     public AdapterGalleryRV(Context context, int layout_item) {
         this.context = context;
         this.layout_item = layout_item;
     }
 
-    public AdapterGalleryRV(Context context, int layout_item, int spacing_vertical, int spacing_horizontal, boolean first) {
+    public AdapterGalleryRV(Context context, int layout_item, List<Item> items,int spacing_vertical, int spacing_horizontal, boolean first) {
         this.context = context;
         this.first = first;
         this.layout_item = layout_item;
         this.spacing_horizontal = spacing_horizontal;
         this.spacing_vertical = spacing_vertical;
+        this.items = items;
     }
 
 
@@ -64,6 +81,9 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
 
     @Override
     public void onBindViewHolder(final ViewHolderGalleryRV holder, final int position) {
+
+        Item item = TestData.get(position);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,11 +91,11 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
             }
         });
 //        holder.image.setImageResource(TestData.get(position).picture);
-        holder.text.setText(TestData.get(position).name);
 
-        if (TestData.get(position).is_favorite)
-            holder.favorite.setImageResource(R.drawable.ic_favorite_36);
-        else holder.favorite.setImageResource(R.drawable.ic_unfavorite_36);
+        holder.loadImage(item.public_picture);
+        holder.text.setText(item.name);
+
+        holder.favorite.setImageResource(item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
 
         holder.layer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -88,7 +108,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         holder.favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TestData.get(position).is_favorite){
+                if (!item.is_favorite){
                     holder.favorite.setImageResource(R.drawable.ic_favorite_36);
                     Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
                 } else {
@@ -96,7 +116,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
                     Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
 
                 }
-                TestData.get(position).is_favorite = !TestData.get(position).is_favorite;
+                item.is_favorite = !item.is_favorite;
             }
         });
 
@@ -109,6 +129,6 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
 
     @Override
     public int getItemCount() {
-        return TestData.size();
+        return this.items.size();
     }
 }

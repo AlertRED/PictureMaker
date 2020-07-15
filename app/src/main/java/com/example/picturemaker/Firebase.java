@@ -2,6 +2,9 @@ package com.example.picturemaker;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Consumer;
@@ -28,8 +31,9 @@ public class Firebase {
 
     static private long MEGABYT = 1024*1024;
 
-    static public void loadItem(String name, Consumer<List<Item>> foo){
-        Query picturesQuery = Firebase.databaseRef.orderByChild(name);
+
+    static public void loadItem(Consumer<List<Item>> foo){
+        Query picturesQuery = Firebase.databaseRef;
 
         picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -38,7 +42,6 @@ public class Firebase {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                     Item item = singleSnapshot.getValue(Item.class);
                     item.public_id = singleSnapshot.getKey();
-                    item.pictureBits = Firebase.GetPicture(item.public_picture);
                     items.add(item);
                 }
                 foo.accept(items);
@@ -49,13 +52,13 @@ public class Firebase {
         });
     }
 
-    static public Bitmap GetPicture(String name){
+    static public void loadPicture(String name, ImageView image){
         StorageReference imageRefl = storageRef.child("pictures/".concat(name));
-        final Bitmap[] bitmap = new Bitmap[1];
         imageRefl.getBytes(MEGABYT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                bitmap[0] = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                image.setImageBitmap(bitmap);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -63,7 +66,22 @@ public class Firebase {
 
             }
         });
-        return bitmap[0];
+    }
+
+    static public void loadPicture(String name, Consumer<Bitmap> foo){
+        StorageReference imageRefl = storageRef.child("pictures/".concat(name));
+        imageRefl.getBytes(MEGABYT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                foo.accept(bitmap);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
     }
 
 }

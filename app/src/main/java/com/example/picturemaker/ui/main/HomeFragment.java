@@ -1,13 +1,16 @@
 package com.example.picturemaker.ui.main;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,9 +31,67 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+class HomeHolder{
+    private ImageView image;
+    private TextView title;
+    private ImageView favorite;
+    private ProgressBar progress;
+    private View layer;
+
+    public HomeHolder(View view) {
+        this.image = view.findViewById(R.id.imageview);
+        this.title = view.findViewById(R.id.picture_name);
+        this.favorite = view.findViewById(R.id.favorite_image_item_home);
+        this.progress = view.findViewById(R.id.progress_image_load);
+        this.layer = view;
+    }
+
+    public ImageView getImage() {
+        return image;
+    }
+
+    public void loadImage(String name){
+        Firebase.loadPicture(name, this::setImage);
+    }
+
+    private void setImage(Bitmap bitmap) {
+        this.image.setImageBitmap(bitmap);
+        this.progress.setVisibility(View.GONE);
+    }
+
+    public View getLayer() {
+        return layer;
+    }
+
+    public TextView getTitle() {
+        return title;
+    }
+
+    public void setTitle(TextView title) {
+        this.title = title;
+    }
+
+    public ImageView getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(ImageView favorite) {
+        this.favorite = favorite;
+    }
+
+    public ProgressBar getProgress() {
+        return progress;
+    }
+
+    public void setProgress(ProgressBar progress) {
+        this.progress = progress;
+    }
+}
+
 public class HomeFragment extends Fragment {
 
-    private Map<String, View> layers = new Hashtable<>();
+    private Map<Item, View> layers = new Hashtable<>();
+    private RecyclerView rv_top;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -43,44 +104,45 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
-//    private void RefreshData(List<Item> items) {
-//        for (Item item: items) {
-//
-//            final Item item = TestData.get_id(key);
-//            ImageView picture = value.findViewById(R.id.imageview);
-//            final ImageView favorite = value.findViewById(R.id.favorite_image_item_home);
-//
-//            picture.setImageResource(item.picture);
-//            favorite.setImageResource(item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
-//
-//            favorite.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (!item.is_favorite) {
-//                        favorite.setImageResource(R.drawable.ic_favorite_36);
-//                        Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        favorite.setImageResource(R.drawable.ic_unfavorite_36);
-//                        Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
-//                    }
-//                    item.is_favorite = !item.is_favorite;
-//                }
-//            });
-//
-//            value.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(getActivity(), PictureActivity.class);
-//                    intent.putExtra("picture_id", item.id);
-//                    startActivity(intent);
-//                }
-//            });
-//        }
-//    }
+
+
+    private void RefreshData() {
+        for (Map.Entry<Item, View> entry : layers.entrySet()) {
+            final Item  item = entry.getKey();
+
+            HomeHolder holder = new HomeHolder(entry.getValue());
+            holder.loadImage(item.public_picture);
+            holder.getFavorite().setImageResource(item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
+            holder.getTitle().setText(item.name);
+
+            holder.getFavorite().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!item.is_favorite) {
+                        holder.getFavorite().setImageResource(R.drawable.ic_favorite_36);
+                        Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
+                    } else {
+                        holder.getFavorite().setImageResource(R.drawable.ic_unfavorite_36);
+                        Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
+                    }
+                    item.is_favorite = !item.is_favorite;
+                }
+            });
+
+            holder.getLayer().setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), PictureActivity.class);
+                    intent.putExtra("picture_id", item.public_id);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-//        this.RefreshData();
+        this.RefreshData();
     }
 
     private void addView(final Item item) {
@@ -88,7 +150,7 @@ public class HomeFragment extends Fragment {
         LayoutInflater inflater = getLayoutInflater();
 
         View layer = inflater.inflate(R.layout.item_pictute_popular, null);
-        this.layers.put(item.public_id, layer);
+        this.layers.put(item, layer);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.setMargins(20, 10, 20, 10);
@@ -99,23 +161,22 @@ public class HomeFragment extends Fragment {
     public void addView(List<Item> items){
         for (Item item: items)
             this.addView(item);
+        this.RefreshData();
     }
 
+    public void RefreshAdapter(List<Item> items){
+        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.item_pictute_top, items,0, 20);
+        rv_top.setAdapter(rvMain_adapter);
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Firebase.loadItem("1", this::addView);
+        Firebase.loadItem(this::addView);
 
-
-        //        while (iter.hasNext()) {
-//            this.addView(iter.next());
-//        }
-
-        RecyclerView rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
+        rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.item_pictute_top, 0, 20);
-        rv_top.setAdapter(rvMain_adapter);
+        Firebase.loadItem(this::RefreshAdapter);
     }
 }

@@ -12,11 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.picturemaker.Firebase;
 import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.R;
+import com.example.picturemaker.support.Item;
+
+import java.util.List;
 
 public class RecentlyFragment extends Fragment {
     private AdapterGalleryRV rvMain_adapter;
+    private RecyclerView rvMain;
 
 //    private MainViewModel mViewModel;
 
@@ -37,16 +42,21 @@ public class RecentlyFragment extends Fragment {
         rvMain_adapter.notifyDataSetChanged();
     }
 
+    private void RefreshAdapter(List<Item> items) {
+        rvMain_adapter = new AdapterGalleryRV(this.getContext() ,R.layout.item_pictute_gallery, items,30,30, false);
+        rvMain.setAdapter(rvMain_adapter);
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 //        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         // TODO: Use the ViewModel
 
-        RecyclerView rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_recently);
-        rvMain_adapter = new AdapterGalleryRV(this.getContext() ,R.layout.item_pictute_gallery, 30,30, false);
+        rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_recently);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
-        rvMain.setAdapter(rvMain_adapter);
+        Firebase.loadItem(this::RefreshAdapter);
+
     }
 
 }
