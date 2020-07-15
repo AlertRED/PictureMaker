@@ -65,7 +65,7 @@ public class PictureActivity extends AppCompatActivity {
     }
 
     private void RefreshData() {
-        this.picture.setImageResource(this.item.picture);
+//        this.picture.setImageResource(this.item.picture);
         this.name.setText(this.item.name);
         this.total_score.setText("Рейтинг: ".concat(String.valueOf(this.item.total_score)));
         this.favorite.setImageResource(this.item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
@@ -91,7 +91,7 @@ public class PictureActivity extends AppCompatActivity {
         this.button_start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(activity, PaintActivity.class);
-                intent.putExtra("picture_id", item.id);
+//                intent.putExtra("picture_id", item.id);
                 startActivity(intent);
             }
         });

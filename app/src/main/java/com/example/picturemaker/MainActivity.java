@@ -2,16 +2,19 @@ package com.example.picturemaker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.example.picturemaker.support.Item;
 import com.example.picturemaker.support.TestData;
 import com.example.picturemaker.ui.main.GalleryFragment;
 import com.example.picturemaker.ui.main.HomeFragment;
@@ -24,6 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
 //        ft.commit();
     }
 
-
+    public List<Item> foo (List<Item> items){
+        return items;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,37 +66,10 @@ public class MainActivity extends AppCompatActivity {
 //        fm.beginTransaction().add(R.id.container, fragment2, "2").hide(fragment2).commit();
 //        fm.beginTransaction().add(R.id.container,fragment1, "1").commit();
 
-        TestData.generate();
+//        TestData.generate();
+//        Firebase.loadItem("1", this::foo);
 
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        StorageReference storageReference = firebaseStorage.getReference();
-
-        StorageReference imageRefl = storageReference.child("pictures/m1.jpg");
-        final ImageView image = findViewById(R.id.imageView);
-        long MAX_BYTES = 1024*1024;
-        imageRefl.getBytes(MAX_BYTES).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                image.setImageBitmap(bitmap);
-                Log.i("TAG", "onSuccess: ");
-            }
-        });
-//        .addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//
-//            }
-//        });
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
-
-        myRef.setValue("111");
-
-
-
-//        openFragment(new HomeFragment());
+        openFragment(new HomeFragment());
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

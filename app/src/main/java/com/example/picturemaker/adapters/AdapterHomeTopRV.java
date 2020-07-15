@@ -70,13 +70,13 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
         holder.layer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(context, PictureActivity.class);
-                intent.putExtra("picture_id", TestData.get(position).id);
+//                intent.putExtra("picture_id", TestData.get(position).id);
                 context.startActivity(intent);
             }
         });
 
-        Bitmap bm = (Bitmap) BitmapFactory.decodeResource(context.getResources(), TestData.get(position).picture);
-        holder.image.setImageBitmap(ImageHelper.getRoundedCornerBitmap(bm, 10));
+//        Bitmap bm = (Bitmap) BitmapFactory.decodeResource(context.getResources(), TestData.get(position).picture);
+//        holder.image.setImageBitmap(ImageHelper.getRoundedCornerBitmap(bm, 10));
         holder.text.setText(TestData.get(position).name);
 
         if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && position < this.getItemCount() - 1) {

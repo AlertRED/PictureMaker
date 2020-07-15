@@ -70,7 +70,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
                 Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show();
             }
         });
-        holder.image.setImageResource(TestData.get(position).picture);
+//        holder.image.setImageResource(TestData.get(position).picture);
         holder.text.setText(TestData.get(position).name);
 
         if (TestData.get(position).is_favorite)
@@ -80,7 +80,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         holder.layer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(context, PictureActivity.class);
-                intent.putExtra("picture_id", TestData.get(position).id);
+//                intent.putExtra("picture_id", TestData.get(position).id);
                 context.startActivity(intent);
             }
         });

@@ -1,22 +1,36 @@
 package com.example.picturemaker.support;
 
-public class Item{
+import android.graphics.Bitmap;
 
-    public int picture;
+public class Item {
+    public String public_id;
     public String name;
+    public int level;
+    public int total_score;
+    public String public_picture;
+
+
+    public Bitmap pictureBits;
+
     public boolean is_favorite;
-    public int id;
     public int score;
     public int progress;
-    public int total_score;
-    public int level;
 
-    public Item(int picture, String name, int id) {
-        this.picture = picture;
-        this.name = name;
-        this.id = id;
-        this.is_favorite = false;
-        this.score = 0;
-        this.level = 2;
+    public Item() {
     }
+
+    public Item(String name, String public_picture, int level) {
+        this.public_picture = public_picture;
+        this.name = name;
+        this.level = level;
+    }
+
+//    public Item(int picture, String name, int id) {
+//        this.picture = picture;
+//        this.name = name;
+//        this.id = id;
+//        this.is_favorite = false;
+//        this.score = 0;
+//        this.level = 2;
+//    }
 }

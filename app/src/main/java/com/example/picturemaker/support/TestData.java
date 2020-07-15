@@ -16,13 +16,13 @@ public class TestData {
     }
 
     static public Item get_id(int id) {
-        for (Item item : items)
-            if (item.id == id) return item;
+//        for (Item item : items)
+//            if (item.id == id) return item;
         return get(0);
     }
 
     static public int size(){
-        return items.size();
+        return 0;
     }
 
 
@@ -39,9 +39,9 @@ public class TestData {
                 "Утро в сосновом бору","Девятый вал","Девочка с персиками",
                 "Тайная вечеря","Постоянство памяти","Рождение Венеры","Боярыня Морозова"};
 
-        for (int i=0; i<pictures.length; i++){
-            TestData.items.add(new Item(pictures[i], names[i], i));
-        }
+//        for (int i=0; i<pictures.length; i++){
+//            TestData.items.add(new Item(pictures[i], names[i], i));
+//        }
     }
 
     static public Iterator<Item> getIter(){
