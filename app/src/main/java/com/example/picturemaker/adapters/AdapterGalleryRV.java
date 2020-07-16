@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.picturemaker.Firebase;
+import com.example.picturemaker.FirebaseDB;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.support.Item;
@@ -35,11 +35,11 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
         text = (TextView)itemView.findViewById(R.id.picture_name);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
         layer = itemView;
-        this.layer.setVisibility(View.GONE);
+//        this.layer.setVisibility(View.GONE);
     }
 
     public void loadImage(String name) {
-        Firebase.loadPicture(name, this::setImage);
+//        FirebaseDB.loadPicture(name, this::setImage);
     }
 
     private void setImage(Bitmap bitmap){
@@ -50,7 +50,6 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
 
 
 public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> {
-
     Context context;
     int layout_item;
     boolean first;

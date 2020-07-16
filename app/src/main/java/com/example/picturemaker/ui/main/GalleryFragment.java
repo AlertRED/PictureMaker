@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.picturemaker.Firebase;
+import com.example.picturemaker.FirebaseDB;
 import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.FilterGalleryActivity;
 import com.example.picturemaker.R;
@@ -75,7 +74,7 @@ public class GalleryFragment extends Fragment {
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain_adapter = new AdapterGalleryRV();
-        Firebase.loadItem(this::RefreshAdapter);
+        FirebaseDB.loadItem(this::RefreshAdapter);
     }
 
 }

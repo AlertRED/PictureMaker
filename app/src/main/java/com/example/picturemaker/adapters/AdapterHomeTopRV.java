@@ -7,18 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.picturemaker.Firebase;
+import com.example.picturemaker.FirebaseDB;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.support.Item;
-import com.example.picturemaker.support.TestData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +32,11 @@ class ViewHolderHomeTopRV extends RecyclerView.ViewHolder {
         layer = itemView;
         image = (ImageView) itemView.findViewById(R.id.imageview);
         text = (TextView) itemView.findViewById(R.id.picture_name);
-        this.layer.setVisibility(View.GONE);
+//        this.layer.setVisibility(View.GONE);
     }
 
     public void loadImage(String name) {
-        Firebase.loadPicture(name, this::setImage);
+//        FirebaseDB.loadPicture(name, this::setImage);
     }
 
     private void setImage(Bitmap bitmap){

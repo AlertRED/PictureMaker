@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.picturemaker.Firebase;
+import com.example.picturemaker.FirebaseDB;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.adapters.AdapterHomeTopRV;
@@ -39,7 +39,7 @@ class HomeHolder {
         this.title = view.findViewById(R.id.picture_name);
         this.favorite = view.findViewById(R.id.favorite_image_item_home);
         this.layer = view;
-        this.layer.setVisibility(View.GONE);
+//        this.layer.setVisibility(View.GONE);
     }
 
     public ImageView getImage() {
@@ -52,7 +52,7 @@ class HomeHolder {
     }
 
     public void loadImage(String name) {
-        Firebase.loadPicture(name, this::setImage);
+//        FirebaseDB.loadPicture(name, this::setImage);
     }
 
     public View getLayer() {
@@ -161,10 +161,10 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Firebase.loadItem(this::addView);
+        FirebaseDB.loadItem(this::addView);
 
         rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        Firebase.loadItem(this::RefreshAdapter);
+        FirebaseDB.loadItem(this::RefreshAdapter);
     }
 }

@@ -24,31 +24,33 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Firebase {
+public class FirebaseDB {
 
-    static private StorageReference fStorage = FirebaseStorage.getInstance().getReference();
-    static private DatabaseReference fDatabase = FirebaseDatabase.getInstance().getReference("pictures");
+    static private FirebaseStorage fStorage;
+    static private FirebaseDatabase fDatabase;
 
     static private long MEGABYT = 1024*1024;
 
-//    static private FirebaseDatabase getDatabase(){
-//        if (fDatabase == null) {
-//            fDatabase = FirebaseDatabase.getInstance();
-//            fDatabase.setPersistenceEnabled(true);
-//        }
-//        return fDatabase;
-//    }
-//
-//    static private FirebaseStorage getStorage(){
-//        if (fStorage == null) {
-//            fStorage = FirebaseStorage.getInstance();
-//        }
-//        return fStorage;
-//    }
+    static private FirebaseDatabase getDatabase(){
+        if (fDatabase == null) {
+            fDatabase = FirebaseDatabase.getInstance();
+            fDatabase.setPersistenceEnabled(true);
+        }
+        return fDatabase;
+    }
+
+    static private FirebaseStorage getStorage(){
+        if (fStorage == null) {
+            fStorage = FirebaseStorage.getInstance();
+        }
+        return fStorage;
+    }
 
 
     static public void loadItem(Consumer<List<Item>> foo){
-        Query picturesQuery = fDatabase;
+        DatabaseReference ref = getDatabase().getReference("pictures");
+        ref.keepSynced(true);
+        Query picturesQuery = ref;
 
         picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -68,7 +70,7 @@ public class Firebase {
     }
 
     static public void loadPicture(String name, ImageView image){
-        StorageReference imageRefl = fStorage.child("pictures/".concat(name));
+        StorageReference imageRefl = getStorage().getReference().child("pictures/".concat(name));
         imageRefl.getBytes(MEGABYT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
@@ -84,7 +86,7 @@ public class Firebase {
     }
 
     static public void loadPicture(String name, Consumer<Bitmap> foo){
-        StorageReference imageRefl = fStorage.child("pictures/".concat(name));
+        StorageReference imageRefl = getStorage().getReference().child("pictures/".concat(name));
         imageRefl.getBytes(MEGABYT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
