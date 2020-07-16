@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,39 +23,36 @@ import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.adapters.AdapterHomeTopRV;
 import com.example.picturemaker.support.Item;
-import com.example.picturemaker.support.TestData;
 
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-class HomeHolder{
+class HomeHolder {
     private ImageView image;
     private TextView title;
     private ImageView favorite;
-    private ProgressBar progress;
     private View layer;
 
     public HomeHolder(View view) {
         this.image = view.findViewById(R.id.imageview);
         this.title = view.findViewById(R.id.picture_name);
         this.favorite = view.findViewById(R.id.favorite_image_item_home);
-        this.progress = view.findViewById(R.id.progress_image_load);
         this.layer = view;
+        this.layer.setVisibility(View.GONE);
     }
 
     public ImageView getImage() {
         return image;
     }
 
-    public void loadImage(String name){
-        Firebase.loadPicture(name, this::setImage);
-    }
-
     private void setImage(Bitmap bitmap) {
         this.image.setImageBitmap(bitmap);
-        this.progress.setVisibility(View.GONE);
+        this.layer.setVisibility(View.VISIBLE);
+    }
+
+    public void loadImage(String name) {
+        Firebase.loadPicture(name, this::setImage);
     }
 
     public View getLayer() {
@@ -79,13 +75,6 @@ class HomeHolder{
         this.favorite = favorite;
     }
 
-    public ProgressBar getProgress() {
-        return progress;
-    }
-
-    public void setProgress(ProgressBar progress) {
-        this.progress = progress;
-    }
 }
 
 public class HomeFragment extends Fragment {
@@ -105,10 +94,9 @@ public class HomeFragment extends Fragment {
     }
 
 
-
     private void RefreshData() {
         for (Map.Entry<Item, View> entry : layers.entrySet()) {
-            final Item  item = entry.getKey();
+            final Item item = entry.getKey();
 
             HomeHolder holder = new HomeHolder(entry.getValue());
             holder.loadImage(item.public_picture);
@@ -158,14 +146,14 @@ public class HomeFragment extends Fragment {
         home_ll.addView(layer);
     }
 
-    public void addView(List<Item> items){
-        for (Item item: items)
+    public void addView(List<Item> items) {
+        for (Item item : items)
             this.addView(item);
         this.RefreshData();
     }
 
-    public void RefreshAdapter(List<Item> items){
-        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.item_pictute_top, items,0, 20);
+    public void RefreshAdapter(List<Item> items) {
+        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.item_pictute_top, items, 0, 20);
         rv_top.setAdapter(rvMain_adapter);
     }
 

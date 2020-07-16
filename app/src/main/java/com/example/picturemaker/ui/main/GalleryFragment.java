@@ -74,6 +74,7 @@ public class GalleryFragment extends Fragment {
 
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
+        rvMain_adapter = new AdapterGalleryRV();
         Firebase.loadItem(this::RefreshAdapter);
     }
 

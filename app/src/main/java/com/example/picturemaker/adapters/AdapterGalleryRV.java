@@ -35,6 +35,7 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
         text = (TextView)itemView.findViewById(R.id.picture_name);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
         layer = itemView;
+        this.layer.setVisibility(View.GONE);
     }
 
     public void loadImage(String name) {
@@ -43,8 +44,8 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
 
     private void setImage(Bitmap bitmap){
         this.image.setImageBitmap(bitmap);
+        this.layer.setVisibility(View.VISIBLE);
     }
-
 }
 
 
@@ -56,6 +57,8 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
     List<Item> items = new ArrayList<>();
+
+    public AdapterGalleryRV() {}
 
     public AdapterGalleryRV(Context context, int layout_item) {
         this.context = context;
@@ -82,7 +85,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
     @Override
     public void onBindViewHolder(final ViewHolderGalleryRV holder, final int position) {
 
-        Item item = TestData.get(position);
+        Item item = this.items.get(position);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +93,6 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
                 Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show();
             }
         });
-//        holder.image.setImageResource(TestData.get(position).picture);
 
         holder.loadImage(item.public_picture);
         holder.text.setText(item.name);

@@ -34,6 +34,7 @@ class ViewHolderHomeTopRV extends RecyclerView.ViewHolder {
         layer = itemView;
         image = (ImageView) itemView.findViewById(R.id.imageview);
         text = (TextView) itemView.findViewById(R.id.picture_name);
+        this.layer.setVisibility(View.GONE);
     }
 
     public void loadImage(String name) {
@@ -42,6 +43,7 @@ class ViewHolderHomeTopRV extends RecyclerView.ViewHolder {
 
     private void setImage(Bitmap bitmap){
         this.image.setImageBitmap(bitmap);
+        this.layer.setVisibility(View.VISIBLE);
     }
 
     public void setText(TextView text) {

@@ -26,14 +26,29 @@ import java.util.List;
 
 public class Firebase {
 
-    static private StorageReference storageRef = FirebaseStorage.getInstance().getReference();;
-    static private DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("pictures");
+    static private StorageReference fStorage = FirebaseStorage.getInstance().getReference();
+    static private DatabaseReference fDatabase = FirebaseDatabase.getInstance().getReference("pictures");
 
     static private long MEGABYT = 1024*1024;
 
+//    static private FirebaseDatabase getDatabase(){
+//        if (fDatabase == null) {
+//            fDatabase = FirebaseDatabase.getInstance();
+//            fDatabase.setPersistenceEnabled(true);
+//        }
+//        return fDatabase;
+//    }
+//
+//    static private FirebaseStorage getStorage(){
+//        if (fStorage == null) {
+//            fStorage = FirebaseStorage.getInstance();
+//        }
+//        return fStorage;
+//    }
+
 
     static public void loadItem(Consumer<List<Item>> foo){
-        Query picturesQuery = Firebase.databaseRef;
+        Query picturesQuery = fDatabase;
 
         picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -53,7 +68,7 @@ public class Firebase {
     }
 
     static public void loadPicture(String name, ImageView image){
-        StorageReference imageRefl = storageRef.child("pictures/".concat(name));
+        StorageReference imageRefl = fStorage.child("pictures/".concat(name));
         imageRefl.getBytes(MEGABYT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
@@ -69,7 +84,7 @@ public class Firebase {
     }
 
     static public void loadPicture(String name, Consumer<Bitmap> foo){
-        StorageReference imageRefl = storageRef.child("pictures/".concat(name));
+        StorageReference imageRefl = fStorage.child("pictures/".concat(name));
         imageRefl.getBytes(MEGABYT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
