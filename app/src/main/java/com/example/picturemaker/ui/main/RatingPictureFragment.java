@@ -16,8 +16,6 @@ import com.example.picturemaker.R;
 
 public class RatingPictureFragment extends Fragment {
 
-    private MainViewModel mViewModel;
-
     public static RatingPictureFragment newInstance() {
         return new RatingPictureFragment();
     }
@@ -32,8 +30,6 @@ public class RatingPictureFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

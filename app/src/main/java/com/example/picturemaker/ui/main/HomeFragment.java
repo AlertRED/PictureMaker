@@ -164,6 +164,8 @@ public class HomeFragment extends Fragment {
 
         FirebaseDB.loadItem(this::addView);
 
+        FirebaseDB.likePicture("1");
+
         rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
         FirebaseDB.loadItem(this::RefreshAdapter);

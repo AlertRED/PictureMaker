@@ -72,15 +72,28 @@ public class FirebaseDB {
         return fAuth;
     }
 
+
+
     static public void login(Activity activity){
         FirebaseAuth auth = getAuth();
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser==null){
             auth.signInAnonymously().addOnCompleteListener(activity, task -> {
                 if (task.isSuccessful()) {
-                    Log.d("TAG", "signInAnonymously:success");
                 } else {
-                    Log.w("TAG", "signInAnonymously:failure", task.getException());
+                }
+            });
+        }
+    }
+
+    static public void login(Activity activity, Runnable foo){
+        FirebaseAuth auth = getAuth();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser==null){
+            auth.signInAnonymously().addOnCompleteListener(activity, task -> {
+                if (task.isSuccessful()) {
+                    foo.run();
+                } else {
                 }
             });
         }
@@ -128,11 +141,17 @@ public class FirebaseDB {
         });
     }
 
+    static public void likePicture(String name){
+        String uid = "1d3d3uf339f03";//getUser().getUid();
+        DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(uid)).child("pic");
+        ref.setValue(name);
+    }
+
     static public void loadPicture(Context context, String name, Consumer<Bitmap> foo, boolean is_disk_cache){
         StorageReference imageRef = getStorage().getReference().child("pictures/".concat(name));
         GlideRequests glide = GlideApp.with(context);
         DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL: DiskCacheStrategy.NONE;
-        glide.asBitmap().load(imageRef).diskCacheStrategy(cache_type)
+        glide.asBitmap().diskCacheStrategy(cache_type).load(imageRef)
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
