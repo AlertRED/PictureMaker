@@ -40,7 +40,7 @@ class HomeHolder {
         this.title = view.findViewById(R.id.picture_name);
         this.favorite = view.findViewById(R.id.favorite_image_item_home);
         this.layer = view;
-//        this.layer.setVisibility(View.GONE);
+        this.layer.setVisibility(View.GONE);
     }
 
     public ImageView getImage() {
@@ -53,7 +53,7 @@ class HomeHolder {
     }
 
     public void loadImage(Context context, String name) {
-        FirebaseDB.loadPicture(context, name, this::setImage);
+        FirebaseDB.loadPicture(context, name, this::setImage, false);
     }
 
     public View getLayer() {

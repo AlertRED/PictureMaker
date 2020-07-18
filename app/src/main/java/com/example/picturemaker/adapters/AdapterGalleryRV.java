@@ -35,11 +35,11 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
         text = (TextView)itemView.findViewById(R.id.picture_name);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
         layer = itemView;
-//        this.layer.setVisibility(View.GONE);
+        this.layer.setVisibility(View.GONE);
     }
 
-    public void loadImage(String name) {
-//        FirebaseDB.loadPicture(name, this::setImage);
+    public void loadImage(Context context, String name) {
+        FirebaseDB.loadPicture(context, name, this::setImage, false);
     }
 
     private void setImage(Bitmap bitmap){
@@ -92,7 +92,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
             }
         });
 
-        holder.loadImage(item.public_picture);
+        holder.loadImage(context, item.public_picture);
         holder.text.setText(item.name);
 
         holder.favorite.setImageResource(item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);

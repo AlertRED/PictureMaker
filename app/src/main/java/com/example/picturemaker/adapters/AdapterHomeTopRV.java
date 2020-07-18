@@ -32,11 +32,11 @@ class ViewHolderHomeTopRV extends RecyclerView.ViewHolder {
         layer = itemView;
         image = (ImageView) itemView.findViewById(R.id.imageview);
         text = (TextView) itemView.findViewById(R.id.picture_name);
-//        this.layer.setVisibility(View.GONE);
+        this.layer.setVisibility(View.GONE);
     }
 
-    public void loadImage(String name) {
-//        FirebaseDB.loadPicture(name, this::setImage);
+    public void loadImage(Context context, String name) {
+        FirebaseDB.loadPicture(context, name, this::setImage, false);
     }
 
     private void setImage(Bitmap bitmap){
@@ -114,7 +114,7 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
 
         holder.getText().setText(item.name);
 
-        holder.loadImage(item.public_picture);
+        holder.loadImage(context, item.public_picture);
 
         if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && position < this.getItemCount() - 1) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);

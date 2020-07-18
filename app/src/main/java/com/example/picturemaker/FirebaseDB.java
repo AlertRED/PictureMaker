@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,9 +17,14 @@ import androidx.core.util.Consumer;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
+import com.example.picturemaker.support.GlideApp;
+import com.example.picturemaker.support.GlideRequests;
 import com.example.picturemaker.support.Item;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -121,24 +128,60 @@ public class FirebaseDB {
         });
     }
 
-    static public void loadPicture(Context context,String name, Consumer<Bitmap> foo){
+    static public void loadPicture(Context context, String name, Consumer<Bitmap> foo, boolean is_disk_cache){
         StorageReference imageRef = getStorage().getReference().child("pictures/".concat(name));
+        GlideRequests glide = GlideApp.with(context);
+        DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL: DiskCacheStrategy.NONE;
+        glide.asBitmap().load(imageRef).diskCacheStrategy(cache_type)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        foo.accept(resource);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
+                    }
+                });
+
+//        Glide.with(context).asBitmap().load(imageRef.toString())
+//                .into(new CustomTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                        foo.accept(resource);
+//                    }
+//
+//                    @Override
+//                    public void onLoadCleared(@Nullable Drawable placeholder) {
+//                    }
+//
+//                    @Override
+//                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+//                        super.onLoadFailed(errorDrawable);
+//                    }
+//                });
 
 
 
 
-        imageRef.getBytes(MEGABYT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                foo.accept(bitmap);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
 
-            }
-        });
+//        imageRef.getBytes(MEGABYT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//                foo.accept(bitmap);
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//
+//            }
+//        });
     }
 
 }
