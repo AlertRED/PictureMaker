@@ -1,6 +1,7 @@
 package com.example.picturemaker;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,12 @@ import com.example.picturemaker.ui.main.GalleryFragment;
 import com.example.picturemaker.ui.main.HomeFragment;
 import com.example.picturemaker.ui.main.ProfileFragment;
 import com.example.picturemaker.ui.main.RecentlyFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     final Fragment fragment1 = new HomeFragment();
     final Fragment fragment2 = new GalleryFragment();
@@ -42,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 //        fragmentTransaction.commit();
 
     }
+
 
 
     @Override

@@ -83,7 +83,6 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
 
     @Override
     public void onBindViewHolder(final ViewHolderGalleryRV holder, final int position) {
-
         Item item = this.items.get(position);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

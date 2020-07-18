@@ -1,5 +1,6 @@
 package com.example.picturemaker.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -51,8 +52,8 @@ class HomeHolder {
         this.layer.setVisibility(View.VISIBLE);
     }
 
-    public void loadImage(String name) {
-//        FirebaseDB.loadPicture(name, this::setImage);
+    public void loadImage(Context context, String name) {
+        FirebaseDB.loadPicture(context, name, this::setImage);
     }
 
     public View getLayer() {
@@ -99,7 +100,7 @@ public class HomeFragment extends Fragment {
             final Item item = entry.getKey();
 
             HomeHolder holder = new HomeHolder(entry.getValue());
-            holder.loadImage(item.public_picture);
+            holder.loadImage(this.getContext(), item.public_picture);
             holder.getFavorite().setImageResource(item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
             holder.getTitle().setText(item.name);
 
