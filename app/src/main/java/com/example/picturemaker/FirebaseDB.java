@@ -72,6 +72,9 @@ public class FirebaseDB {
         return fAuth;
     }
 
+    static public FirebaseUser getUser(){
+        return getAuth().getCurrentUser();
+    }
 
 
     static public void login(Activity activity){
@@ -97,10 +100,6 @@ public class FirebaseDB {
                 }
             });
         }
-    }
-
-    static public FirebaseUser getUser(){
-        return getAuth().getCurrentUser();
     }
 
     static public void loadItem(Consumer<List<Item>> foo){
@@ -142,7 +141,7 @@ public class FirebaseDB {
     }
 
     static public void likePicture(String name){
-        String uid = "1d3d3uf339f03";//getUser().getUid();
+        String uid = getUser().getUid();
         DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(uid)).child("pic");
         ref.setValue(name);
     }
