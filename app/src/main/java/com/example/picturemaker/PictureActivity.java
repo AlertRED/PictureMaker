@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.picturemaker.support.Item;
-import com.example.picturemaker.support.TestData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +64,9 @@ public class PictureActivity extends AppCompatActivity {
     }
 
     private void RefreshData() {
-//        this.picture.setImageResource(this.item.picture);
+
+        FirebaseDB.loadPicture(this,this.item.public_picture, this.picture, false);
+
         this.name.setText(this.item.name);
         this.total_score.setText("Рейтинг: ".concat(String.valueOf(this.item.total_score)));
         this.favorite.setImageResource(this.item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
@@ -96,48 +97,6 @@ public class PictureActivity extends AppCompatActivity {
             }
         });
 
-
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_picture);
-
-        int picture_id = getIntent().getIntExtra("picture_id", 0);
-        this.item = TestData.get_id(picture_id);
-
-        this.picture = findViewById(R.id.picture);
-        this.name = findViewById(R.id.activity_picture_name);
-        this.my_score = findViewById(R.id.picture_my_score);
-        this.total_score = findViewById(R.id.picture_total_score);
-        this.favorite = findViewById(R.id.activity_picture_favorite);
-        this.score = findViewById(R.id.activity_picture_score);
-        this.progress = findViewById(R.id.activity_picture_progress);
-        this.layout_progress = findViewById(R.id.activity_picture_ll_progress);
-        this.button_start = findViewById(R.id.button_start);
-
-
-        this.puzzles = new ArrayList<ImageView>();
-        this.puzzles.add((ImageView) findViewById(R.id.puzzle1));
-        this.puzzles.add((ImageView) findViewById(R.id.puzzle2));
-        this.puzzles.add((ImageView) findViewById(R.id.puzzle3));
-
-        this.RefreshData();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.filter_gallery_toolbar2);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Картина");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-
         this.favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,6 +119,51 @@ public class PictureActivity extends AppCompatActivity {
                 else Toast.makeText(v.getContext(), "Картина не завершина", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void LoadItem(Item item){
+        this.item = item;
+        RefreshData();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_picture);
+
+        String picture_id = getIntent().getStringExtra("picture_id");
+
+        this.picture = findViewById(R.id.picture);
+        this.name = findViewById(R.id.activity_picture_name);
+        this.my_score = findViewById(R.id.picture_my_score);
+        this.total_score = findViewById(R.id.picture_total_score);
+        this.favorite = findViewById(R.id.activity_picture_favorite);
+        this.score = findViewById(R.id.activity_picture_score);
+        this.progress = findViewById(R.id.activity_picture_progress);
+        this.layout_progress = findViewById(R.id.activity_picture_ll_progress);
+        this.button_start = findViewById(R.id.button_start);
+
+        this.puzzles = new ArrayList<ImageView>();
+        this.puzzles.add((ImageView) findViewById(R.id.puzzle1));
+        this.puzzles.add((ImageView) findViewById(R.id.puzzle2));
+        this.puzzles.add((ImageView) findViewById(R.id.puzzle3));
+
+        FirebaseDB.loadItem(this::LoadItem, picture_id);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.filter_gallery_toolbar2);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Картина");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
+
 
     }
 }

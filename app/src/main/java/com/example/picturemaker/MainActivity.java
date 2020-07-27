@@ -42,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseDB.login(this);
-
         fm.beginTransaction().add(R.id.container, fragment4, "4").hide(fragment4).commit();
         fm.beginTransaction().add(R.id.container, fragment3, "3").hide(fragment3).commit();
         fm.beginTransaction().add(R.id.container, fragment2, "2").hide(fragment2).commit();

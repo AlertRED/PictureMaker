@@ -10,8 +10,13 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseDB.login(this, this::finish);
+    }
+
+    @Override
+    public void finish() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        FirebaseDB.login(this, this::finish);
+        super.finish();
     }
 }

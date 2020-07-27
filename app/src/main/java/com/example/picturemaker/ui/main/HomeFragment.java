@@ -162,12 +162,12 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FirebaseDB.loadItem(this::addView);
+        FirebaseDB.loadItems(this::addView);
 
-        FirebaseDB.likePicture("1");
+//        FirebaseDB.likePicture("1");
 
         rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        FirebaseDB.loadItem(this::RefreshAdapter);
+        FirebaseDB.loadItems(this::RefreshAdapter);
     }
 }

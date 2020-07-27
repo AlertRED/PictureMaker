@@ -107,7 +107,7 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
         holder.getLayer().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(context, PictureActivity.class);
-//                intent.putExtra("picture_id", TestData.get(position).id);
+                intent.putExtra("picture_id", item.public_id);
                 context.startActivity(intent);
             }
         });

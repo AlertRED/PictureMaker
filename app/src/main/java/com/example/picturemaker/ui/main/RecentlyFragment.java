@@ -56,7 +56,7 @@ public class RecentlyFragment extends Fragment {
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_recently);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain_adapter = new AdapterGalleryRV();
-        FirebaseDB.loadItem(this::RefreshAdapter);
+        FirebaseDB.loadItems(this::RefreshAdapter);
 
     }
 
