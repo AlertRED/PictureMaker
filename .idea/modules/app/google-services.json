@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "742254386309",
+    "firebase_url": "https://picturepainter-d61a5.firebaseio.com",
+    "project_id": "picturepainter-d61a5",
+    "storage_bucket": "picturepainter-d61a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742254386309:android:b8b484766bc99b45621dec",
+        "android_client_info": {
+          "package_name": "com.example.picturemaker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "742254386309-obpegic4jb2vujaj02cfgd2ednflt311.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.picturemaker",
+            "certificate_hash": "7eb5b545b2a0601d5f3d4c66bfc9f842d2fdbd03"
+          }
+        },
+        {
+          "client_id": "742254386309-r406smk7ra4ikhmqtmqb7b91n00r6ki2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACCkAKzlxTxPtSReqT7FNVZw-p053S_Zw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "742254386309-r406smk7ra4ikhmqtmqb7b91n00r6ki2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
