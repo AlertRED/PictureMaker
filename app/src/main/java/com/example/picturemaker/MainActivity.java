@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.picturemaker.Storage.Storage;
 import com.example.picturemaker.ui.main.GalleryFragment;
 import com.example.picturemaker.ui.main.HomeFragment;
 import com.example.picturemaker.ui.main.ProfileFragment;
@@ -16,6 +17,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+
+    Storage storage;
 
     final Fragment fragment1 = new HomeFragment();
     final Fragment fragment2 = new GalleryFragment();
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().add(R.id.container, fragment3, "3").hide(fragment3).commit();
         fm.beginTransaction().add(R.id.container, fragment2, "2").hide(fragment2).commit();
         fm.beginTransaction().add(R.id.container, fragment1, "1").commit();
+
+        this.storage = new Storage(this);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

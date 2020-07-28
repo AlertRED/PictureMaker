@@ -16,12 +16,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.picturemaker.FirebaseDB;
+import com.example.picturemaker.Storage.Picture;
 import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.FilterGalleryActivity;
 import com.example.picturemaker.R;
-import com.example.picturemaker.support.Item;
-import com.example.picturemaker.support.ItemData;
+import com.example.picturemaker.Storage.LocalStorage;
 
 import java.util.List;
 
@@ -47,8 +46,8 @@ public class GalleryFragment extends Fragment {
         rvMain_adapter.notifyDataSetChanged();
     }
 
-    private void RefreshAdapter(List<Item> items) {
-        rvMain_adapter = new AdapterGalleryRV(this.getContext() ,R.layout.item_pictute_gallery, items,30,30, false);
+    private void RefreshAdapter(List<Picture> pictures) {
+        rvMain_adapter = new AdapterGalleryRV(this.getContext() ,R.layout.item_pictute_gallery, pictures,30,30, false);
         rvMain.setAdapter(rvMain_adapter);
     }
 
@@ -75,7 +74,7 @@ public class GalleryFragment extends Fragment {
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain_adapter = new AdapterGalleryRV();
-        ItemData.loadItems(this::RefreshAdapter);
+        LocalStorage.loadItems(this::RefreshAdapter);
     }
 
 }

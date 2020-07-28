@@ -1,6 +1,7 @@
 package com.example.picturemaker.support;
 
 import com.example.picturemaker.R;
+import com.example.picturemaker.Storage.Picture;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,14 +9,14 @@ import java.util.List;
 
 public class TestData {
 
-    static private List<Item> items;
+    static private List<Picture> pictures;
 
 
-    static public Item get(int index){
-        return items.get(index);
+    static public Picture get(int index){
+        return pictures.get(index);
     }
 
-    static public Item get_id(int id) {
+    static public Picture get_id(int id) {
 //        for (Item item : items)
 //            if (item.id == id) return item;
         return get(0);
@@ -28,7 +29,7 @@ public class TestData {
 
     static public void generate(){
 
-        items = new ArrayList<>();
+        pictures = new ArrayList<>();
 
         int[] pictures = {
                 R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4,
@@ -44,8 +45,8 @@ public class TestData {
 //        }
     }
 
-    static public Iterator<Item> getIter(){
-        return items.iterator();
+    static public Iterator<Picture> getIter(){
+        return pictures.iterator();
     }
 
 }

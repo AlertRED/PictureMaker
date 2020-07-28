@@ -19,12 +19,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.picturemaker.FirebaseDB;
+import com.example.picturemaker.Storage.FirebaseDB;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
+import com.example.picturemaker.Storage.Picture;
 import com.example.picturemaker.adapters.AdapterHomeTopRV;
-import com.example.picturemaker.support.Item;
-import com.example.picturemaker.support.ItemData;
+import com.example.picturemaker.Storage.LocalStorage;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -81,7 +81,7 @@ class HomeHolder {
 
 public class HomeFragment extends Fragment {
 
-    private Map<Item, View> layers = new Hashtable<>();
+    private Map<Picture, View> layers = new Hashtable<>();
     private RecyclerView rv_top;
 
     public static HomeFragment newInstance() {
@@ -97,34 +97,34 @@ public class HomeFragment extends Fragment {
 
 
     private void RefreshData() {
-        for (Map.Entry<Item, View> entry : layers.entrySet()) {
-            final Item item = entry.getKey();
+        for (Map.Entry<Picture, View> entry : layers.entrySet()) {
+            final Picture picture = entry.getKey();
 
             HomeHolder holder = new HomeHolder(entry.getValue());
-            holder.loadImage(this.getContext(), item.public_picture);
-            holder.getFavorite().setImageResource(item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
-            holder.getTitle().setText(item.name);
+            holder.loadImage(this.getContext(), picture.public_picture);
+            holder.getFavorite().setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
+            holder.getTitle().setText(picture.name);
 
             holder.getFavorite().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!item.is_favorite) {
+                    if (!picture.is_favorite) {
                         holder.getFavorite().setImageResource(R.drawable.ic_favorite_36);
                         Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
-                        ItemData.likePicture(item.public_id, true);
+//                        LocalStorage.likePicture(picture.public_id, true);
                     } else {
                         holder.getFavorite().setImageResource(R.drawable.ic_unfavorite_36);
                         Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
-                        ItemData.likePicture(item.public_id, false);
+//                        LocalStorage.likePicture(picture.public_id, false);
                     }
-                    item.is_favorite = !item.is_favorite;
+                    picture.is_favorite = !picture.is_favorite;
                 }
             });
 
             holder.getLayer().setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), PictureActivity.class);
-                    intent.putExtra("picture_id", item.public_id);
+                    intent.putExtra("picture_id", picture.public_id);
                     startActivity(intent);
                 }
             });
@@ -137,12 +137,12 @@ public class HomeFragment extends Fragment {
         this.RefreshData();
     }
 
-    private void addView(final Item item) {
+    private void addView(final Picture picture) {
         LinearLayout home_ll = (LinearLayout) this.getActivity().findViewById(R.id.home_ll);
         LayoutInflater inflater = getLayoutInflater();
 
         View layer = inflater.inflate(R.layout.item_pictute_popular, null);
-        this.layers.put(item, layer);
+        this.layers.put(picture, layer);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.setMargins(20, 10, 20, 10);
@@ -150,14 +150,14 @@ public class HomeFragment extends Fragment {
         home_ll.addView(layer);
     }
 
-    public void addView(List<Item> items) {
-        for (Item item : items)
-            this.addView(item);
+    public void addView(List<Picture> pictures) {
+        for (Picture picture : pictures)
+            this.addView(picture);
         this.RefreshData();
     }
 
-    public void RefreshAdapter(List<Item> items) {
-        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.item_pictute_top, items, 0, 20);
+    public void RefreshAdapter(List<Picture> pictures) {
+        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.item_pictute_top, pictures, 0, 20);
         rv_top.setAdapter(rvMain_adapter);
     }
 
@@ -165,12 +165,12 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ItemData.loadItems(this::addView);
+//        LocalStorage.loadItems(this::addView);
 
 //        FirebaseDB.likePicture("1");
 
         rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        ItemData.loadItems(this::RefreshAdapter);
+//        LocalStorage.loadItems(this::RefreshAdapter);
     }
 }

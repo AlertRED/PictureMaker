@@ -1,9 +1,8 @@
-package com.example.picturemaker;
+package com.example.picturemaker.Storage;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
@@ -16,9 +15,6 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.picturemaker.support.GlideApp;
 import com.example.picturemaker.support.GlideRequests;
-import com.example.picturemaker.support.Item;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -95,7 +91,7 @@ public class FirebaseDB {
         }
     }
 
-    static public void loadItems(Consumer<List<Item>> foo) {
+    static public void loadItems(Consumer<List<Picture>> foo) {
         DatabaseReference ref = getDatabase().getReference("pictures");
         ref.keepSynced(true);
         Query picturesQuery = ref;
@@ -103,13 +99,13 @@ public class FirebaseDB {
         picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Item> items = new ArrayList<>();
+                List<Picture> pictures = new ArrayList<>();
                 Dictionary<String, Integer> id_and_key = new Hashtable<>();
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    Item item = singleSnapshot.getValue(Item.class);
-                    item.public_id = singleSnapshot.getKey();
-                    items.add(item);
-                    id_and_key.put(item.public_id, items.size()-1);
+                    Picture picture = singleSnapshot.getValue(Picture.class);
+                    picture.public_id = singleSnapshot.getKey();
+                    pictures.add(picture);
+                    id_and_key.put(picture.public_id, pictures.size()-1);
                 }
                 DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(getUser().getUid()));
                 ref.keepSynced(true);
@@ -120,11 +116,11 @@ public class FirebaseDB {
                         for (DataSnapshot singleSnapshot : snapshot.getChildren()) {
                             Integer index = id_and_key.remove(singleSnapshot.getKey());
                             if (singleSnapshot.child("is_favorite").exists())
-                                items.get(index).is_favorite = singleSnapshot.child("is_favorite").getValue(Boolean.class);
+                                pictures.get(index).is_favorite = singleSnapshot.child("is_favorite").getValue(Boolean.class);
                             if (singleSnapshot.child("stars").exists())
-                                items.get(index).score = singleSnapshot.child("stars").getValue(Integer.class);
+                                pictures.get(index).score = singleSnapshot.child("stars").getValue(Integer.class);
                         }
-                        foo.accept(items);
+                        foo.accept(pictures);
                     }
 
                     @Override
@@ -140,7 +136,7 @@ public class FirebaseDB {
         });
     }
 
-    static public void loadItem(Consumer<Item> foo, String name) {
+    static public void loadItem(Consumer<Picture> foo, String name) {
         DatabaseReference ref = getDatabase().getReference("pictures");
         ref.keepSynced(true);
         Query picturesQuery = ref.orderByChild("name").equalTo(name);
@@ -148,25 +144,25 @@ public class FirebaseDB {
         picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Item item = null;
+                Picture picture = null;
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    item = singleSnapshot.getValue(Item.class);
-                    item.public_id = singleSnapshot.getKey();
+                    picture = singleSnapshot.getValue(Picture.class);
+                    picture.public_id = singleSnapshot.getKey();
                     break;
                 }
 
-                DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(getUser().getUid())).child(item.public_id);
+                DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(getUser().getUid())).child(picture.public_id);
                 ref.keepSynced(true);
                 Query personalPicturesQuery = ref;
-                Item finalItem = item;
+                Picture finalPicture = picture;
                 personalPicturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.child("is_favorite").exists())
-                            finalItem.is_favorite = snapshot.child("is_favorite").getValue(Boolean.class);
+                            finalPicture.is_favorite = snapshot.child("is_favorite").getValue(Boolean.class);
                         if (snapshot.child("stars").exists())
-                            finalItem.score = snapshot.child("stars").getValue(Integer.class);
-                        foo.accept(finalItem);
+                            finalPicture.score = snapshot.child("stars").getValue(Integer.class);
+                        foo.accept(finalPicture);
                     }
 
                     @Override

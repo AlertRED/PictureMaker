@@ -13,10 +13,10 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.picturemaker.FirebaseDB;
+import com.example.picturemaker.Storage.FirebaseDB;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
-import com.example.picturemaker.support.Item;
+import com.example.picturemaker.Storage.Picture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ class ViewHolderHomeTopRV extends RecyclerView.ViewHolder {
 
 public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> {
 
-    private List<Item> items = new ArrayList<>();
+    private List<Picture> pictures = new ArrayList<>();
     int layout_item;
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
@@ -78,12 +78,12 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
         this.layout_item = layout_item;
     }
 
-    public AdapterHomeTopRV(Context context, int layout_item, List<Item> items, int spacing_vertical, int spacing_horizontal) {
+    public AdapterHomeTopRV(Context context, int layout_item, List<Picture> pictures, int spacing_vertical, int spacing_horizontal) {
         this.context = context;
         this.layout_item = layout_item;
         this.spacing_horizontal = spacing_horizontal;
         this.spacing_vertical = spacing_vertical;
-        this.items = items;
+        this.pictures = pictures;
     }
 
     @Override
@@ -95,26 +95,26 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
     @Override
     public void onBindViewHolder(final ViewHolderHomeTopRV holder, final int position) {
 
-        Item item = this.items.get(position);
+        Picture picture = this.pictures.get(position);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), item.name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), picture.name, Toast.LENGTH_SHORT).show();
             }
         });
 
         holder.getLayer().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(context, PictureActivity.class);
-                intent.putExtra("picture_id", item.public_id);
+                intent.putExtra("picture_id", picture.public_id);
                 context.startActivity(intent);
             }
         });
 
-        holder.getText().setText(item.name);
+        holder.getText().setText(picture.name);
 
-        holder.loadImage(context, item.public_picture);
+        holder.loadImage(context, picture.public_picture);
 
         if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && position < this.getItemCount() - 1) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
@@ -125,6 +125,6 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
 
     @Override
     public int getItemCount() {
-        return this.items.size();
+        return this.pictures.size();
     }
 }

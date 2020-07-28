@@ -17,16 +17,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.picturemaker.support.Item;
-import com.example.picturemaker.support.ItemData;
+import com.example.picturemaker.Storage.FirebaseDB;
+import com.example.picturemaker.Storage.Picture;
+import com.example.picturemaker.Storage.LocalStorage;
+import com.example.picturemaker.Storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PictureActivity extends AppCompatActivity {
 
-    private Item item;
-    private ImageView picture;
+    private Picture picture;
+    private ImageView image;
     private TextView name;
     private TextView my_score;
     private TextView total_score;
@@ -43,12 +45,12 @@ public class PictureActivity extends AppCompatActivity {
         popDialog.setView(view);
 
         final RatingBar progress = view.findViewById(R.id.ratingBar);
-        progress.setRating((float) item.score);
+        progress.setRating((float) picture.score);
 
         popDialog.setPositiveButton("Готово",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        item.score = (int) progress.getRating();
+                        picture.score = (int) progress.getRating();
                         RefreshData();
                         dialog.dismiss();
                     }
@@ -66,26 +68,26 @@ public class PictureActivity extends AppCompatActivity {
 
     private void RefreshData() {
 
-        FirebaseDB.loadPicture(this,this.item.public_picture, this.picture, false);
+//        FirebaseDB.loadPicture(this, this.picture.public_picture, this.picture, false);
 
-        this.name.setText(this.item.name);
-        this.total_score.setText("Рейтинг: ".concat(String.valueOf(this.item.total_score)));
-        this.favorite.setImageResource(this.item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
-        this.score.setImageResource(this.item.score > 0 ? R.drawable.ic_baseline_star_24 : R.drawable.ic_baseline_star_border_24);
+        this.name.setText(this.picture.name);
+        this.total_score.setText("Рейтинг: ".concat(String.valueOf(this.picture.total_score)));
+        this.favorite.setImageResource(this.picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
+        this.score.setImageResource(this.picture.score > 0 ? R.drawable.ic_baseline_star_24 : R.drawable.ic_baseline_star_border_24);
         for (int i = 0; i < this.puzzles.size(); i++) {
-            int state = i > item.level - 1 ? View.GONE : View.VISIBLE;
+            int state = i > picture.level - 1 ? View.GONE : View.VISIBLE;
             this.puzzles.get(i).setVisibility(state);
         }
 
-        if (this.item.progress == 0) {
+        if (this.picture.progress == 0) {
             this.layout_progress.setVisibility(View.GONE);
             this.my_score.setVisibility(View.GONE);
-        } else if (this.item.progress == 100){
+        } else if (this.picture.progress == 100){
             this.layout_progress.setVisibility(View.GONE);
-            this.my_score.setText("Ваша оценка: ".concat(String.valueOf(this.item.score)));
+            this.my_score.setText("Ваша оценка: ".concat(String.valueOf(this.picture.score)));
         } else {
             this.progress.setMax(100);
-            this.progress.setProgress(this.item.progress);
+            this.progress.setProgress(this.picture.progress);
         }
 
         final Activity activity = this;
@@ -101,29 +103,29 @@ public class PictureActivity extends AppCompatActivity {
         this.favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!item.is_favorite) {
+                if (!picture.is_favorite) {
                     favorite.setImageResource(R.drawable.ic_favorite_36);
                     Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
                 } else {
                     favorite.setImageResource(R.drawable.ic_unfavorite_36);
                     Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
                 }
-                item.is_favorite = !item.is_favorite;
+                picture.is_favorite = !picture.is_favorite;
             }
         });
 
         this.score.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (item.progress == 100)
+                if (picture.progress == 100)
                     ShowRating();
                 else Toast.makeText(v.getContext(), "Картина не завершина", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void LoadItem(Item item){
-        this.item = item;
+    private void LoadItem(Picture picture){
+        this.picture = picture;
         RefreshData();
     }
 
@@ -134,7 +136,7 @@ public class PictureActivity extends AppCompatActivity {
 
         String picture_id = getIntent().getStringExtra("picture_id");
 
-        this.picture = findViewById(R.id.picture);
+        this.image = findViewById(R.id.picture);
         this.name = findViewById(R.id.activity_picture_name);
         this.my_score = findViewById(R.id.picture_my_score);
         this.total_score = findViewById(R.id.picture_total_score);
@@ -149,7 +151,7 @@ public class PictureActivity extends AppCompatActivity {
         this.puzzles.add((ImageView) findViewById(R.id.puzzle2));
         this.puzzles.add((ImageView) findViewById(R.id.puzzle3));
 
-        ItemData.loadItem(this::LoadItem, picture_id);
+//        Storage(this::LoadItem, picture_id);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.filter_gallery_toolbar2);
         setSupportActionBar(toolbar);

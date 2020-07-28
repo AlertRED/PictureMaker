@@ -13,10 +13,10 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.picturemaker.FirebaseDB;
+import com.example.picturemaker.Storage.FirebaseDB;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
-import com.example.picturemaker.support.Item;
+import com.example.picturemaker.Storage.Picture;
 import com.example.picturemaker.support.TestData;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
     boolean first;
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
-    List<Item> items = new ArrayList<>();
+    List<Picture> pictures = new ArrayList<>();
 
     public AdapterGalleryRV() {}
 
@@ -64,13 +64,13 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         this.layout_item = layout_item;
     }
 
-    public AdapterGalleryRV(Context context, int layout_item, List<Item> items,int spacing_vertical, int spacing_horizontal, boolean first) {
+    public AdapterGalleryRV(Context context, int layout_item, List<Picture> pictures, int spacing_vertical, int spacing_horizontal, boolean first) {
         this.context = context;
         this.first = first;
         this.layout_item = layout_item;
         this.spacing_horizontal = spacing_horizontal;
         this.spacing_vertical = spacing_vertical;
-        this.items = items;
+        this.pictures = pictures;
     }
 
 
@@ -83,7 +83,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
 
     @Override
     public void onBindViewHolder(final ViewHolderGalleryRV holder, final int position) {
-        Item item = this.items.get(position);
+        Picture picture = this.pictures.get(position);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,15 +92,15 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
             }
         });
 
-        holder.loadImage(context, item.public_picture);
-        holder.text.setText(item.name);
+        holder.loadImage(context, picture.public_picture);
+        holder.text.setText(picture.name);
 
-        holder.favorite.setImageResource(item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
+        holder.favorite.setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
 
         holder.layer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(context, PictureActivity.class);
-                intent.putExtra("picture_id", item.public_id);
+                intent.putExtra("picture_id", picture.public_id);
                 context.startActivity(intent);
             }
         });
@@ -108,7 +108,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         holder.favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!item.is_favorite){
+                if (!picture.is_favorite){
                     holder.favorite.setImageResource(R.drawable.ic_favorite_36);
                     Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
                 } else {
@@ -116,7 +116,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
                     Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
 
                 }
-                item.is_favorite = !item.is_favorite;
+                picture.is_favorite = !picture.is_favorite;
             }
         });
 
@@ -129,6 +129,6 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
 
     @Override
     public int getItemCount() {
-        return this.items.size();
+        return this.pictures.size();
     }
 }
