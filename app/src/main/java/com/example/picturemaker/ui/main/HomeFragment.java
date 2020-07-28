@@ -24,6 +24,7 @@ import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.adapters.AdapterHomeTopRV;
 import com.example.picturemaker.support.Item;
+import com.example.picturemaker.support.ItemData;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -110,9 +111,11 @@ public class HomeFragment extends Fragment {
                     if (!item.is_favorite) {
                         holder.getFavorite().setImageResource(R.drawable.ic_favorite_36);
                         Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
+                        ItemData.likePicture(item.public_id, true);
                     } else {
                         holder.getFavorite().setImageResource(R.drawable.ic_unfavorite_36);
                         Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
+                        ItemData.likePicture(item.public_id, false);
                     }
                     item.is_favorite = !item.is_favorite;
                 }
@@ -162,12 +165,12 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FirebaseDB.loadItems(this::addView);
+        ItemData.loadItems(this::addView);
 
 //        FirebaseDB.likePicture("1");
 
         rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        FirebaseDB.loadItems(this::RefreshAdapter);
+        ItemData.loadItems(this::RefreshAdapter);
     }
 }

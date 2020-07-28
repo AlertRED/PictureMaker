@@ -31,6 +31,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 public class FirebaseDB {
@@ -82,6 +84,17 @@ public class FirebaseDB {
         }
     }
 
+    static public void likePicture(String picture_id, boolean is_like) {
+        String uid = getUser().getUid();
+        DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(uid)).child(picture_id).child("is_favorite");
+
+        if (is_like){
+            ref.setValue(true);
+        } else {
+            ref.removeValue();
+        }
+    }
+
     static public void loadItems(Consumer<List<Item>> foo) {
         DatabaseReference ref = getDatabase().getReference("pictures");
         ref.keepSynced(true);
@@ -91,12 +104,34 @@ public class FirebaseDB {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Item> items = new ArrayList<>();
+                Dictionary<String, Integer> id_and_key = new Hashtable<>();
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     Item item = singleSnapshot.getValue(Item.class);
                     item.public_id = singleSnapshot.getKey();
                     items.add(item);
+                    id_and_key.put(item.public_id, items.size()-1);
                 }
-                foo.accept(items);
+                DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(getUser().getUid()));
+                ref.keepSynced(true);
+                Query personalPicturesQuery = ref;
+                personalPicturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot singleSnapshot : snapshot.getChildren()) {
+                            Integer index = id_and_key.remove(singleSnapshot.getKey());
+                            if (singleSnapshot.child("is_favorite").exists())
+                                items.get(index).is_favorite = singleSnapshot.child("is_favorite").getValue(Boolean.class);
+                            if (singleSnapshot.child("stars").exists())
+                                items.get(index).score = singleSnapshot.child("stars").getValue(Integer.class);
+                        }
+                        foo.accept(items);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -119,7 +154,26 @@ public class FirebaseDB {
                     item.public_id = singleSnapshot.getKey();
                     break;
                 }
-                foo.accept(item);
+
+                DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(getUser().getUid())).child(item.public_id);
+                ref.keepSynced(true);
+                Query personalPicturesQuery = ref;
+                Item finalItem = item;
+                personalPicturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.child("is_favorite").exists())
+                            finalItem.is_favorite = snapshot.child("is_favorite").getValue(Boolean.class);
+                        if (snapshot.child("stars").exists())
+                            finalItem.score = snapshot.child("stars").getValue(Integer.class);
+                        foo.accept(finalItem);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -162,12 +216,6 @@ public class FirebaseDB {
 //
 //            }
 //        });
-    }
-
-    static public void likePicture(String name) {
-        String uid = getUser().getUid();
-        DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(uid)).child("pic");
-        ref.setValue(name);
     }
 
     static public void loadPicture(Context context, String name, Consumer<Bitmap> foo, boolean is_disk_cache) {

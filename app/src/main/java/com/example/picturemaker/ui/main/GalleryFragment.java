@@ -21,6 +21,7 @@ import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.FilterGalleryActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.support.Item;
+import com.example.picturemaker.support.ItemData;
 
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class GalleryFragment extends Fragment {
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain_adapter = new AdapterGalleryRV();
-        FirebaseDB.loadItems(this::RefreshAdapter);
+        ItemData.loadItems(this::RefreshAdapter);
     }
 
 }

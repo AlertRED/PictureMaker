@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.picturemaker.support.Item;
+import com.example.picturemaker.support.ItemData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,7 +149,7 @@ public class PictureActivity extends AppCompatActivity {
         this.puzzles.add((ImageView) findViewById(R.id.puzzle2));
         this.puzzles.add((ImageView) findViewById(R.id.puzzle3));
 
-        FirebaseDB.loadItem(this::LoadItem, picture_id);
+        ItemData.loadItem(this::LoadItem, picture_id);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.filter_gallery_toolbar2);
         setSupportActionBar(toolbar);

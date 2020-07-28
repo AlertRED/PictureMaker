@@ -16,6 +16,7 @@ import com.example.picturemaker.FirebaseDB;
 import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.R;
 import com.example.picturemaker.support.Item;
+import com.example.picturemaker.support.ItemData;
 
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class RecentlyFragment extends Fragment {
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_recently);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain_adapter = new AdapterGalleryRV();
-        FirebaseDB.loadItems(this::RefreshAdapter);
+        ItemData.loadItems(this::RefreshAdapter);
 
     }
 
