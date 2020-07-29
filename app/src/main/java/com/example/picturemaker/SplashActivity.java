@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.example.picturemaker.Storage.FirebaseDB;
 
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override

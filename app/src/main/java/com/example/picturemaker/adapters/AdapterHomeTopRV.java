@@ -13,10 +13,10 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.picturemaker.Storage.FirebaseDB;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.Storage.Picture;
+import com.example.picturemaker.Storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ class ViewHolderHomeTopRV extends RecyclerView.ViewHolder {
     }
 
     public void loadImage(Context context, String name) {
-        FirebaseDB.loadPicture(context, name, this::setImage, false);
+        Storage.getInstance(context).GetImage(context, name, this::setImage);
     }
 
     private void setImage(Bitmap bitmap){

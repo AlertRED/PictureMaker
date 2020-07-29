@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
-        <picture>@font/abeezee</picture>
-        <picture>@font/advent_pro</picture>
-        <picture>@font/aldrich</picture>
-        <picture>@font/antic_slab</picture>
-        <picture>@font/arimo</picture>
-        <picture>@font/mate_sc</picture>
-        <picture>@font/simonetta</picture>
-        <picture>@font/tinos</picture>
+        <item>@font/abeezee</item>
+        <item>@font/advent_pro</item>
+        <item>@font/aldrich</item>
+        <item>@font/antic_slab</item>
+        <item>@font/arimo</item>
+        <item>@font/mate_sc</item>
+        <item>@font/simonetta</item>
+        <item>@font/tinos</item>
     </array>
 </resources>

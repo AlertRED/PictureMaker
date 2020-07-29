@@ -2,13 +2,13 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <picture name="colorPrimary">@color/colorPrimary</picture>
-        <picture name="colorPrimaryDark">@color/colorPrimaryDark</picture>
-        <picture name="colorAccent">@color/colorAccent</picture>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <picture name="android:windowBackground">@drawable/splash_screen</picture>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
 </resources>

@@ -17,10 +17,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.picturemaker.Storage.FirebaseDB;
 import com.example.picturemaker.Storage.Picture;
-import com.example.picturemaker.Storage.LocalStorage;
-import com.example.picturemaker.Storage.Storage;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,9 +162,6 @@ public class PictureActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
 
     }
 }

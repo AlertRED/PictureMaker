@@ -20,7 +20,6 @@ import com.example.picturemaker.Storage.Picture;
 import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.FilterGalleryActivity;
 import com.example.picturemaker.R;
-import com.example.picturemaker.Storage.LocalStorage;
 
 import java.util.List;
 
@@ -74,7 +73,7 @@ public class GalleryFragment extends Fragment {
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
         rvMain_adapter = new AdapterGalleryRV();
-        LocalStorage.loadItems(this::RefreshAdapter);
+//        LocalStorage.loadItems(this::RefreshAdapter);
     }
 
 }

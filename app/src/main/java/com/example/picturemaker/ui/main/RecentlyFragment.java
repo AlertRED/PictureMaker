@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import com.example.picturemaker.Storage.Picture;
 import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.R;
-import com.example.picturemaker.Storage.LocalStorage;
 
 import java.util.List;
 

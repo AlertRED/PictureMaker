@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.picturemaker.Storage.FirebaseDB;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.Storage.Picture;
@@ -39,7 +38,7 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
     }
 
     public void loadImage(Context context, String name) {
-        FirebaseDB.loadPicture(context, name, this::setImage, false);
+//        FirebaseDB.loadPicture(context, name, this::setImage, false);
     }
 
     private void setImage(Bitmap bitmap){

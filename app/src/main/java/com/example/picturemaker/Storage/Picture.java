@@ -1,12 +1,17 @@
 package com.example.picturemaker.Storage;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class Picture {
+
     @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "public_id")
     public String public_id;
 
     @ColumnInfo(name = "name")
@@ -33,9 +38,7 @@ public class Picture {
     public Picture() {
     }
 
-    public Picture(String name, String public_picture, int level) {
-        this.public_picture = public_picture;
-        this.name = name;
-        this.level = level;
+    public Picture(@NonNull String public_id) {
+        this.public_id = public_id;
     }
 }

@@ -107,27 +107,8 @@ public class FirebaseDB {
                     pictures.add(picture);
                     id_and_key.put(picture.public_id, pictures.size()-1);
                 }
-                DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(getUser().getUid()));
-                ref.keepSynced(true);
-                Query personalPicturesQuery = ref;
-                personalPicturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot singleSnapshot : snapshot.getChildren()) {
-                            Integer index = id_and_key.remove(singleSnapshot.getKey());
-                            if (singleSnapshot.child("is_favorite").exists())
-                                pictures.get(index).is_favorite = singleSnapshot.child("is_favorite").getValue(Boolean.class);
-                            if (singleSnapshot.child("stars").exists())
-                                pictures.get(index).score = singleSnapshot.child("stars").getValue(Integer.class);
-                        }
-                        foo.accept(pictures);
-                    }
+                foo.accept(pictures);
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
             }
 
             @Override

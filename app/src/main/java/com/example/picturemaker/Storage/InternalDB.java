@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase;
 import java.util.List;
 
 @Dao
-interface ItemDao {
+interface PictureDao {
     @Query("SELECT * FROM Picture")
     List<Picture> getAll();
 
@@ -32,6 +32,5 @@ interface ItemDao {
 
 @Database(entities = {Picture.class}, version = 1)
 public abstract class InternalDB extends RoomDatabase {
-    public abstract ItemDao userDao();
+    public abstract PictureDao pictureDao();
 }
-

@@ -19,12 +19,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.picturemaker.Storage.FirebaseDB;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.Storage.Picture;
+import com.example.picturemaker.Storage.Storage;
 import com.example.picturemaker.adapters.AdapterHomeTopRV;
-import com.example.picturemaker.Storage.LocalStorage;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -54,7 +53,7 @@ class HomeHolder {
     }
 
     public void loadImage(Context context, String name) {
-        FirebaseDB.loadPicture(context, name, this::setImage, false);
+        Storage.getInstance(context).GetImage(context, name, this::setImage);
     }
 
     public View getLayer() {
@@ -83,6 +82,7 @@ public class HomeFragment extends Fragment {
 
     private Map<Picture, View> layers = new Hashtable<>();
     private RecyclerView rv_top;
+
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -164,13 +164,14 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Storage storage = Storage.getInstance(this.getContext());
+        storage = Storage.getInstance(this.getContext());
 
-//        LocalStorage.loadItems(this::addView);
-
+        storage.GetPictures(this::addView, false, 2);
 //        FirebaseDB.likePicture("1");
 
         rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-//        LocalStorage.loadItems(this::RefreshAdapter);
+        storage.GetPictures(this::RefreshAdapter, false, 2);
     }
 }
