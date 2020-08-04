@@ -1,7 +1,7 @@
 package com.example.picturemaker.support;
 
 import com.example.picturemaker.R;
-import com.example.picturemaker.Storage.Picture;
+import com.example.picturemaker.storage.Picture;
 
 import java.util.ArrayList;
 import java.util.Iterator;

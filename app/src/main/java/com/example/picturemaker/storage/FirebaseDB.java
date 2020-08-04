@@ -1,4 +1,4 @@
-package com.example.picturemaker.Storage;
+package com.example.picturemaker.storage;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 public class FirebaseDB {
 
@@ -80,21 +81,85 @@ public class FirebaseDB {
         }
     }
 
-    static public void likePicture(String picture_id, boolean is_like) {
+    static public void loadAuthors(Consumer<List<String>> foo) {
+        DatabaseReference ref = getDatabase().getReference("authors");
+        ref.keepSynced(true);
+        Query query = ref;
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> authors = new ArrayList<>();
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    String author = (String) singleSnapshot.getValue();
+                    authors.add(author);
+                }
+                foo.accept(authors);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    static public void loadGenres(Consumer<List<String>> foo) {
+        DatabaseReference ref = getDatabase().getReference("genres");
+        ref.keepSynced(true);
+        Query query = ref;
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> genres = new ArrayList<>();
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    String genre = (String) singleSnapshot.getValue();
+                    genres.add(genre);
+                }
+                foo.accept(genres);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    static public void SetFavoritePicture(String picture_id, boolean is_favorite, Runnable foo) {
         String uid = getUser().getUid();
         DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(uid)).child(picture_id).child("is_favorite");
 
-        if (is_like){
-            ref.setValue(true);
+        if (is_favorite) {
+            ref.setValue(true).addOnSuccessListener(aVoid -> foo.run());
         } else {
-            ref.removeValue();
+            ref.removeValue().addOnSuccessListener(aVoid -> foo.run());
         }
     }
 
-    static public void loadItems(Consumer<List<Picture>> foo) {
+    static public void LoadPictures(Consumer<List<Picture>> foo, Map<String, Object> parameters) {
         DatabaseReference ref = getDatabase().getReference("pictures");
         ref.keepSynced(true);
         Query picturesQuery = ref;
+
+        if (parameters.containsKey("is_popular")) {
+            String is_popular = (String) parameters.get("is_popular");
+            picturesQuery = ref.orderByChild("is_popular").equalTo(is_popular);
+        }
+        if (parameters.containsKey("level")) {
+            int level = (int) parameters.get("level");
+            picturesQuery = ref.orderByChild("level").startAt(level).endAt(level);
+        }
+        if (parameters.containsKey("author")) {
+            String author = (String) parameters.get("author");
+            picturesQuery = ref.orderByChild("author").equalTo(author);
+        }
+        if (parameters.containsKey("genre")) {
+            String genre = (String) parameters.get("genre");
+            picturesQuery = ref.orderByChild("genre").equalTo(genre);
+        }
+//        if (parameters.containsKey("is_popular"))
+//            picturesQuery = ref.orderByChild("is_popular").equalTo((boolean) parameters.get("is_popular"));
 
         picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -105,10 +170,8 @@ public class FirebaseDB {
                     Picture picture = singleSnapshot.getValue(Picture.class);
                     picture.public_id = singleSnapshot.getKey();
                     pictures.add(picture);
-                    id_and_key.put(picture.public_id, pictures.size()-1);
                 }
                 foo.accept(pictures);
-
             }
 
             @Override
@@ -179,20 +242,6 @@ public class FirebaseDB {
                         super.onLoadFailed(errorDrawable);
                     }
                 });
-
-
-//        imageRefl.getBytes(MEGABYT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//            @Override
-//            public void onSuccess(byte[] bytes) {
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                image.setImageBitmap(bitmap);
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//
-//            }
-//        });
     }
 
     static public void loadPicture(Context context, String name, Consumer<Bitmap> foo, boolean is_disk_cache) {
@@ -213,39 +262,9 @@ public class FirebaseDB {
                     @Override
                     public void onLoadFailed(@Nullable Drawable errorDrawable) {
                         super.onLoadFailed(errorDrawable);
+
                     }
                 });
-
-//        Glide.with(context).asBitmap().load(imageRef.toString())
-//                .into(new CustomTarget<Bitmap>() {
-//                    @Override
-//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//                        foo.accept(resource);
-//                    }
-//
-//                    @Override
-//                    public void onLoadCleared(@Nullable Drawable placeholder) {
-//                    }
-//
-//                    @Override
-//                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
-//                        super.onLoadFailed(errorDrawable);
-//                    }
-//                });
-
-
-//        imageRef.getBytes(MEGABYT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//            @Override
-//            public void onSuccess(byte[] bytes) {
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-//                foo.accept(bitmap);
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//
-//            }
-//        });
     }
 
 }

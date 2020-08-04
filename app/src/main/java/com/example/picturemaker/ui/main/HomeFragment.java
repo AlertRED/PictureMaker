@@ -21,8 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
-import com.example.picturemaker.Storage.Picture;
-import com.example.picturemaker.Storage.Storage;
+import com.example.picturemaker.storage.Picture;
+import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.adapters.AdapterHomeTopRV;
 
 import java.util.Hashtable;
@@ -40,7 +40,7 @@ class HomeHolder {
         this.title = view.findViewById(R.id.picture_name);
         this.favorite = view.findViewById(R.id.favorite_image_item_home);
         this.layer = view;
-        this.layer.setVisibility(View.GONE);
+        this.layer.setAlpha(0);
     }
 
     public ImageView getImage() {
@@ -49,7 +49,7 @@ class HomeHolder {
 
     private void setImage(Bitmap bitmap) {
         this.image.setImageBitmap(bitmap);
-        this.layer.setVisibility(View.VISIBLE);
+        this.layer.animate().alpha(1f).setDuration(250);
     }
 
     public void loadImage(Context context, String name) {
@@ -80,9 +80,10 @@ class HomeHolder {
 
 public class HomeFragment extends Fragment {
 
-    private Map<Picture, View> layers = new Hashtable<>();
+    private Map<String, HomeHolder> pictures_holdes = new Hashtable<>();
     private RecyclerView rv_top;
-
+    Storage storage;
+    private LinearLayout home_ll;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -97,38 +98,35 @@ public class HomeFragment extends Fragment {
 
 
     private void RefreshData() {
-        for (Map.Entry<Picture, View> entry : layers.entrySet()) {
-            final Picture picture = entry.getKey();
-
-            HomeHolder holder = new HomeHolder(entry.getValue());
-            holder.loadImage(this.getContext(), picture.public_picture);
-            holder.getFavorite().setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
-            holder.getTitle().setText(picture.name);
-
-            holder.getFavorite().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!picture.is_favorite) {
-                        holder.getFavorite().setImageResource(R.drawable.ic_favorite_36);
-                        Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
-//                        LocalStorage.likePicture(picture.public_id, true);
-                    } else {
-                        holder.getFavorite().setImageResource(R.drawable.ic_unfavorite_36);
-                        Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
-//                        LocalStorage.likePicture(picture.public_id, false);
-                    }
-                    picture.is_favorite = !picture.is_favorite;
-                }
-            });
-
-            holder.getLayer().setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), PictureActivity.class);
-                    intent.putExtra("picture_id", picture.public_id);
-                    startActivity(intent);
-                }
-            });
+        for (Map.Entry<String, HomeHolder> entry : pictures_holdes.entrySet()) {
+            storage.GetPicture(this::RefreshPicture, entry.getKey());
         }
+    }
+
+    private void RefreshPicture(Picture picture) {
+        HomeHolder holder = this.pictures_holdes.get(picture.public_id);
+
+        assert holder != null;
+        holder.loadImage(this.getContext(), picture.public_picture);
+        holder.getTitle().setText(picture.name);
+        holder.getFavorite().setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
+
+        holder.getFavorite().setOnClickListener(v -> {
+            storage.SetFavoritePicture(picture.public_id, !picture.is_favorite, () -> {updatePictureInfo(picture.public_id);});
+            if (!picture.is_favorite) {
+                holder.getFavorite().setImageResource(R.drawable.ic_favorite_36);
+                Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
+            } else {
+                holder.getFavorite().setImageResource(R.drawable.ic_unfavorite_36);
+                Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        holder.getLayer().setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), PictureActivity.class);
+            intent.putExtra("picture_id", picture.public_id);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -137,41 +135,52 @@ public class HomeFragment extends Fragment {
         this.RefreshData();
     }
 
-    private void addView(final Picture picture) {
-        LinearLayout home_ll = (LinearLayout) this.getActivity().findViewById(R.id.home_ll);
+    private void addView(String pictureId) {
         LayoutInflater inflater = getLayoutInflater();
-
         View layer = inflater.inflate(R.layout.item_pictute_popular, null);
-        this.layers.put(picture, layer);
-
+        this.pictures_holdes.put(pictureId, new HomeHolder(layer));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.setMargins(20, 10, 20, 10);
         layer.setLayoutParams(params);
         home_ll.addView(layer);
     }
 
-    public void addView(List<Picture> pictures) {
-        for (Picture picture : pictures)
-            this.addView(picture);
-        this.RefreshData();
+    private void updatePictureInfo(String pictureId){
+        this.storage.GetPicture(this::RefreshPicture, pictureId);
     }
 
-    public void RefreshAdapter(List<Picture> pictures) {
-        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.item_pictute_top, pictures, 0, 20);
+    public void showPictures(List<String> picturesIds) {
+        for (String pictureId : picturesIds) {
+            addView(pictureId);
+            updatePictureInfo(pictureId);
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden)
+            RefreshData();
+    }
+
+    public void RefreshAdapter(List<String> picturesIds) {
+        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.item_pictute_top, picturesIds, 0, 20);
         rv_top.setAdapter(rvMain_adapter);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Storage storage = Storage.getInstance(this.getContext());
+        home_ll = (LinearLayout) this.getActivity().findViewById(R.id.home_ll);
         storage = Storage.getInstance(this.getContext());
 
-        storage.GetPictures(this::addView, false, 2);
-//        FirebaseDB.likePicture("1");
+        Map<String, Object> parameters = new Hashtable<>();
+        parameters.put("is_popular", true);
+        storage.GetPicturesIds(this::showPictures, parameters);
 
         rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
         rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        storage.GetPictures(this::RefreshAdapter, false, 2);
+        Map<String, Object> parameters1 = new Hashtable<>();
+        storage.GetPicturesIds(this::RefreshAdapter, parameters1);
     }
 }

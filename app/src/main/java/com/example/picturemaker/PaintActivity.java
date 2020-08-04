@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import com.example.picturemaker.adapters.AdapterColorsRV;
-import com.example.picturemaker.Storage.Picture;
-import com.example.picturemaker.support.TestData;
+import com.example.picturemaker.storage.Picture;
 
 public class PaintActivity extends AppCompatActivity {
 
@@ -20,7 +19,6 @@ public class PaintActivity extends AppCompatActivity {
         setContentView(R.layout.activity_paint);
 
         int picture_id = getIntent().getIntExtra("picture_id", 0);
-        this.picture = TestData.get_id(picture_id);
 
         RecyclerView rv_top = (RecyclerView) this.findViewById(R.id.rv_new);
         rv_top.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));

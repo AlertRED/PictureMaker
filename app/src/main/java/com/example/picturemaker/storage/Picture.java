@@ -1,9 +1,8 @@
-package com.example.picturemaker.Storage;
+package com.example.picturemaker.storage;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -38,7 +37,14 @@ public class Picture {
     public Picture() {
     }
 
-    public Picture(@NonNull String public_id) {
+    public Picture(@NonNull String public_id, String name, int level, int total_score, String public_picture, boolean is_favorite, int score, int progress) {
         this.public_id = public_id;
+        this.name = name;
+        this.level = level;
+        this.total_score = total_score;
+        this.public_picture = public_picture;
+        this.is_favorite = is_favorite;
+        this.score = score;
+        this.progress = progress;
     }
 }

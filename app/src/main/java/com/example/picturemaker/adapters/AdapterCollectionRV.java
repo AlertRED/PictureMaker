@@ -15,19 +15,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
+import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.support.TestData;
 
 import java.util.List;
 
 
-class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
+class ViewHolderCollectionRV extends RecyclerView.ViewHolder{
     private ImageView image;
     public TextView text;
     public ImageView favorite;
     public View layer;
 
-    public ViewHolderGalleryRV(View itemView) {
+    public ViewHolderCollectionRV(View itemView) {
         super(itemView);
         image = (ImageView)itemView.findViewById(R.id.imageview);
         text = (TextView)itemView.findViewById(R.id.picture_name);
@@ -47,55 +48,58 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
 }
 
 
-public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> {
+public class AdapterCollectionRV extends RecyclerView.Adapter<ViewHolderCollectionRV> {
     Context context;
     int layout_item;
     boolean first;
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
-    List<String> picturesIds;
+    List<Picture> pictures;
     Storage storage;
 
-    public AdapterGalleryRV() {}
+    public AdapterCollectionRV(){}
 
-    public AdapterGalleryRV(Context context ,int layout_item, List<String> picturesIds, int spacing_vertical, int spacing_horizontal, boolean first) {
+    public AdapterCollectionRV(Context context, int layout_item) {
+        this.context = context;
+        this.layout_item = layout_item;
+    }
+
+    public AdapterCollectionRV(Context context ,int layout_item, List<Picture> pictures, int spacing_vertical, int spacing_horizontal, boolean first) {
         this.context = context;
         this.first = first;
         this.layout_item = layout_item;
         this.spacing_horizontal = spacing_horizontal;
         this.spacing_vertical = spacing_vertical;
-        this.picturesIds = picturesIds;
+        this.pictures = pictures;
         this.storage = Storage.getInstance(context);
     }
 
 
     @Override
-    public ViewHolderGalleryRV onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolderCollectionRV onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(this.layout_item, parent, false);
-        return new ViewHolderGalleryRV(v);
+        return new ViewHolderCollectionRV(v);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolderGalleryRV holder, final int position) {
-        String pictureId = this.picturesIds.get(position);
-        storage.GetPicture(picture -> {
-            holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
+    public void onBindViewHolder(final ViewHolderCollectionRV holder, final int position) {
+        Picture picture = this.pictures.get(position);
+        holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
 
-            holder.loadImage(context, picture.public_picture);
-            holder.text.setText(picture.name);
+        holder.loadImage(context, picture.public_picture);
+        holder.text.setText(picture.name);
 
 
-            holder.layer.setOnClickListener(v -> {
-                Intent intent = new Intent(context, PictureActivity.class);
-                intent.putExtra("picture_id", picture.public_id);
-                context.startActivity(intent);
-            });
+        holder.layer.setOnClickListener(v -> {
+            Intent intent = new Intent(context, PictureActivity.class);
+            intent.putExtra("picture_id", picture.public_id);
+            context.startActivity(intent);
+        });
 
-            holder.favorite.setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
-            holder.favorite.setOnClickListener(v -> {
-                storage.SetFavoritePicture(picture.public_id, !picture.is_favorite, () -> {notifyItemChanged(position);});
-            });
-        }, pictureId);
+        holder.favorite.setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
+        holder.favorite.setOnClickListener(v -> {
+            storage.SetFavoritePicture(picture.public_id, !picture.is_favorite, () -> {notifyItemChanged(position);});
+        });
 
 
 
@@ -108,6 +112,6 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
 
     @Override
     public int getItemCount() {
-        return this.picturesIds.size();
+        return this.pictures.size();
     }
 }

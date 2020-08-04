@@ -17,7 +17,7 @@
         android:layout_weight="0"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/image1" />
+        app:srcCompat="@color/cardview_shadow_end_color" />
 
     <RelativeLayout
         android:layout_width="match_parent"

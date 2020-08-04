@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.picturemaker.Storage.Storage;
 import com.example.picturemaker.ui.main.GalleryFragment;
 import com.example.picturemaker.ui.main.HomeFragment;
 import com.example.picturemaker.ui.main.ProfileFragment;
