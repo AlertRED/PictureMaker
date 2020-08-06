@@ -143,7 +143,7 @@ public class FirebaseDB {
         Query picturesQuery = ref;
 
         if (parameters.containsKey("is_popular")) {
-            String is_popular = (String) parameters.get("is_popular");
+            Boolean is_popular = (Boolean) parameters.get("is_popular");
             picturesQuery = ref.orderByChild("is_popular").equalTo(is_popular);
         }
         if (parameters.containsKey("level")) {
@@ -165,7 +165,6 @@ public class FirebaseDB {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Picture> pictures = new ArrayList<>();
-                Dictionary<String, Integer> id_and_key = new Hashtable<>();
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     Picture picture = singleSnapshot.getValue(Picture.class);
                     picture.public_id = singleSnapshot.getKey();
