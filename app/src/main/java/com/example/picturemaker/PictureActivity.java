@@ -17,10 +17,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +66,7 @@ public class PictureActivity extends AppCompatActivity {
         popDialog.show();
     }
 
-    private void LoadPicture(Bitmap bitmap){
+    private void LoadPicture(Bitmap bitmap) {
         this.image.setImageBitmap(bitmap);
     }
 
@@ -86,7 +86,7 @@ public class PictureActivity extends AppCompatActivity {
         if (this.picture.progress == 0) {
             this.layout_progress.setVisibility(View.GONE);
             this.my_score.setVisibility(View.GONE);
-        } else if (this.picture.progress == 100){
+        } else if (this.picture.progress == 100) {
             this.layout_progress.setVisibility(View.GONE);
             this.my_score.setText("Ваша оценка: ".concat(String.valueOf(this.picture.score)));
         } else {
@@ -102,16 +102,7 @@ public class PictureActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        this.favorite.setOnClickListener(v -> {
-            storage.SetFavoritePicture(picture.public_id, !picture.is_favorite, () -> {storage.GetPicture(this::LoadItem, picture.public_id);});
-            if (!picture.is_favorite) {
-                favorite.setImageResource(R.drawable.ic_favorite_36);
-                Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
-            } else {
-                favorite.setImageResource(R.drawable.ic_unfavorite_36);
-                Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
-            }
-        });
+        this.favorite.setOnClickListener(v -> storage.SetFavoritePicture(picture.id, !picture.is_favorite));
 
         this.score.setOnClickListener(v -> {
             if (picture.progress == 100)
@@ -120,7 +111,7 @@ public class PictureActivity extends AppCompatActivity {
         });
     }
 
-    private void LoadItem(Picture picture){
+    private void LoadItem(Picture picture) {
         this.picture = picture;
         RefreshData();
     }
@@ -130,7 +121,7 @@ public class PictureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture);
 
-        String picture_id = getIntent().getStringExtra("picture_id");
+        long picture_id = getIntent().getIntExtra("pictureId", 0);
 
         this.image = findViewById(R.id.picture);
         this.name = findViewById(R.id.activity_picture_name);
@@ -148,7 +139,9 @@ public class PictureActivity extends AppCompatActivity {
         this.puzzles.add((ImageView) findViewById(R.id.puzzle3));
 
         this.storage = Storage.getInstance(this);
-        storage.GetPicture(this::LoadItem, picture_id);
+//        storage.GetPicture(this::LoadItem, picture_id);
+        LiveData<Picture> live = this.storage.GetLivePicture(picture_id);
+        live.observe(this, this::LoadItem);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.filter_gallery_toolbar2);
         setSupportActionBar(toolbar);
@@ -158,4 +151,5 @@ public class PictureActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> finish());
 
     }
+
 }

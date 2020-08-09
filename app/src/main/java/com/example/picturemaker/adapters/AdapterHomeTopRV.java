@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
+import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class ViewHolderHomeTopRV extends RecyclerView.ViewHolder {
@@ -30,7 +32,6 @@ class ViewHolderHomeTopRV extends RecyclerView.ViewHolder {
         layer = itemView;
         image = (ImageView) itemView.findViewById(R.id.imageview);
         text = (TextView) itemView.findViewById(R.id.picture_name);
-        this.layer.setAlpha(0f);
     }
 
     public void loadImage(Context context, String name) {
@@ -43,7 +44,6 @@ class ViewHolderHomeTopRV extends RecyclerView.ViewHolder {
 
     private void setImage(Bitmap bitmap) {
         this.image.setImageBitmap(bitmap);
-        this.layer.animate().alpha(1f).setDuration(250);
     }
 
     public TextView getText() {
@@ -70,19 +70,14 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
     int spacing_horizontal = 0;
     Context context;
     Storage storage;
-    private List<String> picturesIds;
+    private List<Picture> pictures;
 
-    public AdapterHomeTopRV(Context context, int layout_item) {
-        this.context = context;
-        this.layout_item = layout_item;
-    }
-
-    public AdapterHomeTopRV(Context context, int layout_item, List<String> picturesIds, int spacing_vertical, int spacing_horizontal) {
+    public AdapterHomeTopRV(Context context, int layout_item, int spacing_vertical, int spacing_horizontal) {
         this.context = context;
         this.layout_item = layout_item;
         this.spacing_horizontal = spacing_horizontal;
         this.spacing_vertical = spacing_vertical;
-        this.picturesIds = picturesIds;
+        this.pictures = new ArrayList<>();
         this.storage = Storage.getInstance(context);
     }
 
@@ -94,27 +89,21 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
 
     @Override
     public void onBindViewHolder(final ViewHolderHomeTopRV holder, final int picture_id) {
-        storage.GetPicture(picture -> {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), picture.name, Toast.LENGTH_SHORT).show();
-                }
-            });
 
-            holder.getLayer().setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, PictureActivity.class);
-                    intent.putExtra("picture_id", picture.public_id);
-                    context.startActivity(intent);
-                }
-            });
+        Picture picture = pictures.get(picture_id);
 
-            holder.getText().setText(picture.name);
+        holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), picture.name, Toast.LENGTH_SHORT).show());
 
-            holder.loadImage(context, picture.public_picture);
+        holder.getLayer().setOnClickListener(v -> {
+            Intent intent = new Intent(context, PictureActivity.class);
+            intent.putExtra("pictureId", picture.id);
+            context.startActivity(intent);
+        });
 
-        }, this.picturesIds.get(picture_id));
+        holder.getText().setText(picture.name);
+
+        holder.loadImage(context, picture.public_picture);
+
 
         if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && picture_id < this.getItemCount() - 1) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
@@ -123,8 +112,17 @@ public class AdapterHomeTopRV extends RecyclerView.Adapter<ViewHolderHomeTopRV> 
         }
     }
 
+    public void setData(List<Picture> pictures){
+        this.pictures = pictures;
+    }
+
+    public List<Picture> getData(){
+        return this.pictures;
+    }
+
+
     @Override
     public int getItemCount() {
-        return this.picturesIds.size();
+        return this.pictures.size();
     }
 }

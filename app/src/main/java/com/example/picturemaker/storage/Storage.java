@@ -7,22 +7,17 @@ import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableMaybeObserver;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class Storage {
 
     private static Storage instance;
+    public ViewPictureDao viewPictureDao;
     LocalStorage localStorage;
     InternalDB db;
     PictureDao pictureDao;
@@ -30,8 +25,9 @@ public class Storage {
 
     private Storage(Context context) {
         this.localStorage = new LocalStorage();
-        this.db = Room.databaseBuilder(context, InternalDB.class, "database-name").build();
+        this.db = Room.databaseBuilder(context, InternalDB.class, "database-name").fallbackToDestructiveMigration().build();
         this.pictureDao = this.db.pictureDao();
+        this.viewPictureDao = this.db.viewPictureDao();
         this.context = context;
     }
 
@@ -71,139 +67,73 @@ public class Storage {
         }
     }
 
-    public void GetPicturesIds(Consumer<List<String>> foo, Map<String, Object> parameters) {
-        List<String> picturesIds = this.localStorage.GetPicturesIds(parameters);
-        if (picturesIds != null) {
-            foo.accept(picturesIds);
-        } else {
-            FirebaseDB.LoadPictures(pictures1 -> {
-                this.localStorage.SaveStorage(pictures1, parameters);
-                GetPicturesIds(foo, parameters);
-            }, parameters);
-        }
+    public LiveData<List<Picture>> GetLiveDataFromView(String viewName) {
+        return this.viewPictureDao.getPicturesFromView(viewName);
     }
 
-    public void GetPicture(Consumer<Picture> foo, String picture_id) {
-        pictureDao.findById(picture_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableMaybeObserver<Picture>() {
-                    @Override
-                    public void onSuccess(Picture picture) {
-                        foo.accept(picture);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Picture picture = localStorage.GetPicture(picture_id);
-                        if (picture == null) {
-                            FirebaseDB.loadItem(picture1 -> {
-                                if (picture1.is_favorite) {
-                                    SavePictureToDB(picture1, () -> {
-                                    });
-                                } else
-                                    localStorage.SaveStorage(picture1);
-                                foo.accept(picture1);
-                            }, picture_id);
-                        } else {
-                            foo.accept(picture);
-                        }
-                    }
-                });
+    public void LoadPicturesByGallery(Map<String, Object> parameters) {
+        this.DeletePictures("Gallery");
+        this.LoadPictures("Gallery", parameters);
     }
 
-    public LiveData<List<Picture>> GetPicturesLiveData() {
-        return pictureDao.getAll();
+    public void LoadPicturesByCollection() {
+        Map<String, Object> parameters = new Hashtable<>();
+        this.LoadPictures("Collection", parameters);
+    }
+
+    public void LoadPicturesByTop() {
+        Map<String, Object> parameters = new Hashtable<>();
+        parameters.put("is_popular", true);
+        this.LoadPictures("Top", parameters);
+    }
+
+    public void LoadPicturesByPopular() {
+        Map<String, Object> parameters = new Hashtable<>();
+        parameters.put("is_popular", true);
+        this.LoadPictures("Popular", parameters);
+    }
+
+    private long InsertOrUpdate(Picture picture) {
+        long id = this.pictureDao.getIdByPublicId(picture.public_id);
+        if (id == 0)
+            return this.pictureDao.insert(picture);
+        this.pictureDao.update(picture);
+//        this.pictureDao.updatePicture(id, picture.name, picture.level, picture.total_score, "1.jpg", picture.is_favorite, picture.score, picture.progress);
+        return id;
+    }
+
+    public LiveData<Picture> GetLivePicture(long id) {
+        return this.pictureDao.liveById(id);
+    }
+
+    private void DeletePictures(String viewName) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> this.viewPictureDao.deleteAllPicturesFromView(viewName));
+    }
+
+    private void LoadPictures(String viewName, Map<String, Object> parameters) {
+        FirebaseDB.LoadPictures(pictures -> {
+            Executor myExecutor = Executors.newSingleThreadExecutor();
+            myExecutor.execute(() -> {
+                for (Picture picture : pictures) {
+                    long id = InsertOrUpdate(picture);
+                    this.viewPictureDao.insert(new ViewPicture(viewName, id));
+                }
+            });
+        }, parameters);
     }
 
     public void GetImage(Context context, String picture_name, Consumer<Bitmap> foo) {
-        FirebaseDB.loadPicture(context, picture_name, foo, false);
+        FirebaseDB.loadImage(context, picture_name, foo, false);
     }
 
-    public void SetFavoritePicture(String picture_id, boolean is_favorite, Runnable foo) {
-        FirebaseDB.SetFavoritePicture(picture_id, is_favorite, () ->
-                pictureDao.findById(picture_id)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new DisposableMaybeObserver<Picture>() {
-                            // Если запись найдена в БД
-                            @Override
-                            public void onSuccess(Picture picture) {
-                                picture.is_favorite = is_favorite;
-                                localStorage.SaveStorage(picture);
-                                DeletePictureToDB(picture, foo);
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                Picture picture = localStorage.GetPicture(picture_id);
-                                if (picture != null) { // Если запись найдена в локальном хранилище
-                                    picture.is_favorite = is_favorite;
-                                    SavePictureToDB(picture, foo);
-                                } else { // Если запись не найдена ни в БД ни в Хранилище, берем ее в Firebase
-                                    FirebaseDB.loadItem(picture1 -> {
-                                        picture1.is_favorite = is_favorite;
-                                        SavePictureToDB(picture1, foo);
-                                    }, picture_id);
-                                }
-                            }
-                        }));
-    }
-
-    private void SavePictureToDB(Picture picture, Runnable foo) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> pictureDao.insertAll(picture));
-
-//        Callable<Void> clb = () -> {
-//            this.pictureDao.insertAll(picture);
-//            return null;
-//        };
-//
-//        Disposable f = Observable.just(clb)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(voidCallable -> foo.run());
-    }
-
-    private void SavePictureToDB(Picture picture) {
-        Executor executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> pictureDao.update(picture));
-    }
-
-    private void UpdatePictureToDB(Picture picture, Runnable foo) {
-        Callable<Void> clb = () -> {
-            this.pictureDao.update(picture);
-            return null;
-        };
-
-        Disposable f = Observable.just(clb)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(voidCallable -> foo.run());
-    }
-
-    private void UpdatePictureToDB(Picture picture) {
-        Executor executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> pictureDao.update(picture));
-    }
-
-    private void DeletePictureToDB(Picture picture, Runnable foo) {
+    public void SetFavoritePicture(long pictureId, boolean isFavorite) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            this.pictureDao.delete(picture);
+            Picture picture = pictureDao.findById(pictureId);
+            picture.is_favorite = isFavorite;
+            pictureDao.update(picture);
+            FirebaseDB.SetFavoritePicture(picture.public_id, isFavorite, () -> {});
         });
-    }
-
-    private void DeletePictureToDB(Picture picture) {
-        Executor executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> pictureDao.delete(picture));
     }
 }

@@ -6,8 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.adapters.AdapterCollectionRV;
 import com.example.picturemaker.R;
+import com.example.picturemaker.support.PictureDiffUtilCallback;
 
 import java.util.List;
 
@@ -38,23 +41,11 @@ public class RecentlyFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_recently, container, false);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        rvMain_adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden)
-            rvMain_adapter.notifyDataSetChanged();
-    }
-
     private void RefreshAdapter(List<Picture> pictures) {
-        rvMain_adapter = new AdapterCollectionRV(this.getContext() ,R.layout.item_pictute_gallery, pictures,30,30, false);
-        rvMain.setAdapter(rvMain_adapter);
-        rvMain_adapter.notifyDataSetChanged();
+        PictureDiffUtilCallback pictureDiffUtilCallback = new PictureDiffUtilCallback(rvMain_adapter.getData(), pictures);
+        DiffUtil.DiffResult productDiffResult = DiffUtil.calculateDiff(pictureDiffUtilCallback);
+        rvMain_adapter.setData(pictures);
+        productDiffResult.dispatchUpdatesTo(rvMain_adapter);
     }
 
     @Override
@@ -65,20 +56,15 @@ public class RecentlyFragment extends Fragment {
 
         this.storage = Storage.getInstance(this.getContext());
 
-//        LiveData<String> liveData = DataController
-//
-//        liveData.observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String value) {
-//                textView.setText(value)
-//            }
-//        });
-
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_recently);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
-        rvMain_adapter = new AdapterCollectionRV();
-        LiveData<List<Picture>> liveData = this.storage.GetPicturesLiveData();
-        liveData.observe(getViewLifecycleOwner(), pictures -> RefreshAdapter(pictures));
+        ((SimpleItemAnimator) rvMain.getItemAnimator()).setSupportsChangeAnimations(false);
+        rvMain_adapter = new AdapterCollectionRV(this.getContext() ,R.layout.item_pictute_gallery, 30,30, false);
+        rvMain.setAdapter(rvMain_adapter);
+        LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView("Collection");
+        liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
+        this.storage.LoadPicturesByCollection();
+
     }
 
 }

@@ -11,23 +11,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
+import com.example.picturemaker.adapters.AdapterHomeTopRV;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
-import com.example.picturemaker.adapters.AdapterHomeTopRV;
+import com.example.picturemaker.support.PictureDiffUtilCallback;
 
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 class HomeHolder {
     private ImageView image;
@@ -40,7 +44,7 @@ class HomeHolder {
         this.title = view.findViewById(R.id.picture_name);
         this.favorite = view.findViewById(R.id.favorite_image_item_home);
         this.layer = view;
-        this.layer.setAlpha(0);
+//        this.layer.setAlpha(0);
     }
 
     public ImageView getImage() {
@@ -49,7 +53,7 @@ class HomeHolder {
 
     private void setImage(Bitmap bitmap) {
         this.image.setImageBitmap(bitmap);
-        this.layer.animate().alpha(1f).setDuration(250);
+//        this.layer.animate().alpha(1f).setDuration(250);
     }
 
     public void loadImage(Context context, String name) {
@@ -80,10 +84,11 @@ class HomeHolder {
 
 public class HomeFragment extends Fragment {
 
-    private Map<String, HomeHolder> pictures_holdes = new Hashtable<>();
-    private RecyclerView rv_top;
     Storage storage;
+    private RecyclerView rv_top;
+    private AdapterHomeTopRV rv_top_adapter;
     private LinearLayout home_ll;
+    private Map<Picture, HomeHolder> picturesAndLayers;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -97,90 +102,89 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void RefreshData() {
-        for (Map.Entry<String, HomeHolder> entry : pictures_holdes.entrySet()) {
-            storage.GetPicture(this::RefreshPicture, entry.getKey());
-        }
-    }
-
-    private void RefreshPicture(Picture picture) {
-        HomeHolder holder = this.pictures_holdes.get(picture.public_id);
-
-        assert holder != null;
+    private void RefreshInfo(HomeHolder holder, Picture picture) {
         holder.loadImage(this.getContext(), picture.public_picture);
         holder.getTitle().setText(picture.name);
         holder.getFavorite().setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
 
         holder.getFavorite().setOnClickListener(v -> {
-            storage.SetFavoritePicture(picture.public_id, !picture.is_favorite, () -> {updatePictureInfo(picture.public_id);});
-            if (!picture.is_favorite) {
-                holder.getFavorite().setImageResource(R.drawable.ic_favorite_36);
-                Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
-            } else {
-                holder.getFavorite().setImageResource(R.drawable.ic_unfavorite_36);
-                Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
-            }
+            storage.SetFavoritePicture(picture.id, !picture.is_favorite);
         });
 
         holder.getLayer().setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), PictureActivity.class);
-            intent.putExtra("picture_id", picture.public_id);
+            intent.putExtra("pictureId", picture.id);
             startActivity(intent);
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        this.RefreshData();
-    }
-
-    private void addView(String pictureId) {
+    private View addView(Picture picture) {
         LayoutInflater inflater = getLayoutInflater();
         View layer = inflater.inflate(R.layout.item_pictute_popular, null);
-        this.pictures_holdes.put(pictureId, new HomeHolder(layer));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.setMargins(20, 10, 20, 10);
         layer.setLayoutParams(params);
         home_ll.addView(layer);
+        return layer;
     }
 
-    private void updatePictureInfo(String pictureId){
-        this.storage.GetPicture(this::RefreshPicture, pictureId);
+    private boolean ComparePicture(Picture new_picture, Picture old_picture) {
+        return (new_picture.is_favorite == old_picture.is_favorite
+                && new_picture.public_picture.equals(old_picture.public_picture));
     }
 
-    public void showPictures(List<String> picturesIds) {
-        for (String pictureId : picturesIds) {
-            addView(pictureId);
-            updatePictureInfo(pictureId);
+    public void ShowPictures(List<Picture> pictures) {
+        Map<Picture, HomeHolder> newPicturesAndHolders = new Hashtable<>();
+        for (Picture new_picture : pictures) {
+            Picture old_picture = null;
+            HomeHolder holder = null;
+            for (Map.Entry<Picture, HomeHolder> entry : picturesAndLayers.entrySet()) {
+                old_picture = entry.getKey();
+                holder = entry.getValue();
+                if (old_picture.id == new_picture.id)
+                    break;
+            }
+            if (old_picture != null) {
+                if (!ComparePicture(new_picture, old_picture)) {
+                    RefreshInfo(holder, new_picture);
+                }
+            } else {
+                View layer = addView(new_picture);
+                holder = new HomeHolder(layer);
+                RefreshInfo(holder, new_picture);
+            }
+            newPicturesAndHolders.put(new_picture, holder);
         }
+        this.picturesAndLayers = newPicturesAndHolders;
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden)
-            RefreshData();
-    }
-
-    public void RefreshAdapter(List<String> picturesIds) {
-        AdapterHomeTopRV rvMain_adapter = new AdapterHomeTopRV(getContext(), R.layout.item_pictute_top, picturesIds, 0, 20);
-        rv_top.setAdapter(rvMain_adapter);
+    public void RefreshAdapter(List<Picture> pictures) {
+        PictureDiffUtilCallback pictureDiffUtilCallback = new PictureDiffUtilCallback(rv_top_adapter.getData(), pictures);
+        DiffUtil.DiffResult productDiffResult = DiffUtil.calculateDiff(pictureDiffUtilCallback);
+        rv_top_adapter.setData(pictures);
+        productDiffResult.dispatchUpdatesTo(rv_top_adapter);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        home_ll = (LinearLayout) this.getActivity().findViewById(R.id.home_ll);
-        storage = Storage.getInstance(this.getContext());
+        this.home_ll = (LinearLayout) this.getActivity().findViewById(R.id.home_ll);
+        this.storage = Storage.getInstance(this.getContext());
+        this.picturesAndLayers = new Hashtable<Picture, HomeHolder>();
 
-        Map<String, Object> parameters = new Hashtable<>();
-        parameters.put("is_popular", true);
-        storage.GetPicturesIds(this::showPictures, parameters);
+        LiveData<List<Picture>> liveData1 = this.storage.GetLiveDataFromView("Popular");
+        liveData1.observe(getViewLifecycleOwner(), this::ShowPictures);
+        this.storage.LoadPicturesByPopular();
 
-        rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
-        rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        Map<String, Object> parameters1 = new Hashtable<>();
-        storage.GetPicturesIds(this::RefreshAdapter, parameters1);
+
+        this.rv_top = (RecyclerView) this.getActivity().findViewById(R.id.rv_new);
+        this.rv_top.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        ((SimpleItemAnimator) rv_top.getItemAnimator()).setSupportsChangeAnimations(false);
+        rv_top_adapter = new AdapterHomeTopRV(this.getContext(), R.layout.item_pictute_top, 0, 30);
+        rv_top.setAdapter(rv_top_adapter);
+
+        LiveData<List<Picture>> liveData2 = this.storage.GetLiveDataFromView("Top");
+        liveData2.observe(getViewLifecycleOwner(), this::RefreshAdapter);
+        this.storage.LoadPicturesByTop();
     }
 }

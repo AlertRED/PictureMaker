@@ -3,13 +3,17 @@ package com.example.picturemaker.storage;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(indices = {@Index(value = {"id"}, unique = true), @Index(value = {"public_id"}, unique = true)})
 public class Picture {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @NonNull
+    @ColumnInfo(name = "id")
+    public int id;
+
     @ColumnInfo(name = "public_id")
     public String public_id;
 

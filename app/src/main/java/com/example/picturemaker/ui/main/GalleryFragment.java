@@ -12,13 +12,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.example.picturemaker.FilterGalleryActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.adapters.AdapterGalleryRV;
+import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
+import com.example.picturemaker.support.PictureDiffUtilCallback;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -42,12 +47,6 @@ public class GalleryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_gallery, container, false);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        rvMain_adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -78,20 +77,14 @@ public class GalleryFragment extends Fragment {
         if (!this.author.equals("Любой")) {
             parameters.put("author", this.author);
         }
-        this.storage.GetPicturesIds(this::RefreshAdapter, parameters);
+        this.storage.LoadPicturesByGallery(parameters);
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden)
-            rvMain_adapter.notifyDataSetChanged();
-    }
-
-    private void RefreshAdapter(List<String> picturesIds) {
-        rvMain_adapter = new AdapterGalleryRV(this.getContext(), R.layout.item_pictute_gallery, picturesIds, 30, 30, false);
-        rvMain.setAdapter(rvMain_adapter);
-        rvMain_adapter.notifyDataSetChanged();
+    private void RefreshAdapter(List<Picture> pictures) {
+        PictureDiffUtilCallback pictureDiffUtilCallback = new PictureDiffUtilCallback(rvMain_adapter.getData(), pictures);
+        DiffUtil.DiffResult productDiffResult = DiffUtil.calculateDiff(pictureDiffUtilCallback);
+        rvMain_adapter.setData(pictures);
+        productDiffResult.dispatchUpdatesTo(rvMain_adapter);
     }
 
     @Override
@@ -105,7 +98,7 @@ public class GalleryFragment extends Fragment {
 
         filter_view.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), FilterGalleryActivity.class);
-            intent.putExtra("act", this.author);
+            intent.putExtra("author", this.author);
             intent.putExtra("level", this.level);
             intent.putExtra("genre", this.genre);
             startActivityForResult(intent, 0);
@@ -118,8 +111,13 @@ public class GalleryFragment extends Fragment {
 
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
         rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
-        rvMain_adapter = new AdapterGalleryRV();
-        this.storage.GetPicturesIds(this::RefreshAdapter, new Hashtable<>());
+        ((SimpleItemAnimator) rvMain.getItemAnimator()).setSupportsChangeAnimations(false);
+        rvMain_adapter = new AdapterGalleryRV(this.getContext(), R.layout.item_pictute_gallery, 30, 30, false);
+        rvMain.setAdapter(rvMain_adapter);
+
+        LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView("Gallery");
+        liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
+        this.storage.LoadPicturesByGallery(new Hashtable<>());
     }
 
 }

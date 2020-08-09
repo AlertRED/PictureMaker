@@ -9,15 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
+import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
-import com.example.picturemaker.support.TestData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,7 +33,7 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
         text = (TextView)itemView.findViewById(R.id.picture_name);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
         layer = itemView;
-        this.layer.setAlpha(0);
+//        this.layer.setAlpha(0);
     }
 
     public void loadImage(Context context, String name) {
@@ -42,7 +42,7 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder{
 
     private void setImage(Bitmap bitmap){
         this.image.setImageBitmap(bitmap);
-        this.layer.animate().alpha(1f).setDuration(250);
+//        this.layer.animate().alpha(1f).setDuration(250);
     }
 }
 
@@ -53,19 +53,18 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
     boolean first;
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
-    List<String> picturesIds;
+    List<Picture> pictures;
     Storage storage;
 
-    public AdapterGalleryRV() {}
-
-    public AdapterGalleryRV(Context context ,int layout_item, List<String> picturesIds, int spacing_vertical, int spacing_horizontal, boolean first) {
+    public AdapterGalleryRV(Context context , int layout_item, int spacing_vertical, int spacing_horizontal, boolean first) {
         this.context = context;
         this.first = first;
         this.layout_item = layout_item;
         this.spacing_horizontal = spacing_horizontal;
         this.spacing_vertical = spacing_vertical;
-        this.picturesIds = picturesIds;
+        this.pictures = pictures;
         this.storage = Storage.getInstance(context);
+        this.pictures = new ArrayList<>();
     }
 
 
@@ -77,9 +76,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
 
     @Override
     public void onBindViewHolder(final ViewHolderGalleryRV holder, final int position) {
-        String pictureId = this.picturesIds.get(position);
-        storage.GetPicture(picture -> {
-            holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
+            Picture picture = this.pictures.get(position);
 
             holder.loadImage(context, picture.public_picture);
             holder.text.setText(picture.name);
@@ -87,15 +84,12 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
 
             holder.layer.setOnClickListener(v -> {
                 Intent intent = new Intent(context, PictureActivity.class);
-                intent.putExtra("picture_id", picture.public_id);
+                intent.putExtra("pictureId", picture.id);
                 context.startActivity(intent);
             });
 
             holder.favorite.setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
-            holder.favorite.setOnClickListener(v -> {
-                storage.SetFavoritePicture(picture.public_id, !picture.is_favorite, () -> {notifyItemChanged(position);});
-            });
-        }, pictureId);
+            holder.favorite.setOnClickListener(v -> storage.SetFavoritePicture(picture.id, !picture.is_favorite));
 
 
 
@@ -106,8 +100,16 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         }
     }
 
+    public void setData(List<Picture> pictures){
+        this.pictures = pictures;
+    }
+
+    public List<Picture> getData(){
+        return this.pictures;
+    }
+
     @Override
     public int getItemCount() {
-        return this.picturesIds.size();
+        return this.pictures.size();
     }
 }

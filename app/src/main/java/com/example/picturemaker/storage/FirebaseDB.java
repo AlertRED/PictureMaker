@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,8 +26,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -125,11 +122,10 @@ public class FirebaseDB {
         });
     }
 
-
     static public void SetFavoritePicture(String picture_id, boolean is_favorite, Runnable foo) {
         String uid = getUser().getUid();
         DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(uid)).child(picture_id).child("is_favorite");
-
+        ref.keepSynced(false);
         if (is_favorite) {
             ref.setValue(true).addOnSuccessListener(aVoid -> foo.run());
         } else {
@@ -158,8 +154,8 @@ public class FirebaseDB {
             String genre = (String) parameters.get("genre");
             picturesQuery = ref.orderByChild("genre").equalTo(genre);
         }
-//        if (parameters.containsKey("is_popular"))
-//            picturesQuery = ref.orderByChild("is_popular").equalTo((boolean) parameters.get("is_popular"));
+        if (parameters.containsKey("is_popular"))
+            picturesQuery = ref.orderByChild("is_popular").equalTo((boolean) parameters.get("is_popular"));
 
         picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -179,7 +175,7 @@ public class FirebaseDB {
         });
     }
 
-    static public void loadItem(Consumer<Picture> foo, String name) {
+    static public void loadPicture(Consumer<Picture> foo, String name) {
         DatabaseReference ref = getDatabase().getReference("pictures");
         ref.keepSynced(true);
         Query picturesQuery = ref.orderByChild("name").equalTo(name);
@@ -221,29 +217,7 @@ public class FirebaseDB {
         });
     }
 
-    static public void loadPicture(Context context, String name, ImageView image, boolean is_disk_cache) {
-        StorageReference imageRef = getStorage().getReference().child("pictures/".concat(name));
-        GlideRequests glide = GlideApp.with(context);
-        DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.NONE;
-        glide.asBitmap().diskCacheStrategy(cache_type).load(imageRef)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        image.setImageBitmap(resource);
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                    }
-
-                    @Override
-                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                        super.onLoadFailed(errorDrawable);
-                    }
-                });
-    }
-
-    static public void loadPicture(Context context, String name, Consumer<Bitmap> foo, boolean is_disk_cache) {
+    static public void loadImage(Context context, String name, Consumer<Bitmap> foo, boolean is_disk_cache) {
         StorageReference imageRef = getStorage().getReference().child("pictures/".concat(name));
         GlideRequests glide = GlideApp.with(context);
         DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.NONE;

@@ -19,31 +19,32 @@ import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.support.TestData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-class ViewHolderCollectionRV extends RecyclerView.ViewHolder{
-    private ImageView image;
+class ViewHolderCollectionRV extends RecyclerView.ViewHolder {
     public TextView text;
     public ImageView favorite;
     public View layer;
+    private ImageView image;
 
     public ViewHolderCollectionRV(View itemView) {
         super(itemView);
-        image = (ImageView)itemView.findViewById(R.id.imageview);
-        text = (TextView)itemView.findViewById(R.id.picture_name);
+        image = (ImageView) itemView.findViewById(R.id.imageview);
+        text = (TextView) itemView.findViewById(R.id.picture_name);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
         layer = itemView;
-        this.layer.setAlpha(0);
+//        this.layer.setAlpha(0);
     }
 
     public void loadImage(Context context, String name) {
         Storage.getInstance(context).GetImage(context, name, this::setImage);
     }
 
-    private void setImage(Bitmap bitmap){
+    private void setImage(Bitmap bitmap) {
         this.image.setImageBitmap(bitmap);
-        this.layer.animate().alpha(1f).setDuration(250);
+//        this.layer.animate().alpha(1f).setDuration(250);
     }
 }
 
@@ -57,20 +58,14 @@ public class AdapterCollectionRV extends RecyclerView.Adapter<ViewHolderCollecti
     List<Picture> pictures;
     Storage storage;
 
-    public AdapterCollectionRV(){}
 
-    public AdapterCollectionRV(Context context, int layout_item) {
-        this.context = context;
-        this.layout_item = layout_item;
-    }
-
-    public AdapterCollectionRV(Context context ,int layout_item, List<Picture> pictures, int spacing_vertical, int spacing_horizontal, boolean first) {
+    public AdapterCollectionRV(Context context, int layout_item,  int spacing_vertical, int spacing_horizontal, boolean first) {
         this.context = context;
         this.first = first;
         this.layout_item = layout_item;
         this.spacing_horizontal = spacing_horizontal;
         this.spacing_vertical = spacing_vertical;
-        this.pictures = pictures;
+        this.pictures = new ArrayList<>();
         this.storage = Storage.getInstance(context);
     }
 
@@ -92,22 +87,27 @@ public class AdapterCollectionRV extends RecyclerView.Adapter<ViewHolderCollecti
 
         holder.layer.setOnClickListener(v -> {
             Intent intent = new Intent(context, PictureActivity.class);
-            intent.putExtra("picture_id", picture.public_id);
+            intent.putExtra("pictureId", picture.id);
             context.startActivity(intent);
         });
 
         holder.favorite.setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
-        holder.favorite.setOnClickListener(v -> {
-            storage.SetFavoritePicture(picture.public_id, !picture.is_favorite, () -> {notifyItemChanged(position);});
-        });
+        holder.favorite.setOnClickListener(v -> storage.SetFavoritePicture(picture.id, !picture.is_favorite));
 
 
-
-        if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && (!this.first || position > 0)){
+        if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && (!this.first || position > 0)) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
             params.setMargins(this.spacing_horizontal, this.spacing_vertical, 0, 0);
             holder.itemView.setLayoutParams(params);
         }
+    }
+
+    public void setData(List<Picture> pictures){
+        this.pictures = pictures;
+    }
+
+    public List<Picture> getData(){
+        return this.pictures;
     }
 
     @Override
