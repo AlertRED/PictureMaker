@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_layout"
-    android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="10dp">
+    android:paddingBottom="20dp">
 
-    <ImageView
+    <com.github.siyamed.shapeimageview.RoundedImageView
         android:id="@+id/imageview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0"
         android:adjustViewBounds="true"
+        app:siRadius="13dp"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/image1" />
+        app:srcCompat="@drawable/img" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:paddingLeft="4dp"
-        android:paddingTop="4dp">
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/imageview"
+        android:layout_marginBottom="0dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
 
         <TextView
             android:id="@+id/picture_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_gradient_1"
             android:fontFamily="sans-serif"
             android:text="Picture"
-            android:textColor="#000000"
+            android:textColor="#FFF"
             android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/favorite_image_item_gallery"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
+            android:background="@drawable/bg_gradient_1"
             app:srcCompat="@drawable/ic_unfavorite_36" />
 
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
