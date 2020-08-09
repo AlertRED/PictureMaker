@@ -1,6 +1,7 @@
 package com.example.picturemaker.support;
 
 import com.example.picturemaker.R;
+import com.example.picturemaker.storage.Picture;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,27 +9,27 @@ import java.util.List;
 
 public class TestData {
 
-    static private List<Item> items;
+    static private List<Picture> pictures;
 
 
-    static public Item get(int index){
-        return items.get(index);
+    static public Picture get(int index){
+        return pictures.get(index);
     }
 
-    static public Item get_id(int id) {
-        for (Item item : items)
-            if (item.id == id) return item;
+    static public Picture get_id(int id) {
+//        for (Item item : items)
+//            if (item.id == id) return item;
         return get(0);
     }
 
     static public int size(){
-        return items.size();
+        return 0;
     }
 
 
     static public void generate(){
 
-        items = new ArrayList<>();
+        pictures = new ArrayList<>();
 
         int[] pictures = {
                 R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4,
@@ -39,13 +40,13 @@ public class TestData {
                 "Утро в сосновом бору","Девятый вал","Девочка с персиками",
                 "Тайная вечеря","Постоянство памяти","Рождение Венеры","Боярыня Морозова"};
 
-        for (int i=0; i<pictures.length; i++){
-            TestData.items.add(new Item(pictures[i], names[i], i));
-        }
+//        for (int i=0; i<pictures.length; i++){
+//            TestData.items.add(new Item(pictures[i], names[i], i));
+//        }
     }
 
-    static public Iterator<Item> getIter(){
-        return items.iterator();
+    static public Iterator<Picture> getIter(){
+        return pictures.iterator();
     }
 
 }

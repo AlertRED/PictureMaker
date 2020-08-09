@@ -3,6 +3,7 @@ package com.example.picturemaker;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,17 +17,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 
-import com.example.picturemaker.support.Item;
-import com.example.picturemaker.support.TestData;
+import com.example.picturemaker.storage.Picture;
+import com.example.picturemaker.storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PictureActivity extends AppCompatActivity {
 
-    private Item item;
-    private ImageView picture;
+    private Picture picture;
+    private ImageView image;
     private TextView name;
     private TextView my_score;
     private TextView total_score;
@@ -37,21 +39,21 @@ public class PictureActivity extends AppCompatActivity {
     private LinearLayout layout_progress;
     private Button button_start;
 
+    private Storage storage;
+
     public void ShowRating() {
         final AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
         View view = View.inflate(this, R.layout.activity_rating_picture, null);
         popDialog.setView(view);
 
         final RatingBar progress = view.findViewById(R.id.ratingBar);
-        progress.setRating((float) item.score);
+        progress.setRating((float) picture.score);
 
         popDialog.setPositiveButton("Готово",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        item.score = (int) progress.getRating();
-                        RefreshData();
-                        dialog.dismiss();
-                    }
+                (dialog, which) -> {
+                    picture.score = (int) progress.getRating();
+                    RefreshData();
+                    dialog.dismiss();
                 }).setNegativeButton("Отмена",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -64,39 +66,54 @@ public class PictureActivity extends AppCompatActivity {
         popDialog.show();
     }
 
+    private void LoadPicture(Bitmap bitmap) {
+        this.image.setImageBitmap(bitmap);
+    }
+
     private void RefreshData() {
-        this.picture.setImageResource(this.item.picture);
-        this.name.setText(this.item.name);
-        this.total_score.setText("Рейтинг: ".concat(String.valueOf(this.item.total_score)));
-        this.favorite.setImageResource(this.item.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
-        this.score.setImageResource(this.item.score > 0 ? R.drawable.ic_baseline_star_24 : R.drawable.ic_baseline_star_border_24);
+
+        this.storage.GetImage(this, this.picture.public_picture, this::LoadPicture);
+
+        this.name.setText(this.picture.name);
+        this.total_score.setText("Рейтинг: ".concat(String.valueOf(this.picture.total_score)));
+        this.favorite.setImageResource(this.picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
+        this.score.setImageResource(this.picture.score > 0 ? R.drawable.ic_baseline_star_24 : R.drawable.ic_baseline_star_border_24);
         for (int i = 0; i < this.puzzles.size(); i++) {
-            int state = i > item.level - 1 ? View.GONE : View.VISIBLE;
+            int state = i > picture.level - 1 ? View.GONE : View.VISIBLE;
             this.puzzles.get(i).setVisibility(state);
         }
 
-        if (this.item.progress == 0) {
+        if (this.picture.progress == 0) {
             this.layout_progress.setVisibility(View.GONE);
             this.my_score.setVisibility(View.GONE);
-        } else if (this.item.progress == 100){
+        } else if (this.picture.progress == 100) {
             this.layout_progress.setVisibility(View.GONE);
-            this.my_score.setText("Ваша оценка: ".concat(String.valueOf(this.item.score)));
+            this.my_score.setText("Ваша оценка: ".concat(String.valueOf(this.picture.score)));
         } else {
             this.progress.setMax(100);
-            this.progress.setProgress(this.item.progress);
+            this.progress.setProgress(this.picture.progress);
         }
 
         final Activity activity = this;
 
-        this.button_start.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, PaintActivity.class);
-                intent.putExtra("picture_id", item.id);
-                startActivity(intent);
-            }
+        this.button_start.setOnClickListener(v -> {
+            Intent intent = new Intent(activity, PaintActivity.class);
+            intent.putExtra("picture_id", picture.public_id);
+            startActivity(intent);
         });
 
+        this.favorite.setOnClickListener(v -> storage.SetFavoritePicture(picture.id, !picture.is_favorite));
 
+        this.score.setOnClickListener(v -> {
+            if (picture.progress == 100)
+                ShowRating();
+            else Toast.makeText(v.getContext(), "Картина не завершина", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void LoadItem(Picture picture) {
+        this.picture = picture;
+        RefreshData();
     }
 
     @Override
@@ -104,10 +121,9 @@ public class PictureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture);
 
-        int picture_id = getIntent().getIntExtra("picture_id", 0);
-        this.item = TestData.get_id(picture_id);
+        long picture_id = getIntent().getIntExtra("pictureId", 0);
 
-        this.picture = findViewById(R.id.picture);
+        this.image = findViewById(R.id.picture);
         this.name = findViewById(R.id.activity_picture_name);
         this.my_score = findViewById(R.id.picture_my_score);
         this.total_score = findViewById(R.id.picture_total_score);
@@ -117,49 +133,23 @@ public class PictureActivity extends AppCompatActivity {
         this.layout_progress = findViewById(R.id.activity_picture_ll_progress);
         this.button_start = findViewById(R.id.button_start);
 
-
         this.puzzles = new ArrayList<ImageView>();
         this.puzzles.add((ImageView) findViewById(R.id.puzzle1));
         this.puzzles.add((ImageView) findViewById(R.id.puzzle2));
         this.puzzles.add((ImageView) findViewById(R.id.puzzle3));
 
-        this.RefreshData();
+        this.storage = Storage.getInstance(this);
+//        storage.GetPicture(this::LoadItem, picture_id);
+        LiveData<Picture> live = this.storage.GetLivePicture(picture_id);
+        live.observe(this, this::LoadItem);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.filter_gallery_toolbar2);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Картина");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-
-        this.favorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!item.is_favorite) {
-                    favorite.setImageResource(R.drawable.ic_favorite_36);
-                    Toast.makeText(v.getContext(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
-                } else {
-                    favorite.setImageResource(R.drawable.ic_unfavorite_36);
-                    Toast.makeText(v.getContext(), "Убрано из избранного", Toast.LENGTH_SHORT).show();
-                }
-                item.is_favorite = !item.is_favorite;
-            }
-        });
-
-        this.score.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (item.progress == 100)
-                    ShowRating();
-                else Toast.makeText(v.getContext(), "Картина не завершина", Toast.LENGTH_SHORT).show();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
 
     }
+
 }

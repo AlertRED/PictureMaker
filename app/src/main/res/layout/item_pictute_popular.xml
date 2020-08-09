@@ -18,8 +18,7 @@
         android:layout_height="150dp"
         android:adjustViewBounds="true"
         android:cropToPadding="true"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/image1" />
+        android:scaleType="centerCrop" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +26,7 @@
         android:layout_marginTop="4dp">
 
         <TextView
-            android:id="@+id/textview"
+            android:id="@+id/picture_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
