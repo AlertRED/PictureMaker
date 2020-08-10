@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -21,26 +20,25 @@ import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.adapters.AdapterCollectionRV;
 import com.example.picturemaker.R;
 import com.example.picturemaker.support.PictureDiffUtilCallback;
-import com.example.picturemaker.support.SpacesItemDecoration;
 
 import java.util.List;
 
-public class RecentlyFragment extends Fragment {
+public class CollectionFragment extends Fragment {
     private AdapterCollectionRV rvMain_adapter;
     private RecyclerView rvMain;
     private Storage storage;
 
 //    private MainViewModel mViewModel;
 
-    public static RecentlyFragment newInstance() {
-        return new RecentlyFragment();
+    public static CollectionFragment newInstance() {
+        return new CollectionFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_recently, container, false);
+        return inflater.inflate(R.layout.fragment_collection, container, false);
     }
 
     private void RefreshAdapter(List<Picture> pictures) {

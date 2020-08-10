@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.picturemaker.ui.main.GalleryFragment;
 import com.example.picturemaker.ui.main.HomeFragment;
 import com.example.picturemaker.ui.main.ProfileFragment;
-import com.example.picturemaker.ui.main.RecentlyFragment;
+import com.example.picturemaker.ui.main.CollectionFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     final Fragment fragment1 = new HomeFragment();
     final Fragment fragment2 = new GalleryFragment();
-    final Fragment fragment3 = new RecentlyFragment();
+    final Fragment fragment3 = new CollectionFragment();
     final Fragment fragment4 = new ProfileFragment();
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active = fragment1;
