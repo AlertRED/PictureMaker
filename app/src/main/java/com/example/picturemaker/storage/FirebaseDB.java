@@ -220,7 +220,7 @@ public class FirebaseDB {
     static public void loadImage(Context context, String name, Consumer<Bitmap> foo, boolean is_disk_cache) {
         StorageReference imageRef = getStorage().getReference().child("pictures/".concat(name));
         GlideRequests glide = GlideApp.with(context);
-        DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.NONE;
+        DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.ALL;
         glide.asBitmap().diskCacheStrategy(cache_type).load(imageRef)
                 .into(new CustomTarget<Bitmap>() {
                     @Override

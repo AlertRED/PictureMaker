@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.adapters.AdapterCollectionRV;
 import com.example.picturemaker.R;
 import com.example.picturemaker.support.PictureDiffUtilCallback;
+import com.example.picturemaker.support.SpacesItemDecoration;
 
 import java.util.List;
 
@@ -57,10 +59,15 @@ public class RecentlyFragment extends Fragment {
         this.storage = Storage.getInstance(this.getContext());
 
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_recently);
-        rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
+
         ((SimpleItemAnimator) rvMain.getItemAnimator()).setSupportsChangeAnimations(false);
         rvMain_adapter = new AdapterCollectionRV(this.getContext() ,R.layout.item_pictute_gallery, 30,30, false);
         rvMain.setAdapter(rvMain_adapter);
+
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        rvMain.setLayoutManager(layoutManager);
+
         LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView("Collection");
         liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
         this.storage.LoadPicturesByCollection();

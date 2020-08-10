@@ -2,6 +2,7 @@ package com.example.picturemaker.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.picturemaker.FilterGalleryActivity;
 import com.example.picturemaker.R;
@@ -24,6 +25,7 @@ import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.support.PictureDiffUtilCallback;
+import com.example.picturemaker.support.SpacesItemDecoration;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -110,14 +112,18 @@ public class GalleryFragment extends Fragment {
         category.setAdapter(category_adapter);
 
         rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
-        rvMain.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
+//        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.default_gaps);
+//        rvMain.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
         ((SimpleItemAnimator) rvMain.getItemAnimator()).setSupportsChangeAnimations(false);
-        rvMain_adapter = new AdapterGalleryRV(this.getContext(), R.layout.item_pictute_gallery, 30, 30, false);
+        rvMain_adapter = new AdapterGalleryRV(this.getContext(), getResources(),R.layout.item_pictute_gallery, 30, 30, false);
         rvMain.setAdapter(rvMain_adapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        rvMain.setLayoutManager(layoutManager);
 
         LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView("Gallery");
         liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
         this.storage.LoadPicturesByGallery(new Hashtable<>());
-    }
 
+    }
 }
