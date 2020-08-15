@@ -124,6 +124,5 @@ public class GalleryFragment extends Fragment {
         LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView("Gallery");
         liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
         this.storage.LoadPicturesByGallery(new Hashtable<>());
-
     }
 }

@@ -20,7 +20,7 @@ public class PaintActivity extends AppCompatActivity {
 
         int picture_id = getIntent().getIntExtra("picture_id", 0);
 
-        RecyclerView rv_top = (RecyclerView) this.findViewById(R.id.rv_new);
+        RecyclerView rv_top = (RecyclerView) this.findViewById(R.id.rv_news);
         rv_top.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         AdapterColorsRV rvMain_adapter = new AdapterColorsRV(this, R.layout.item_color_brush, 0, 20);
         rv_top.setAdapter(rvMain_adapter);

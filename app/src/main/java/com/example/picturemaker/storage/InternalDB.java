@@ -1,5 +1,7 @@
 package com.example.picturemaker.storage;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Database;
@@ -7,7 +9,9 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import java.util.List;
@@ -15,8 +19,11 @@ import java.util.List;
 @Dao
 interface ViewPictureDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(ViewPicture viewPicture);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void update(ViewPicture viewPicture);
 
     @Query("SELECT * FROM view_picture")
     List<ViewPicture> getAll();
@@ -34,8 +41,28 @@ interface ViewPictureDao {
 @Dao
 interface PictureDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insert(Picture picture);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insertIgnore(Picture picture);
+
+    @Update
+    void update(Picture picture);
+
+    @Transaction
+    default boolean is_new(Picture picture){
+        return findByPublicId(picture.public_id) == null;
+    }
+
+    @Transaction
+    default long insertOrUpdate(Picture picture) {
+        long id = insertIgnore(picture);
+        if (id == -1) {
+            update(picture);
+            id = findByPublicId(picture.public_id).id;
+        }
+        return id;
+    }
+
+
 
     @Query("SELECT * FROM Picture")
     LiveData<List<Picture>> liveAll();
@@ -64,7 +91,7 @@ interface PictureDao {
 //    @Insert
 //    void insertAll(Picture... pictures);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     long[] insertAll(List<Picture> pictures);
 
     @Delete
@@ -76,13 +103,24 @@ interface PictureDao {
     @Query("UPDATE picture SET name = :name AND level=:level AND total_score=:total_score AND public_picture=:public_picture AND is_favorite=:is_favorite AND score=:score AND progress=:progress WHERE id = :id")
     int updatePicture(long id, String name, int level, int total_score, String public_picture, boolean is_favorite, int score, int progress);
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void update(Picture picture);
 }
 
-@Database(entities = {Picture.class, ViewPicture.class}, version = 22, exportSchema = false)
+@Database(entities = {Picture.class, ViewPicture.class}, version = 28, exportSchema = false)
 public abstract class InternalDB extends RoomDatabase {
-    public abstract PictureDao pictureDao();
 
+    public abstract PictureDao pictureDao();
     public abstract ViewPictureDao viewPictureDao();
+
+    private static volatile InternalDB INSTANCE;
+
+    static InternalDB getDatabase(final Context context) {
+        if (INSTANCE == null) {
+            synchronized (InternalDB.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(context, InternalDB.class, "database-name").fallbackToDestructiveMigration().build();
+                }
+            }
+        }
+        return INSTANCE;
+    }
 }

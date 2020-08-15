@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(indices = {@Index(value = {"id"}, unique = true), @Index(value = {"public_id"}, unique = true)})
+@Entity(indices = {@Index(value = {"public_id"}, unique = true)})
 public class Picture {
 
     @PrimaryKey(autoGenerate = true)

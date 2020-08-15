@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 
 import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
-import androidx.room.Room;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -21,14 +20,12 @@ public class Storage {
     LocalStorage localStorage;
     InternalDB db;
     PictureDao pictureDao;
-    Context context;
 
     private Storage(Context context) {
         this.localStorage = new LocalStorage();
-        this.db = Room.databaseBuilder(context, InternalDB.class, "database-name").fallbackToDestructiveMigration().build();
+        this.db = InternalDB.getDatabase(context);
         this.pictureDao = this.db.pictureDao();
         this.viewPictureDao = this.db.viewPictureDao();
-        this.context = context;
     }
 
     public static Storage getInstance(Context context) {
@@ -93,15 +90,6 @@ public class Storage {
         this.LoadPictures("Popular", parameters);
     }
 
-    private long InsertOrUpdate(Picture picture) {
-        long id = this.pictureDao.getIdByPublicId(picture.public_id);
-        if (id == 0)
-            return this.pictureDao.insert(picture);
-        this.pictureDao.update(picture);
-//        this.pictureDao.updatePicture(id, picture.name, picture.level, picture.total_score, "1.jpg", picture.is_favorite, picture.score, picture.progress);
-        return id;
-    }
-
     public LiveData<Picture> GetLivePicture(long id) {
         return this.pictureDao.liveById(id);
     }
@@ -116,8 +104,9 @@ public class Storage {
             Executor myExecutor = Executors.newSingleThreadExecutor();
             myExecutor.execute(() -> {
                 for (Picture picture : pictures) {
-                    long id = InsertOrUpdate(picture);
+                    long id = this.pictureDao.insertOrUpdate(picture);
                     this.viewPictureDao.insert(new ViewPicture(viewName, id));
+
                 }
             });
         }, parameters);
@@ -133,7 +122,8 @@ public class Storage {
             Picture picture = pictureDao.findById(pictureId);
             picture.is_favorite = isFavorite;
             pictureDao.update(picture);
-            FirebaseDB.SetFavoritePicture(picture.public_id, isFavorite, () -> {});
+            FirebaseDB.SetFavoritePicture(picture.public_id, isFavorite, () -> {
+            });
         });
     }
 }

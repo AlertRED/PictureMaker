@@ -15,7 +15,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_new"
+        android:id="@+id/rv_popular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"

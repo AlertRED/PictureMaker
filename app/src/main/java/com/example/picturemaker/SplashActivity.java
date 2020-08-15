@@ -6,15 +6,18 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.picturemaker.storage.FirebaseDB;
+import com.example.picturemaker.storage.InternalDB;
 import com.example.picturemaker.storage.Storage;
 
 
 public class SplashActivity extends AppCompatActivity {
 
+    private Storage storage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Storage storage = Storage.getInstance(this);
+        this.storage = Storage.getInstance(this);
         FirebaseDB.login(this, this::finish);
     }
 
