@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,6 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder {
     public ImageView favorite;
     public View layer;
     private ImageView image;
-    private ProgressBar progressBar;
 
 
     public ViewHolderGalleryRV(View itemView, Resources resources) {
@@ -37,8 +37,8 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder {
         image = (ImageView) itemView.findViewById(R.id.imageview);
         text = (TextView) itemView.findViewById(R.id.picture_name);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
-        progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar5);
         layer = itemView;
+        layer.setVisibility(View.GONE);
 //        this.layer.setAlpha(0);
     }
 
@@ -47,8 +47,8 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder {
     }
 
     private void setImage(Bitmap bitmap) {
-        progressBar.setVisibility(View.INVISIBLE);
         this.image.setImageBitmap(bitmap);
+        layer.setVisibility(View.VISIBLE);
 //        this.layer.animate().alpha(1f).setDuration(250);
     }
 }

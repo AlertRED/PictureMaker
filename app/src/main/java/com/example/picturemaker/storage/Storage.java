@@ -16,12 +16,14 @@ import java.util.concurrent.Executors;
 public class Storage {
 
     private static Storage instance;
+    public final FirebaseDB firebase;
     public ViewPictureDao viewPictureDao;
     LocalStorage localStorage;
     InternalDB db;
     PictureDao pictureDao;
 
     private Storage(Context context) {
+        this.firebase = FirebaseDB.getInstance(context);
         this.localStorage = new LocalStorage();
         this.db = InternalDB.getDatabase(context);
         this.pictureDao = this.db.pictureDao();
@@ -40,7 +42,7 @@ public class Storage {
         if (genres != null) {
             foo.accept(genres);
         } else {
-            FirebaseDB.loadGenres(genres1 -> {
+            this.firebase.loadGenres(genres1 -> {
                 this.localStorage.SaveStorageGenres(genres1);
                 GetGenres(foo);
             });
@@ -57,7 +59,7 @@ public class Storage {
         if (authors != null) {
             foo.accept(authors);
         } else {
-            FirebaseDB.loadAuthors(authors1 -> {
+            this.firebase.loadAuthors(authors1 -> {
                 this.localStorage.SaveStorageAuthors(authors1);
                 GetAuthors(foo);
             });
@@ -68,26 +70,26 @@ public class Storage {
         return this.viewPictureDao.getPicturesFromView(viewName);
     }
 
-    public void LoadPicturesByGallery(Map<String, Object> parameters) {
+    public void LoadPicturesByGallery(Context context, Map<String, Object> parameters) {
         this.DeletePictures("Gallery");
-        this.LoadPictures("Gallery", parameters);
+        this.LoadPictures(context,"Gallery", parameters);
     }
 
-    public void LoadPicturesByCollection() {
+    public void LoadPicturesByCollection(Context context) {
         Map<String, Object> parameters = new Hashtable<>();
-        this.LoadPictures("Collection", parameters);
+        this.LoadPictures(context,"Collection", parameters);
     }
 
-    public void LoadPicturesByTop() {
-        Map<String, Object> parameters = new Hashtable<>();
-        parameters.put("is_popular", true);
-        this.LoadPictures("Top", parameters);
-    }
-
-    public void LoadPicturesByPopular() {
+    public void LoadPicturesByTop(Context context) {
         Map<String, Object> parameters = new Hashtable<>();
         parameters.put("is_popular", true);
-        this.LoadPictures("Popular", parameters);
+        this.LoadPictures(context, "Top", parameters);
+    }
+
+    public void LoadPicturesByPopular(Context context) {
+        Map<String, Object> parameters = new Hashtable<>();
+        parameters.put("is_popular", true);
+        this.LoadPictures(context, "Popular", parameters);
     }
 
     public LiveData<Picture> GetLivePicture(long id) {
@@ -99,21 +101,20 @@ public class Storage {
         myExecutor.execute(() -> this.viewPictureDao.deleteAllPicturesFromView(viewName));
     }
 
-    private void LoadPictures(String viewName, Map<String, Object> parameters) {
-        FirebaseDB.LoadPictures(pictures -> {
+    private void LoadPictures(Context context, String viewName, Map<String, Object> parameters) {
+        this.firebase.LoadPictures(pictures -> {
             Executor myExecutor = Executors.newSingleThreadExecutor();
             myExecutor.execute(() -> {
                 for (Picture picture : pictures) {
                     long id = this.pictureDao.insertOrUpdate(picture);
-                    this.viewPictureDao.insert(new ViewPicture(viewName, id));
-
+                    this.firebase.loadImage(context, picture.public_picture, () -> this.viewPictureDao.insert(new ViewPicture(viewName, id)), true);
                 }
             });
         }, parameters);
     }
 
     public void GetImage(Context context, String picture_name, Consumer<Bitmap> foo) {
-        FirebaseDB.loadImage(context, picture_name, foo, false);
+        this.firebase.loadImage(context, picture_name, foo, false);
     }
 
     public void SetFavoritePicture(long pictureId, boolean isFavorite) {
@@ -122,7 +123,7 @@ public class Storage {
             Picture picture = pictureDao.findById(pictureId);
             picture.is_favorite = isFavorite;
             pictureDao.update(picture);
-            FirebaseDB.SetFavoritePicture(picture.public_id, isFavorite, () -> {
+            this.firebase.SetFavoritePicture(picture.public_id, isFavorite, () -> {
             });
         });
     }

@@ -28,15 +28,12 @@ class ViewHolderHomePopular extends RecyclerView.ViewHolder {
     private TextView title;
     private ImageView favorite;
     private View layer;
-    private ProgressBar progressBar;
-
 
     public ViewHolderHomePopular(View view) {
         super(view);
         this.image = view.findViewById(R.id.imageview);
         this.title = view.findViewById(R.id.picture_name);
         this.favorite = view.findViewById(R.id.favorite_image_item_home);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         this.layer = view;
 //        this.layer.setAlpha(0);
     }
@@ -46,7 +43,6 @@ class ViewHolderHomePopular extends RecyclerView.ViewHolder {
     }
 
     private void setImage(Bitmap bitmap) {
-        progressBar.setVisibility(View.INVISIBLE);
         this.image.setImageBitmap(bitmap);
 //        this.layer.animate().alpha(1f).setDuration(250);
     }

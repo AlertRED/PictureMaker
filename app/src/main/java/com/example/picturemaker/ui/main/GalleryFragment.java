@@ -31,6 +31,9 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+
 public class GalleryFragment extends Fragment {
 
     RecyclerView rvMain;
@@ -54,32 +57,35 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        this.genre = data.getStringExtra("genre");
-        this.level = data.getStringExtra("level");
-        this.author = data.getStringExtra("author");
+        if (resultCode == RESULT_OK) {
+            System.err.println(requestCode);
+            this.genre = data.getStringExtra("genre");
+            this.level = data.getStringExtra("level");
+            this.author = data.getStringExtra("author");
 
-        Map<String, Object> parameters = new Hashtable<>();
-        if (!this.level.equals("Любой")) {
-            int num_level = 0;
-            switch (this.level) {
-                case "Легкий":
-                    num_level = 1;
-                    break;
-                case "Средний":
-                    num_level = 2;
-                    break;
-                case "Сложный":
-                    num_level = 3;
-                    break;
+            Map<String, Object> parameters = new Hashtable<>();
+            if (!this.level.equals("Любой")) {
+                int num_level = 0;
+                switch (this.level) {
+                    case "Легкий":
+                        num_level = 1;
+                        break;
+                    case "Средний":
+                        num_level = 2;
+                        break;
+                    case "Сложный":
+                        num_level = 3;
+                        break;
+                }
+                parameters.put("level", num_level);
             }
-            parameters.put("level", num_level);
+            if (!this.genre.equals("Любой"))
+                parameters.put("genre", this.genre);
+            if (!this.author.equals("Любой")) {
+                parameters.put("author", this.author);
+            }
+            this.storage.LoadPicturesByGallery(getContext(), parameters);
         }
-        if (!this.genre.equals("Любой"))
-            parameters.put("genre", this.genre);
-        if (!this.author.equals("Любой")) {
-            parameters.put("author", this.author);
-        }
-        this.storage.LoadPicturesByGallery(parameters);
     }
 
     private void RefreshAdapter(List<Picture> pictures) {
@@ -123,6 +129,6 @@ public class GalleryFragment extends Fragment {
 
         LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView("Gallery");
         liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
-        this.storage.LoadPicturesByGallery(new Hashtable<>());
+        this.storage.LoadPicturesByGallery(getContext(), new Hashtable<>());
     }
 }

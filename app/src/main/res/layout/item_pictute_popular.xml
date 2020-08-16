@@ -27,15 +27,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/down_bar"
-        android:layout_centerInParent="true"
-        android:translationZ="10dp" />
-
     <RelativeLayout
         android:id="@+id/down_bar"
         android:layout_width="match_parent"

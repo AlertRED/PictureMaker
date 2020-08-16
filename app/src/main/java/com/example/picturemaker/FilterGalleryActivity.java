@@ -92,26 +92,21 @@ public class FilterGalleryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.filter_gallery_toolbar);
         setSupportActionBar(toolbar);
         Button accept_button = (Button) findViewById(R.id.accept_filter);
-        accept_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent answerIntent = new Intent();
-                answerIntent.putExtra("genre", (String) spin_genre.getSelectedItem());
-                answerIntent.putExtra("author", (String) spin_author.getSelectedItem());
-                answerIntent.putExtra("level", (String) spin_level.getSelectedItem());
-                setResult(RESULT_OK, answerIntent);
-                finish();
-            }
+        accept_button.setOnClickListener(v -> {
+            Intent answerIntent = new Intent();
+            answerIntent.putExtra("genre", (String) spin_genre.getSelectedItem());
+            answerIntent.putExtra("author", (String) spin_author.getSelectedItem());
+            answerIntent.putExtra("level", (String) spin_level.getSelectedItem());
+            setResult(RESULT_OK, answerIntent);
+            finish();
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("");
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        toolbar.setNavigationOnClickListener(v -> {
+            setResult(RESULT_CANCELED);
+            finish();
         });
 
         this.spin_genre = (Spinner) findViewById(R.id.spin_filter_genre);

@@ -68,7 +68,7 @@ public class CollectionFragment extends Fragment {
 
         LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView("Collection");
         liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
-        this.storage.LoadPicturesByCollection();
+        this.storage.LoadPicturesByCollection(getContext());
 
     }
 

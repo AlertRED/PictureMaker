@@ -9,8 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.picturemaker.support.GlideApp;
 import com.example.picturemaker.support.GlideRequests;
@@ -31,55 +35,41 @@ import java.util.Map;
 
 public class FirebaseDB {
 
-    static private FirebaseStorage fStorage;
-    static private FirebaseDatabase fDatabase;
-    static private FirebaseAuth fAuth;
+    private FirebaseStorage fStorage;
+    private FirebaseDatabase fDatabase;
+    private FirebaseAuth fAuth;
+    private static FirebaseDB INSTANCE;
 
-    static private long MEGABYT = 1024 * 1024;
+    private FirebaseDB(Context context) {
+        this.fDatabase = FirebaseDatabase.getInstance();
+        this.fDatabase.setPersistenceEnabled(true);
+        this.fStorage = FirebaseStorage.getInstance();
+        this.fAuth = FirebaseAuth.getInstance();
+    }
 
-    static private FirebaseDatabase getDatabase() {
-        if (fDatabase == null) {
-            fDatabase = FirebaseDatabase.getInstance();
-            fDatabase.setPersistenceEnabled(true);
+    static FirebaseDB getInstance(Context context){
+        if (INSTANCE == null){
+            INSTANCE = new FirebaseDB(context);
         }
-        return fDatabase;
+        return INSTANCE;
     }
 
-    static private FirebaseStorage getStorage() {
-        if (fStorage == null) {
-            fStorage = FirebaseStorage.getInstance();
-        }
-        return fStorage;
-    }
 
-    static private FirebaseAuth getAuth() {
-        if (fAuth == null) {
-            fAuth = FirebaseAuth.getInstance();
-        }
-        return fAuth;
-    }
 
-    static public FirebaseUser getUser() {
-        return getAuth().getCurrentUser();
-    }
-
-    static public void login(Activity activity, Runnable foo) {
-        FirebaseAuth auth = getAuth();
-        FirebaseUser currentUser = auth.getCurrentUser();
+    public void login(Activity activity, Runnable foo) {
+        FirebaseUser currentUser = fAuth.getCurrentUser();
         if (currentUser == null) {
-            auth.signInAnonymously().addOnCompleteListener(activity, task -> {
-                if (task.isSuccessful()) {
+            fAuth.signInAnonymously().addOnCompleteListener(activity, task -> {
+                if (task.isSuccessful())
                     foo.run();
-                } else {
-                }
             });
         } else {
             foo.run();
         }
     }
 
-    static public void loadAuthors(Consumer<List<String>> foo) {
-        DatabaseReference ref = getDatabase().getReference("authors");
+    public void loadAuthors(Consumer<List<String>> foo) {
+        DatabaseReference ref = fDatabase.getReference("authors");
         ref.keepSynced(true);
         Query query = ref;
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -100,8 +90,8 @@ public class FirebaseDB {
         });
     }
 
-    static public void loadGenres(Consumer<List<String>> foo) {
-        DatabaseReference ref = getDatabase().getReference("genres");
+    public void loadGenres(Consumer<List<String>> foo) {
+        DatabaseReference ref = fDatabase.getReference("genres");
         ref.keepSynced(true);
         Query query = ref;
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -122,9 +112,9 @@ public class FirebaseDB {
         });
     }
 
-    static public void SetFavoritePicture(String picture_id, boolean is_favorite, Runnable foo) {
-        String uid = getUser().getUid();
-        DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(uid)).child(picture_id).child("is_favorite");
+    public void SetFavoritePicture(String picture_id, boolean is_favorite, Runnable foo) {
+        String uid = fAuth.getUid();
+        DatabaseReference ref = fDatabase.getReference("likes").child("user-".concat(uid)).child(picture_id).child("is_favorite");
         ref.keepSynced(false);
         if (is_favorite) {
             ref.setValue(true).addOnSuccessListener(aVoid -> foo.run());
@@ -133,8 +123,8 @@ public class FirebaseDB {
         }
     }
 
-    static public void LoadPictures(Consumer<List<Picture>> foo, Map<String, Object> parameters) {
-        DatabaseReference ref = getDatabase().getReference("pictures");
+    public void LoadPictures(Consumer<List<Picture>> foo, Map<String, Object> parameters) {
+        DatabaseReference ref = fDatabase.getReference("pictures");
         ref.keepSynced(true);
         Query picturesQuery = ref;
 
@@ -175,52 +165,52 @@ public class FirebaseDB {
         });
     }
 
-    static public void loadPicture(Consumer<Picture> foo, String name) {
-        DatabaseReference ref = getDatabase().getReference("pictures");
-        ref.keepSynced(true);
-        Query picturesQuery = ref.orderByChild("name").equalTo(name);
+//    public void loadPicture(Consumer<Picture> foo, String name) {
+//        DatabaseReference ref = fDatabase.getReference("pictures");
+//        ref.keepSynced(true);
+//        Query picturesQuery = ref.orderByChild("name").equalTo(name);
+//
+//        picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Picture picture = null;
+//                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+//                    picture = singleSnapshot.getValue(Picture.class);
+//                    picture.public_id = singleSnapshot.getKey();
+//                    break;
+//                }
+//
+//                DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(getUser().getUid())).child(picture.public_id);
+//                ref.keepSynced(true);
+//                Query personalPicturesQuery = ref;
+//                Picture finalPicture = picture;
+//                personalPicturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        if (snapshot.child("is_favorite").exists())
+//                            finalPicture.is_favorite = snapshot.child("is_favorite").getValue(Boolean.class);
+//                        if (snapshot.child("stars").exists())
+//                            finalPicture.score = snapshot.child("stars").getValue(Integer.class);
+//                        foo.accept(finalPicture);
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//            }
+//        });
+//    }
 
-        picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Picture picture = null;
-                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    picture = singleSnapshot.getValue(Picture.class);
-                    picture.public_id = singleSnapshot.getKey();
-                    break;
-                }
-
-                DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(getUser().getUid())).child(picture.public_id);
-                ref.keepSynced(true);
-                Query personalPicturesQuery = ref;
-                Picture finalPicture = picture;
-                personalPicturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.child("is_favorite").exists())
-                            finalPicture.is_favorite = snapshot.child("is_favorite").getValue(Boolean.class);
-                        if (snapshot.child("stars").exists())
-                            finalPicture.score = snapshot.child("stars").getValue(Integer.class);
-                        foo.accept(finalPicture);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-    }
-
-    static public void loadImage(Context context, String name, Consumer<Bitmap> foo, boolean is_disk_cache) {
-        StorageReference imageRef = getStorage().getReference().child("pictures/".concat(name));
-        GlideRequests glide = GlideApp.with(context);
+    public void loadImage(Context context, String name, Consumer<Bitmap> foo, boolean is_disk_cache) {
+        StorageReference imageRef = fStorage.getReference().child("pictures/".concat(name));
         DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.ALL;
+        GlideRequests glide = GlideApp.with(context);
         glide.asBitmap().diskCacheStrategy(cache_type).load(imageRef)
                 .into(new CustomTarget<Bitmap>() {
                     @Override
@@ -238,6 +228,24 @@ public class FirebaseDB {
 
                     }
                 });
+    }
+
+    public void loadImage(Context context, String name, Runnable foo, boolean is_disk_cache) {
+        StorageReference imageRef = fStorage.getReference().child("pictures/".concat(name));
+        DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.ALL;
+        GlideRequests glide = GlideApp.with(context);
+        glide.asBitmap().diskCacheStrategy(cache_type).load(imageRef).listener(new RequestListener<Bitmap>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                foo.run();
+                return false;
+            }
+        }).submit();
     }
 
 }

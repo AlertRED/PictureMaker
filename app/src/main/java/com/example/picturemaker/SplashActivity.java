@@ -18,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.storage = Storage.getInstance(this);
-        FirebaseDB.login(this, this::finish);
+        this.storage.firebase.login(this, this::finish);
     }
 
     @Override
