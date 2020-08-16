@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,13 +29,16 @@ class ViewHolderCollectionRV extends RecyclerView.ViewHolder {
     public ImageView favorite;
     public View layer;
     private ImageView image;
+    private ProgressBar progressBar;
 
     public ViewHolderCollectionRV(View itemView) {
         super(itemView);
         image = (ImageView) itemView.findViewById(R.id.imageview);
         text = (TextView) itemView.findViewById(R.id.picture_name);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
+        progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar5);
         layer = itemView;
+
 //        this.layer.setAlpha(0);
     }
 
@@ -43,6 +47,7 @@ class ViewHolderCollectionRV extends RecyclerView.ViewHolder {
     }
 
     private void setImage(Bitmap bitmap) {
+        progressBar.setVisibility(View.INVISIBLE);
         this.image.setImageBitmap(bitmap);
 //        this.layer.animate().alpha(1f).setDuration(250);
     }

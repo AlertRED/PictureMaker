@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.example.picturemaker.R;
 import com.example.picturemaker.adapters.AdapterHomeNews;
+import com.example.picturemaker.adapters.AdapterHomePopular;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.support.PictureDiffUtilCallback;
@@ -29,7 +30,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView rvHomeNews;
     private RecyclerView rvHomePopular;
     private AdapterHomeNews rvHomeAdapterNews;
-    private AdapterHomeNews rvHomeAdapterPopular;
+    private AdapterHomePopular rvHomeAdapterPopular;
 
     @Nullable
     @Override
@@ -71,7 +72,7 @@ public class HomeFragment extends Fragment {
         this.rvHomePopular = (RecyclerView) this.getActivity().findViewById(R.id.rv_popular);
         this.rvHomePopular.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
         ((SimpleItemAnimator) rvHomePopular.getItemAnimator()).setSupportsChangeAnimations(false);
-        rvHomeAdapterPopular = new AdapterHomeNews(this.getContext(),R.layout.item_pictute_popular,0, 0);
+        rvHomeAdapterPopular = new AdapterHomePopular(this.getContext(),R.layout.item_pictute_popular,0, 0);
         rvHomePopular.setAdapter(rvHomeAdapterPopular);
 
         LiveData<List<Picture>> liveDataPopular = this.storage.GetLiveDataFromView("Popular");

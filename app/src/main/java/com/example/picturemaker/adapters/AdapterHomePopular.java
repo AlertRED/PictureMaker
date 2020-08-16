@@ -1,19 +1,24 @@
 package com.example.picturemaker.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
+import com.example.picturemaker.support.TestData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +28,15 @@ class ViewHolderHomePopular extends RecyclerView.ViewHolder {
     private TextView title;
     private ImageView favorite;
     private View layer;
+    private ProgressBar progressBar;
+
 
     public ViewHolderHomePopular(View view) {
         super(view);
         this.image = view.findViewById(R.id.imageview);
         this.title = view.findViewById(R.id.picture_name);
         this.favorite = view.findViewById(R.id.favorite_image_item_home);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         this.layer = view;
 //        this.layer.setAlpha(0);
     }
@@ -38,6 +46,7 @@ class ViewHolderHomePopular extends RecyclerView.ViewHolder {
     }
 
     private void setImage(Bitmap bitmap) {
+        progressBar.setVisibility(View.INVISIBLE);
         this.image.setImageBitmap(bitmap);
 //        this.layer.animate().alpha(1f).setDuration(250);
     }
@@ -54,8 +63,8 @@ class ViewHolderHomePopular extends RecyclerView.ViewHolder {
         return title;
     }
 
-    public void setTitle(TextView title) {
-        this.title = title;
+    public void setTitle(String  text) {
+        this.title.setText(text);
     }
 
     public ImageView getFavorite() {
@@ -93,7 +102,21 @@ public class AdapterHomePopular extends RecyclerView.Adapter<ViewHolderHomePopul
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderHomePopular holder, int position) {
+        Picture picture = this.pictures.get(position);
+        holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
 
+        holder.loadImage(context, picture.public_picture);
+        holder.setTitle(picture.name);
+
+
+        holder.getLayer().setOnClickListener(v -> {
+            Intent intent = new Intent(context, PictureActivity.class);
+            intent.putExtra("pictureId", picture.id);
+            context.startActivity(intent);
+        });
+
+        holder.getFavorite().setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
+        holder.getFavorite().setOnClickListener(v -> storage.SetFavoritePicture(picture.id, !picture.is_favorite));
     }
 
     public void setData(List<Picture> pictures){
