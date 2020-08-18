@@ -20,7 +20,6 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.picturemaker.R;
-import com.example.picturemaker.support.Function2;
 import com.example.picturemaker.support.GlideApp;
 import com.example.picturemaker.support.GlideRequests;
 import com.google.firebase.auth.FirebaseAuth;
@@ -173,87 +172,30 @@ public class FirebaseDB {
         });
     }
 
-//    public void loadPicture(Consumer<Picture> foo, String name) {
-//        DatabaseReference ref = fDatabase.getReference("pictures");
-//        ref.keepSynced(true);
-//        Query picturesQuery = ref.orderByChild("name").equalTo(name);
-//
-//        picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Picture picture = null;
-//                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-//                    picture = singleSnapshot.getValue(Picture.class);
-//                    picture.public_id = singleSnapshot.getKey();
-//                    break;
-//                }
-//
-//                DatabaseReference ref = getDatabase().getReference("likes").child("user-".concat(getUser().getUid())).child(picture.public_id);
-//                ref.keepSynced(true);
-//                Query personalPicturesQuery = ref;
-//                Picture finalPicture = picture;
-//                personalPicturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        if (snapshot.child("is_favorite").exists())
-//                            finalPicture.is_favorite = snapshot.child("is_favorite").getValue(Boolean.class);
-//                        if (snapshot.child("stars").exists())
-//                            finalPicture.score = snapshot.child("stars").getValue(Integer.class);
-//                        foo.accept(finalPicture);
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//            }
-//        });
-//    }
-
     public void loadImage(Context context, String name, ImageView imageView, boolean is_disk_cache) {
         StorageReference imageRef = fStorage.getReference().child("pictures/".concat(name));
         DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.ALL;
         RequestOptions requestOptions = new RequestOptions().placeholder(R.drawable.bg_load_image);
         GlideRequests glide = GlideApp.with(context);
         glide.asBitmap().diskCacheStrategy(cache_type).apply(requestOptions).load(imageRef).into(imageView);
-//                .into(new CustomTarget<Bitmap>() {
-//                    @Override
-//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//                        foo.accept(resource);
-//                    }
-//
-//                    @Override
-//                    public void onLoadCleared(@Nullable Drawable placeholder) {
-//                    }
-//
-//                    @Override
-//                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
-//                        super.onLoadFailed(errorDrawable);
-//                    }
-//                });
     }
 
-    public void loadImage(Context context, String name, Function2<Integer,Integer> foo, boolean is_disk_cache) {
-        StorageReference imageRef = fStorage.getReference().child("pictures/".concat(name));
-        DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.ALL;
-        GlideRequests glide = GlideApp.with(context);
-
-        glide.asBitmap().diskCacheStrategy(cache_type).load(imageRef).listener(new RequestListener<Bitmap>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                foo.apply(resource.getHeight(), resource.getWidth());
-                return false;
-            }
-        }).submit();
-    }
+//    public void loadImage(Context context, String name, Function2<Integer,Integer> foo, boolean is_disk_cache) {
+//        StorageReference imageRef = fStorage.getReference().child("pictures/".concat(name));
+//        DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.ALL;
+//        GlideRequests glide = GlideApp.with(context);
+//
+//        glide.asBitmap().diskCacheStrategy(cache_type).load(imageRef).listener(new RequestListener<Bitmap>() {
+//            @Override
+//            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+//                foo.apply(resource.getHeight(), resource.getWidth());
+//                return false;
+//            }
+//        }).submit();
+//    }
 }

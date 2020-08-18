@@ -18,7 +18,6 @@ import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
-import com.example.picturemaker.support.TestData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +98,7 @@ public class AdapterHomePopular extends RecyclerView.Adapter<ViewHolderHomePopul
     @Override
     public void onBindViewHolder(@NonNull ViewHolderHomePopular holder, int position) {
         Picture picture = this.pictures.get(position);
-        holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
+//        holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
 
 //        holder.loadImage(context, picture.public_picture);
         storage.GetImage(context, picture.public_picture, holder.image);

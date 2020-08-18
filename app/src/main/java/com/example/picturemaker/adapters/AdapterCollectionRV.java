@@ -20,7 +20,6 @@ import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
-import com.example.picturemaker.support.TestData;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -84,7 +83,7 @@ public class AdapterCollectionRV extends RecyclerView.Adapter<ViewHolderCollecti
     @Override
     public void onBindViewHolder(final ViewHolderCollectionRV holder, final int position) {
         Picture picture = this.pictures.get(position);
-        holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
+//        holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
 
 //        holder.loadImage(context, picture.public_picture);
         storage.GetImage(context, picture.public_picture, holder.image);
