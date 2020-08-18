@@ -2,9 +2,13 @@ package com.example.picturemaker.storage;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.widget.ImageView;
 
 import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
+
+import com.example.picturemaker.support.Function2;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -35,6 +39,10 @@ public class Storage {
             instance = new Storage(context);
         }
         return instance;
+    }
+
+    public FirebaseUser getUser(){
+        return this.firebase.getUser();
     }
 
     public void GetGenres(Consumer<List<String>> foo) {
@@ -106,15 +114,15 @@ public class Storage {
             Executor myExecutor = Executors.newSingleThreadExecutor();
             myExecutor.execute(() -> {
                 for (Picture picture : pictures) {
-                    long id = this.pictureDao.insertOrUpdate(picture);
-                    this.firebase.loadImage(context, picture.public_picture, () -> this.viewPictureDao.insert(new ViewPicture(viewName, id)), true);
+                        long id = this.pictureDao.insertOrUpdate(picture);
+                        this.viewPictureDao.insert(new ViewPicture(viewName, id));
                 }
             });
         }, parameters);
     }
 
-    public void GetImage(Context context, String picture_name, Consumer<Bitmap> foo) {
-        this.firebase.loadImage(context, picture_name, foo, false);
+    public void GetImage(Context context, String picture_name, ImageView imageView) {
+        this.firebase.loadImage(context, picture_name, imageView, false);
     }
 
     public void SetFavoritePicture(long pictureId, boolean isFavorite) {

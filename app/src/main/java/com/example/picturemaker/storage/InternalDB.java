@@ -105,7 +105,7 @@ interface PictureDao {
 
 }
 
-@Database(entities = {Picture.class, ViewPicture.class}, version = 28, exportSchema = false)
+@Database(entities = {Picture.class, ViewPicture.class}, version = 29, exportSchema = false)
 public abstract class InternalDB extends RoomDatabase {
 
     public abstract PictureDao pictureDao();

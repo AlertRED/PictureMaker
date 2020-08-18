@@ -14,11 +14,14 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.support.TestData;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +31,7 @@ class ViewHolderCollectionRV extends RecyclerView.ViewHolder {
     public TextView text;
     public ImageView favorite;
     public View layer;
-    private ImageView image;
+    public ImageView image;
 
     public ViewHolderCollectionRV(View itemView) {
         super(itemView);
@@ -41,7 +44,7 @@ class ViewHolderCollectionRV extends RecyclerView.ViewHolder {
     }
 
     public void loadImage(Context context, String name) {
-        Storage.getInstance(context).GetImage(context, name, this::setImage);
+//        Storage.getInstance(context).GetImage(context, name, this::setImage);
     }
 
     private void setImage(Bitmap bitmap) {
@@ -83,8 +86,11 @@ public class AdapterCollectionRV extends RecyclerView.Adapter<ViewHolderCollecti
         Picture picture = this.pictures.get(position);
         holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
 
-        holder.loadImage(context, picture.public_picture);
+//        holder.loadImage(context, picture.public_picture);
+        storage.GetImage(context, picture.public_picture, holder.image);
         holder.text.setText(picture.name);
+
+        StorageReference i = storage.firebase.fStorage.getReference().child("pictures/".concat(picture.public_picture));
 
 
         holder.layer.setOnClickListener(v -> {

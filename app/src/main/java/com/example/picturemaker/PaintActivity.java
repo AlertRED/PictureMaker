@@ -18,9 +18,9 @@ public class PaintActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paint);
 
-        int picture_id = getIntent().getIntExtra("picture_id", 0);
+//        int picture_id = getIntent().getIntExtra("picture_id", 0);
 
-        RecyclerView rv_top = (RecyclerView) this.findViewById(R.id.rv_news);
+        RecyclerView rv_top = (RecyclerView) this.findViewById(R.id.rv_colors);
         rv_top.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         AdapterColorsRV rvMain_adapter = new AdapterColorsRV(this, R.layout.item_color_brush, 0, 20);
         rv_top.setAdapter(rvMain_adapter);

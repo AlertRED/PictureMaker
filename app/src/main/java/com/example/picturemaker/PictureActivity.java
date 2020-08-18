@@ -28,7 +28,7 @@ import java.util.List;
 public class PictureActivity extends AppCompatActivity {
 
     private Picture picture;
-    private ImageView image;
+    public ImageView image;
     private TextView name;
     private TextView my_score;
     private TextView total_score;
@@ -72,7 +72,7 @@ public class PictureActivity extends AppCompatActivity {
 
     private void RefreshData() {
 
-        this.storage.GetImage(this, this.picture.public_picture, this::LoadPicture);
+        this.storage.GetImage(this, this.picture.public_picture, image);
 
         this.name.setText(this.picture.name);
         this.total_score.setText("Рейтинг: ".concat(String.valueOf(this.picture.total_score)));

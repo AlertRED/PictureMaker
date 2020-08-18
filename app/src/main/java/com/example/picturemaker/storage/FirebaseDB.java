@@ -4,18 +4,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.arch.core.util.Function;
 import androidx.core.util.Consumer;
 
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.picturemaker.R;
+import com.example.picturemaker.support.Function2;
 import com.example.picturemaker.support.GlideApp;
 import com.example.picturemaker.support.GlideRequests;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,9 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
 public class FirebaseDB {
 
-    private FirebaseStorage fStorage;
+    public FirebaseStorage fStorage;
     private FirebaseDatabase fDatabase;
     private FirebaseAuth fAuth;
     private static FirebaseDB INSTANCE;
@@ -54,7 +60,9 @@ public class FirebaseDB {
         return INSTANCE;
     }
 
-
+    public FirebaseUser getUser(){
+        return this.fAuth.getCurrentUser();
+    }
 
     public void login(Activity activity, Runnable foo) {
         FirebaseUser currentUser = fAuth.getCurrentUser();
@@ -207,33 +215,34 @@ public class FirebaseDB {
 //        });
 //    }
 
-    public void loadImage(Context context, String name, Consumer<Bitmap> foo, boolean is_disk_cache) {
+    public void loadImage(Context context, String name, ImageView imageView, boolean is_disk_cache) {
         StorageReference imageRef = fStorage.getReference().child("pictures/".concat(name));
         DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.ALL;
+        RequestOptions requestOptions = new RequestOptions().placeholder(R.drawable.bg_load_image);
         GlideRequests glide = GlideApp.with(context);
-        glide.asBitmap().diskCacheStrategy(cache_type).load(imageRef)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        foo.accept(resource);
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                    }
-
-                    @Override
-                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                        super.onLoadFailed(errorDrawable);
-
-                    }
-                });
+        glide.asBitmap().diskCacheStrategy(cache_type).apply(requestOptions).load(imageRef).into(imageView);
+//                .into(new CustomTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                        foo.accept(resource);
+//                    }
+//
+//                    @Override
+//                    public void onLoadCleared(@Nullable Drawable placeholder) {
+//                    }
+//
+//                    @Override
+//                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+//                        super.onLoadFailed(errorDrawable);
+//                    }
+//                });
     }
 
-    public void loadImage(Context context, String name, Runnable foo, boolean is_disk_cache) {
+    public void loadImage(Context context, String name, Function2<Integer,Integer> foo, boolean is_disk_cache) {
         StorageReference imageRef = fStorage.getReference().child("pictures/".concat(name));
         DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.ALL;
         GlideRequests glide = GlideApp.with(context);
+
         glide.asBitmap().diskCacheStrategy(cache_type).load(imageRef).listener(new RequestListener<Bitmap>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -242,10 +251,9 @@ public class FirebaseDB {
 
             @Override
             public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                foo.run();
+                foo.apply(resource.getHeight(), resource.getWidth());
                 return false;
             }
         }).submit();
     }
-
 }

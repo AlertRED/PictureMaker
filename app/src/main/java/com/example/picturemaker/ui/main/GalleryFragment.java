@@ -2,7 +2,6 @@ package com.example.picturemaker.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,19 +24,18 @@ import com.example.picturemaker.adapters.AdapterGalleryRV;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.support.PictureDiffUtilCallback;
-import com.example.picturemaker.support.SpacesItemDecoration;
 
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+
 
 public class GalleryFragment extends Fragment {
 
-    RecyclerView rvMain;
-    private AdapterGalleryRV rvMain_adapter;
+    RecyclerView recyclerView;
+    private AdapterGalleryRV adapterGalleryRV;
     private Storage storage;
     private String author;
     private String genre;
@@ -89,10 +87,10 @@ public class GalleryFragment extends Fragment {
     }
 
     private void RefreshAdapter(List<Picture> pictures) {
-        PictureDiffUtilCallback pictureDiffUtilCallback = new PictureDiffUtilCallback(rvMain_adapter.getData(), pictures);
+        PictureDiffUtilCallback pictureDiffUtilCallback = new PictureDiffUtilCallback(adapterGalleryRV.getData(), pictures);
         DiffUtil.DiffResult productDiffResult = DiffUtil.calculateDiff(pictureDiffUtilCallback);
-        rvMain_adapter.setData(pictures);
-        productDiffResult.dispatchUpdatesTo(rvMain_adapter);
+        adapterGalleryRV.setData(pictures);
+        productDiffResult.dispatchUpdatesTo(adapterGalleryRV);
     }
 
     @Override
@@ -117,15 +115,13 @@ public class GalleryFragment extends Fragment {
         ArrayAdapter<String> category_adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         category.setAdapter(category_adapter);
 
-        rvMain = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
-//        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.default_gaps);
-//        rvMain.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
-        ((SimpleItemAnimator) rvMain.getItemAnimator()).setSupportsChangeAnimations(false);
-        rvMain_adapter = new AdapterGalleryRV(this.getContext(), getResources(),R.layout.item_pictute_gallery, 30, 30, false);
-        rvMain.setAdapter(rvMain_adapter);
+        recyclerView = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
+        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        adapterGalleryRV = new AdapterGalleryRV(this.getContext(), getResources(),R.layout.item_pictute_gallery, 30, 30, false);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        rvMain.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapterGalleryRV);
 
         LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView("Gallery");
         liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);

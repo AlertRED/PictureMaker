@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ViewHolderHomePopular extends RecyclerView.ViewHolder {
-    private ImageView image;
+    public ImageView image;
     private TextView title;
     private ImageView favorite;
     private View layer;
@@ -48,7 +48,7 @@ class ViewHolderHomePopular extends RecyclerView.ViewHolder {
     }
 
     public void loadImage(Context context, String name) {
-        Storage.getInstance(context).GetImage(context, name, this::setImage);
+//        Storage.getInstance(context).GetImage(context, name, this::setImage);
     }
 
     public View getLayer() {
@@ -101,7 +101,9 @@ public class AdapterHomePopular extends RecyclerView.Adapter<ViewHolderHomePopul
         Picture picture = this.pictures.get(position);
         holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
 
-        holder.loadImage(context, picture.public_picture);
+//        holder.loadImage(context, picture.public_picture);
+        storage.GetImage(context, picture.public_picture, holder.image);
+
         holder.setTitle(picture.name);
 
 

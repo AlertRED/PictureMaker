@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="user_013841"
+            android:text="id: "
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/circularImageView"
             app:layout_constraintTop_toTopOf="parent" />

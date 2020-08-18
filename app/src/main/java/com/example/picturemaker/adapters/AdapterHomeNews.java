@@ -24,7 +24,7 @@ import java.util.List;
 
 class ViewHolderHomeNews extends RecyclerView.ViewHolder {
 
-    private ImageView image;
+    public ImageView image;
     private TextView text;
     private View layer;
 
@@ -37,7 +37,7 @@ class ViewHolderHomeNews extends RecyclerView.ViewHolder {
     }
 
     public void loadImage(Context context, String name) {
-        Storage.getInstance(context).GetImage(context, name, this::setImage);
+//        Storage.getInstance(context).GetImage(context, name, this::setImage);
     }
 
     public ImageView getImage() {
@@ -93,6 +93,7 @@ public class AdapterHomeNews extends RecyclerView.Adapter<ViewHolderHomeNews> {
     public void onBindViewHolder(final ViewHolderHomeNews holder, final int picture_id) {
 
         Picture picture = pictures.get(picture_id);
+        storage.GetImage(context, picture.public_picture, holder.image);
 
         holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), picture.name, Toast.LENGTH_SHORT).show());
 

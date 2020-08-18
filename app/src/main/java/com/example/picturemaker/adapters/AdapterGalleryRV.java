@@ -4,22 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder {
     public TextView text;
     public ImageView favorite;
     public View layer;
-    private ImageView image;
+    public ImageView image;
 
 
     public ViewHolderGalleryRV(View itemView, Resources resources) {
@@ -38,17 +38,19 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder {
         text = (TextView) itemView.findViewById(R.id.picture_name);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
         layer = itemView;
-        layer.setVisibility(View.GONE);
+        layer.setVisibility(View.VISIBLE);
 //        this.layer.setAlpha(0);
     }
 
     public void loadImage(Context context, String name) {
-        Storage.getInstance(context).GetImage(context, name, this::setImage);
+//        Storage.getInstance(context).GetImage(context, name, this::setImage);
     }
 
     private void setImage(Bitmap bitmap) {
         this.image.setImageBitmap(bitmap);
         layer.setVisibility(View.VISIBLE);
+//        this.image.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+
 //        this.layer.animate().alpha(1f).setDuration(250);
     }
 }
@@ -64,7 +66,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
     Storage storage;
 
 
-    public AdapterGalleryRV(Context context, Resources resources ,int layout_item, int spacing_vertical, int spacing_horizontal, boolean first) {
+    public AdapterGalleryRV(Context context, Resources resources, int layout_item, int spacing_vertical, int spacing_horizontal, boolean first) {
         this.context = context;
         this.first = first;
         this.layout_item = layout_item;
@@ -87,8 +89,11 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
     @Override
     public void onBindViewHolder(final ViewHolderGalleryRV holder, final int position) {
         Picture picture = this.pictures.get(position);
-        holder.loadImage(context, picture.public_picture);
+//        holder.loadImage(context, picture.public_picture);
         holder.text.setText(picture.name);
+
+        storage.GetImage(context, picture.public_picture, holder.image);
+
 
         holder.layer.setOnClickListener(v -> {
             Intent intent = new Intent(context, PictureActivity.class);
@@ -98,6 +103,7 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
 
         holder.favorite.setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
         holder.favorite.setOnClickListener(v -> storage.SetFavoritePicture(picture.id, !picture.is_favorite));
+
 
         if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && (!this.first || position > 0)) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
