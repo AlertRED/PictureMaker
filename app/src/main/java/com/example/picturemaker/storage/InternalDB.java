@@ -22,6 +22,9 @@ interface ViewPictureDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(ViewPicture viewPicture);
 
+    @Query("DELETE FROM view_picture WHERE viewName IS :viewName AND pictureId=:pictureId")
+    void deleteByViewAndPicture(String viewName, long pictureId);
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(ViewPicture viewPicture);
 
@@ -105,7 +108,7 @@ interface PictureDao {
 
 }
 
-@Database(entities = {Picture.class, ViewPicture.class}, version = 29, exportSchema = false)
+@Database(entities = {Picture.class, ViewPicture.class}, version = 30, exportSchema = false)
 public abstract class InternalDB extends RoomDatabase {
 
     public abstract PictureDao pictureDao();

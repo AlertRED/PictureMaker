@@ -34,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -76,28 +77,14 @@ public class FirebaseDB {
     }
 
     public void loadAuthors(Consumer<List<String>> foo) {
-        DatabaseReference ref = fDatabase.getReference("authors");
-        ref.keepSynced(true);
-        Query query = ref;
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<String> authors = new ArrayList<>();
-                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    String author = (String) singleSnapshot.getValue();
-                    authors.add(author);
-                }
-                foo.accept(authors);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        loadFilter(foo, "authors");
     }
 
     public void loadGenres(Consumer<List<String>> foo) {
+        loadFilter(foo, "genres");
+    }
+
+    private void loadFilter(Consumer<List<String>> foo, String filter_name){
         DatabaseReference ref = fDatabase.getReference("genres");
         ref.keepSynced(true);
         Query query = ref;
@@ -135,6 +122,10 @@ public class FirebaseDB {
         ref.keepSynced(true);
         Query picturesQuery = ref;
 
+        if (parameters.containsKey("picture_id")) {
+            String is_popular = (String) parameters.get("picture_id");
+            picturesQuery = ref.orderByKey().equalTo(is_popular);
+        }
         if (parameters.containsKey("is_popular")) {
             Boolean is_popular = (Boolean) parameters.get("is_popular");
             picturesQuery = ref.orderByChild("is_popular").equalTo(is_popular);
@@ -155,8 +146,6 @@ public class FirebaseDB {
             String genre = (String) parameters.get("genre");
             picturesQuery = ref.orderByChild("genre").equalTo(genre);
         }
-        if (parameters.containsKey("is_popular"))
-            picturesQuery = ref.orderByChild("is_popular").equalTo((boolean) parameters.get("is_popular"));
 
         picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -174,6 +163,33 @@ public class FirebaseDB {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    public void getFavoriteIds(Consumer<List<String>> foo){
+        String uid = this.getUser().getUid();
+        DatabaseReference ref = fDatabase.getReference("likes").child("user-".concat(uid));
+        Query picturesQuery = ref.orderByChild("is_favorite").equalTo(true);
+        ref.keepSynced(true);
+
+        picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<String> pictureIds = new ArrayList<>();
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    pictureIds.add(singleSnapshot.getKey());
+                }
+                foo.accept(pictureIds);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+
+    private void returnData(DataSnapshot dataSnapshot, Consumer<List<Picture>> foo){
+
     }
 
     public void loadImage(Context context, String name, ImageView imageView, boolean is_disk_cache) {

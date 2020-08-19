@@ -79,25 +79,30 @@ public class Storage {
 
     public void LoadPicturesByGallery(Context context, Map<String, Object> parameters) {
         this.DeletePictures("Gallery");
-        this.LoadPictures(context,"Gallery", parameters);
+        this.LoadPictures("Gallery", parameters);
     }
 
     public void LoadPicturesByCollection(Context context) {
         Map<String, Object> parameters = new Hashtable<>();
-        this.LoadPictures(context,"Collection", parameters);
+        this.firebase.getFavoriteIds(pictureIds -> {
+            for (String pictureId : pictureIds) {
+                parameters.put("picture_id", pictureId);
+                this.LoadPictures("Collection", parameters);
+            }
+        });
     }
 
     public void LoadPicturesByNews(Context context) {
         Map<String, Object> parameters = new Hashtable<>();
         parameters.put("is_last", true);
         parameters.put("count", 2);
-        this.LoadPictures(context, "News", parameters);
+        this.LoadPictures("News", parameters);
     }
 
     public void LoadPicturesByPopular(Context context) {
         Map<String, Object> parameters = new Hashtable<>();
         parameters.put("is_popular", true);
-        this.LoadPictures(context, "Popular", parameters);
+        this.LoadPictures("Popular", parameters);
     }
 
     public LiveData<Picture> GetLivePicture(long id) {
@@ -109,7 +114,7 @@ public class Storage {
         myExecutor.execute(() -> this.viewPictureDao.deleteAllPicturesFromView(viewName));
     }
 
-    private void LoadPictures(Context context, String viewName, Map<String, Object> parameters) {
+    private void LoadPictures(String viewName, Map<String, Object> parameters) {
         this.firebase.LoadPictures(pictures -> {
             Executor myExecutor = Executors.newSingleThreadExecutor();
             myExecutor.execute(() -> {
@@ -131,6 +136,10 @@ public class Storage {
             Picture picture = pictureDao.findById(pictureId);
             picture.is_favorite = isFavorite;
             pictureDao.update(picture);
+            if (isFavorite)
+                this.viewPictureDao.insert(new ViewPicture("Collection", picture.id));
+            else
+                this.viewPictureDao.deleteByViewAndPicture("Collection", picture.id);
             this.firebase.SetFavoritePicture(picture.public_id, isFavorite, () -> {
             });
         });
