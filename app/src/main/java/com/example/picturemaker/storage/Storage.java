@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 
-import com.example.picturemaker.support.Function2;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Hashtable;
@@ -88,10 +87,11 @@ public class Storage {
         this.LoadPictures(context,"Collection", parameters);
     }
 
-    public void LoadPicturesByTop(Context context) {
+    public void LoadPicturesByNews(Context context) {
         Map<String, Object> parameters = new Hashtable<>();
-        parameters.put("is_popular", true);
-        this.LoadPictures(context, "Top", parameters);
+        parameters.put("is_last", true);
+        parameters.put("count", 2);
+        this.LoadPictures(context, "News", parameters);
     }
 
     public void LoadPicturesByPopular(Context context) {

@@ -139,8 +139,12 @@ public class FirebaseDB {
             Boolean is_popular = (Boolean) parameters.get("is_popular");
             picturesQuery = ref.orderByChild("is_popular").equalTo(is_popular);
         }
+        if (parameters.containsKey("is_last")) {
+            Integer count = (Integer) parameters.get("count");
+            picturesQuery = ref.limitToLast(count);
+        }
         if (parameters.containsKey("level")) {
-            int level = (int) parameters.get("level");
+            Integer level = (Integer) parameters.get("level");
             picturesQuery = ref.orderByChild("level").startAt(level).endAt(level);
         }
         if (parameters.containsKey("author")) {

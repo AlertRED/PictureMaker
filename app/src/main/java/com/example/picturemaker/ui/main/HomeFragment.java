@@ -64,9 +64,9 @@ public class HomeFragment extends Fragment {
         rvHomeAdapterNews = new AdapterHomeNews(this.getContext(),R.layout.item_pictute_news,0, 30);
         rvHomeNews.setAdapter(rvHomeAdapterNews);
 
-        LiveData<List<Picture>> liveDataNews = this.storage.GetLiveDataFromView("Top");
+        LiveData<List<Picture>> liveDataNews = this.storage.GetLiveDataFromView("News");
         liveDataNews.observe(getViewLifecycleOwner(), this::RefreshAdapterNews);
-        this.storage.LoadPicturesByTop(getContext());
+        this.storage.LoadPicturesByNews(getContext());
 
 
         this.rvHomePopular = (RecyclerView) this.getActivity().findViewById(R.id.rv_popular);
