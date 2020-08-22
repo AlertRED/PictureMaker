@@ -1,6 +1,4 @@
-package com.example.picturemaker.ui.main;
-
-import androidx.lifecycle.ViewModelProviders;
+package com.example.picturemaker.ui.fragments;
 
 import android.os.Bundle;
 

@@ -1,4 +1,4 @@
-package com.example.picturemaker.ui.main;
+package com.example.picturemaker.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

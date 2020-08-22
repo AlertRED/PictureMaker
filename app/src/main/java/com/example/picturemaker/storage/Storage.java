@@ -1,7 +1,6 @@
 package com.example.picturemaker.storage;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import androidx.core.util.Consumer;
@@ -40,7 +39,7 @@ public class Storage {
         return instance;
     }
 
-    public FirebaseUser getUser(){
+    public FirebaseUser getUser() {
         return this.firebase.getUser();
     }
 
@@ -82,14 +81,30 @@ public class Storage {
         this.LoadPictures("Gallery", parameters);
     }
 
-    public void LoadPicturesByCollection(Context context) {
+    public void LoadPicturesByCollection(Context context, String collectionType) {
         Map<String, Object> parameters = new Hashtable<>();
-        this.firebase.getFavoriteIds(pictureIds -> {
-            for (String pictureId : pictureIds) {
-                parameters.put("picture_id", pictureId);
-                this.LoadPictures("Collection", parameters);
-            }
-        });
+        if (collectionType.equals("Favorites"))
+            this.firebase.getFavoriteIds(pictureIds -> {
+                for (String pictureId : pictureIds) {
+                    parameters.put("picture_id", pictureId);
+                    this.LoadPictures(collectionType, parameters);
+                }
+            });
+        else if (collectionType.equals("Process"))
+            this.firebase.getProcessIds(pictureIds -> {
+                for (String pictureId : pictureIds) {
+                    parameters.put("picture_id", pictureId);
+                    this.LoadPictures(collectionType, parameters);
+                }
+            });
+        else if (collectionType.equals("Finish"))
+            this.firebase.getFinishedIds(pictureIds -> {
+                for (String pictureId : pictureIds) {
+                    parameters.put("picture_id", pictureId);
+                    this.LoadPictures(collectionType, parameters);
+                }
+            });
+
     }
 
     public void LoadPicturesByNews(Context context) {
@@ -119,8 +134,8 @@ public class Storage {
             Executor myExecutor = Executors.newSingleThreadExecutor();
             myExecutor.execute(() -> {
                 for (Picture picture : pictures) {
-                        long id = this.pictureDao.insertOrUpdate(picture);
-                        this.viewPictureDao.insert(new ViewPicture(viewName, id));
+                    long id = this.pictureDao.insertOrUpdate(picture);
+                    this.viewPictureDao.insert(new ViewPicture(viewName, id));
                 }
             });
         }, parameters);
@@ -137,9 +152,9 @@ public class Storage {
             picture.is_favorite = isFavorite;
             pictureDao.update(picture);
             if (isFavorite)
-                this.viewPictureDao.insert(new ViewPicture("Collection", picture.id));
+                this.viewPictureDao.insert(new ViewPicture("Favorites", picture.id));
             else
-                this.viewPictureDao.deleteByViewAndPicture("Collection", picture.id);
+                this.viewPictureDao.deleteByViewAndPicture("Favorites", picture.id);
             this.firebase.SetFavoritePicture(picture.public_id, isFavorite, () -> {
             });
         });

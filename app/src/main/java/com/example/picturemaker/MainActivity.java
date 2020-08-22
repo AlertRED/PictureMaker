@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.picturemaker.ui.main.GalleryFragment;
-import com.example.picturemaker.ui.main.HomeFragment;
-import com.example.picturemaker.ui.main.ProfileFragment;
-import com.example.picturemaker.ui.main.CollectionFragment;
+import com.example.picturemaker.ui.fragments.GalleryFragment;
+import com.example.picturemaker.ui.fragments.HomeFragment;
+import com.example.picturemaker.ui.fragments.ProfileFragment;
+import com.example.picturemaker.ui.fragments.CollectionFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 

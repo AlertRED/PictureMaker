@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.main.GalleryFragment">
+    tools:context=".ui.fragments.GalleryFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

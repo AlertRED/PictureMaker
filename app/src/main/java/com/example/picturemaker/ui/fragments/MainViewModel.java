@@ -1,4 +1,4 @@
-package com.example.picturemaker.ui.main;
+package com.example.picturemaker.ui.fragments;
 
 import androidx.lifecycle.ViewModel;
 

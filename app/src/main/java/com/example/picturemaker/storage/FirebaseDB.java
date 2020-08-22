@@ -2,23 +2,13 @@ package com.example.picturemaker.storage;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.arch.core.util.Function;
 import androidx.core.util.Consumer;
 
-import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.example.picturemaker.R;
 import com.example.picturemaker.support.GlideApp;
 import com.example.picturemaker.support.GlideRequests;
@@ -34,17 +24,16 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
 
 public class FirebaseDB {
 
+    private static FirebaseDB INSTANCE;
     public FirebaseStorage fStorage;
     private FirebaseDatabase fDatabase;
     private FirebaseAuth fAuth;
-    private static FirebaseDB INSTANCE;
 
     private FirebaseDB(Context context) {
         this.fDatabase = FirebaseDatabase.getInstance();
@@ -53,14 +42,14 @@ public class FirebaseDB {
         this.fAuth = FirebaseAuth.getInstance();
     }
 
-    static FirebaseDB getInstance(Context context){
-        if (INSTANCE == null){
+    static FirebaseDB getInstance(Context context) {
+        if (INSTANCE == null) {
             INSTANCE = new FirebaseDB(context);
         }
         return INSTANCE;
     }
 
-    public FirebaseUser getUser(){
+    public FirebaseUser getUser() {
         return this.fAuth.getCurrentUser();
     }
 
@@ -84,7 +73,7 @@ public class FirebaseDB {
         loadFilter(foo, "genres");
     }
 
-    private void loadFilter(Consumer<List<String>> foo, String filter_name){
+    private void loadFilter(Consumer<List<String>> foo, String filter_name) {
         DatabaseReference ref = fDatabase.getReference("genres");
         ref.keepSynced(true);
         Query query = ref;
@@ -108,7 +97,7 @@ public class FirebaseDB {
 
     public void SetFavoritePicture(String picture_id, boolean is_favorite, Runnable foo) {
         String uid = fAuth.getUid();
-        DatabaseReference ref = fDatabase.getReference("likes").child("user-".concat(uid)).child(picture_id).child("is_favorite");
+        DatabaseReference ref = fDatabase.getReference("user-pictures").child("user-".concat(uid)).child(picture_id).child("is_favorite");
         ref.keepSynced(false);
         if (is_favorite) {
             ref.setValue(true).addOnSuccessListener(aVoid -> foo.run());
@@ -165,13 +154,33 @@ public class FirebaseDB {
         });
     }
 
-    public void getFavoriteIds(Consumer<List<String>> foo){
+    public void getFavoriteIds(Consumer<List<String>> foo) {
         String uid = this.getUser().getUid();
-        DatabaseReference ref = fDatabase.getReference("likes").child("user-".concat(uid));
-        Query picturesQuery = ref.orderByChild("is_favorite").equalTo(true);
+        DatabaseReference ref = fDatabase.getReference("user-pictures").child("user-".concat(uid));
+        Query query = ref.orderByChild("is_favorite").equalTo(true);
         ref.keepSynced(true);
+        getFromUserPicture(foo, query);
+    }
 
-        picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getProcessIds(Consumer<List<String>> foo) {
+        String uid = this.getUser().getUid();
+        DatabaseReference ref = fDatabase.getReference("user-pictures").child("user-".concat(uid));
+        Query query = ref.orderByChild("status").equalTo("process");
+        ref.keepSynced(true);
+        getFromUserPicture(foo, query);
+    }
+
+    public void getFinishedIds(Consumer<List<String>> foo) {
+        String uid = this.getUser().getUid();
+        DatabaseReference ref = fDatabase.getReference("user-pictures").child("user-".concat(uid));
+        Query query = ref.orderByChild("status").equalTo("finish");
+        ref.keepSynced(true);
+        getFromUserPicture(foo, query);
+    }
+
+    public void getFromUserPicture(Consumer<List<String>> foo, Query query) {
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> pictureIds = new ArrayList<>();
@@ -188,7 +197,7 @@ public class FirebaseDB {
     }
 
 
-    private void returnData(DataSnapshot dataSnapshot, Consumer<List<Picture>> foo){
+    private void returnData(DataSnapshot dataSnapshot, Consumer<List<Picture>> foo) {
 
     }
 
