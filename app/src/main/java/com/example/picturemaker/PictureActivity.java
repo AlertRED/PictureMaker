@@ -81,12 +81,15 @@ public class PictureActivity extends AppCompatActivity {
     }
 
     private void LoadPictureBackground(Bitmap bitmap){
+        BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+        this.imageBackground.setImageDrawable(drawable);
+        this.image.setImageDrawable(drawable);
     }
 
     private void RefreshData() {
 
-        this.storage.GetImage(this, this.picture.public_picture, image);
         this.storage.GetImage(this, this.picture.public_picture, imageBackground);
+        this.storage.GetImage(this, this.picture.public_picture, image);
 //        this.storage.GetImage(this, this.picture.public_picture, this::LoadPictureBackground);
 
 
