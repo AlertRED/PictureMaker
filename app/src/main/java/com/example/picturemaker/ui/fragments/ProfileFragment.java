@@ -1,15 +1,14 @@
 package com.example.picturemaker.ui.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.picturemaker.R;
 import com.example.picturemaker.storage.Storage;
@@ -38,6 +37,7 @@ public class ProfileFragment extends Fragment {
         FirebaseUser user = this.storage.getUser();
         TextView tvUsername = this.getActivity().findViewById(R.id.textView10);
         tvUsername.setText("id: ".concat(user.getUid()));
+
     }
 
 }

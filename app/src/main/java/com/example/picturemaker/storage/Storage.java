@@ -1,6 +1,7 @@
 package com.example.picturemaker.storage;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import androidx.core.util.Consumer;
@@ -143,6 +144,11 @@ public class Storage {
 
     public void GetImage(Context context, String picture_name, ImageView imageView) {
         this.firebase.loadImage(context, picture_name, imageView, false);
+    }
+
+    public void GetImage(Context context, String picture_name, Consumer<Bitmap> foo) {
+
+        this.firebase.loadImage(context, picture_name, foo, false);
     }
 
     public void SetFavoritePicture(long pictureId, boolean isFavorite) {

@@ -2,163 +2,163 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_profile_picture"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_grey_alpha_picture"
     android:orientation="vertical"
     tools:context=".PictureActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/filter_gallery_toolbar2"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#536DFE"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/activity_picture_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="4dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:text="TextView"
-            android:textColor="#000000"
-            android:textSize="24sp" />
+        android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/picture"
+            android:id="@+id/backgroundPicture"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/blurLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:targetApi="lollipop">
+
+
+        </eightbitlab.com.blurview.BlurView>
 
         <LinearLayout
+            android:id="@+id/layout_picture1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_grey_alpha_picture"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingLeft="4dp">
 
-                <ImageView
-                    android:id="@+id/puzzle1"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="0"
-                    android:visibility="visible"
-                    app:srcCompat="@drawable/ic_puzzle_piece_24" />
-
-                <ImageView
-                    android:id="@+id/puzzle2"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="0"
-                    app:srcCompat="@drawable/ic_puzzle_piece_24" />
-
-                <ImageView
-                    android:id="@+id/puzzle3"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="0"
-                    android:visibility="visible"
-                    app:srcCompat="@drawable/ic_puzzle_piece_24" />
-
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <ImageView
-                    android:id="@+id/activity_picture_score"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    app:srcCompat="@drawable/ic_baseline_star_border_24" />
-
-                <ImageView
-                    android:id="@+id/activity_picture_favorite"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    app:srcCompat="@drawable/ic_unfavorite_36" />
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/filter_gallery_toolbar2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:minHeight="?attr/actionBarSize"
+                    android:theme="?attr/actionBarTheme"
+                    app:titleTextColor="#FFFFFF" />
 
             </LinearLayout>
 
-            <RelativeLayout
+            <ImageView
+                android:id="@+id/picture"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp">
-
-                <TextView
-                    android:id="@+id/picture_total_score"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="8dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:text="Рейтинг: 8.1"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/picture_my_score"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:paddingTop="4dp"
-                    android:paddingRight="4dp"
-                    android:paddingBottom="4dp"
-                    android:text="Моя оценка: 7.9"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
-
-            </RelativeLayout>
+                android:layout_height="300dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp" />
 
             <LinearLayout
-                android:id="@+id/activity_picture_ll_progress"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="32dp"
+                android:paddingTop="10dp"
+                android:paddingRight="32dp"
+                android:paddingBottom="10dp">
 
-                <TextView
-                    android:id="@+id/textView12"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/activity_picture_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:fontFamily="sans-serif-light"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="Название"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp" />
+
+                    <ImageView
+                        android:id="@+id/activity_picture_favorite"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_weight="0"
+                        app:srcCompat="@drawable/ic_unfavorite_36" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingLeft="4dp">
+
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Прогресс выполнения"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/picture_my_score"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="right"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:text="Моя оценка: 7.9"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/picture_total_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:text="Рейтинг: 8.1"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/activity_picture_ll_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/button_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_button_start"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Начать"
+                    android:textColor="#FFFFFF"
                     android:textSize="18sp" />
 
-                <ProgressBar
-                    android:id="@+id/activity_picture_progress"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="100"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:progress="80" />
             </LinearLayout>
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/button_start"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:text="Начать" />
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

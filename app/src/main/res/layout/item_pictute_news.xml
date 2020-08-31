@@ -44,7 +44,7 @@
             android:id="@+id/picture_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
+            android:fontFamily="sans-serif-light"
             android:text="Picture"
             android:textColor="#FFF"
             android:textSize="14sp" />

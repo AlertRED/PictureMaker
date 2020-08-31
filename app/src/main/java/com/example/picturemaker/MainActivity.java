@@ -65,10 +65,10 @@ public class MainActivity extends AppCompatActivity {
 //                        openFragment(new RecentlyFragment());
                         openFragment(fragment3);
                         break;
-                    case R.id.action_profile:
-//                        openFragment(new ProfileFragment());
-                        openFragment(fragment4);
-                        break;
+//                    case R.id.action_profile:
+////                        openFragment(new ProfileFragment());
+//                        openFragment(fragment4);
+//                        break;
                 }
                 return true;
             }

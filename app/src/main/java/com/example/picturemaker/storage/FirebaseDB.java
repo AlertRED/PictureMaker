@@ -2,13 +2,19 @@ package com.example.picturemaker.storage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.example.picturemaker.R;
 import com.example.picturemaker.support.GlideApp;
 import com.example.picturemaker.support.GlideRequests;
@@ -26,6 +32,8 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 public class FirebaseDB {
@@ -209,22 +217,21 @@ public class FirebaseDB {
         glide.asBitmap().diskCacheStrategy(cache_type).apply(requestOptions).load(imageRef).into(imageView);
     }
 
-//    public void loadImage(Context context, String name, Function2<Integer,Integer> foo, boolean is_disk_cache) {
-//        StorageReference imageRef = fStorage.getReference().child("pictures/".concat(name));
-//        DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.ALL;
-//        GlideRequests glide = GlideApp.with(context);
-//
-//        glide.asBitmap().diskCacheStrategy(cache_type).load(imageRef).listener(new RequestListener<Bitmap>() {
-//            @Override
-//            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                foo.apply(resource.getHeight(), resource.getWidth());
-//                return false;
-//            }
-//        }).submit();
-//    }
+    public void loadImage(Context context, String name, Consumer<Bitmap> foo, boolean is_disk_cache) {
+        StorageReference imageRef = fStorage.getReference().child("pictures/".concat(name));
+        DiskCacheStrategy cache_type = is_disk_cache ? DiskCacheStrategy.ALL : DiskCacheStrategy.ALL;
+        GlideRequests glide = GlideApp.with(context);
+        glide.asBitmap().diskCacheStrategy(cache_type).load(imageRef).listener(new RequestListener<Bitmap>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                foo.accept(resource);
+                return false;
+            }
+        }).submit();
+    }
 }
