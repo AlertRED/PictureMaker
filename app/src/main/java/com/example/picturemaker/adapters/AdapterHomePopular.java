@@ -2,14 +2,11 @@ package com.example.picturemaker.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,7 +37,7 @@ class ViewHolderHomePopular extends RecyclerView.ViewHolder {
         return layer;
     }
 
-    public void setTitle(String  text) {
+    public void setTitle(String text) {
         this.title.setText(text);
     }
 
@@ -48,7 +45,8 @@ class ViewHolderHomePopular extends RecyclerView.ViewHolder {
         return favorite;
     }
 }
-public class AdapterHomePopular extends RecyclerView.Adapter<ViewHolderHomePopular>{
+
+public class AdapterHomePopular extends RecyclerView.Adapter<ViewHolderHomePopular> {
     int layout_item;
     int spacing_vertical;
     int spacing_horizontal;
@@ -88,12 +86,12 @@ public class AdapterHomePopular extends RecyclerView.Adapter<ViewHolderHomePopul
         });
     }
 
-    public void setData(List<Picture> pictures){
-        this.pictures = pictures;
+    public List<Picture> getData() {
+        return this.pictures;
     }
 
-    public List<Picture> getData(){
-        return this.pictures;
+    public void setData(List<Picture> pictures) {
+        this.pictures = pictures;
     }
 
     @Override

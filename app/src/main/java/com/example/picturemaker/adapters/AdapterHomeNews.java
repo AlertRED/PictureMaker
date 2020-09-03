@@ -2,16 +2,14 @@ package com.example.picturemaker.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.picturemaker.PictureActivity;
@@ -67,6 +65,7 @@ public class AdapterHomeNews extends RecyclerView.Adapter<ViewHolderHomeNews> {
         this.storage = Storage.getInstance(context);
     }
 
+    @NonNull
     @Override
     public ViewHolderHomeNews onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(this.layout_item, parent, false);
@@ -90,14 +89,13 @@ public class AdapterHomeNews extends RecyclerView.Adapter<ViewHolderHomeNews> {
         holder.getText().setText(picture.name);
     }
 
-    public void setData(List<Picture> pictures){
-        this.pictures = pictures;
-    }
-
-    public List<Picture> getData(){
+    public List<Picture> getData() {
         return this.pictures;
     }
 
+    public void setData(List<Picture> pictures) {
+        this.pictures = pictures;
+    }
 
     @Override
     public int getItemCount() {

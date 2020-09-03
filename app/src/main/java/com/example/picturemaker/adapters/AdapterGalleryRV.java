@@ -2,8 +2,6 @@ package com.example.picturemaker.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,17 +39,16 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder {
 }
 
 public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> {
-    private final Resources resources;
     Context context;
     int layout_item;
     boolean first;
-    int spacing_vertical = 0;
-    int spacing_horizontal = 0;
+    int spacing_vertical;
+    int spacing_horizontal;
     List<Picture> pictures;
     Storage storage;
 
 
-    public AdapterGalleryRV(Context context, Resources resources, int layout_item, int spacing_vertical, int spacing_horizontal, boolean first) {
+    public AdapterGalleryRV(Context context, int layout_item, int spacing_vertical, int spacing_horizontal, boolean first) {
         this.context = context;
         this.first = first;
         this.layout_item = layout_item;
@@ -63,7 +57,6 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
         this.pictures = new ArrayList<>();
         this.storage = Storage.getInstance(context);
         this.pictures = new ArrayList<>();
-        this.resources = resources;
     }
 
 

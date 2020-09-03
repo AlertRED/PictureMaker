@@ -1,7 +1,6 @@
 package com.example.picturemaker.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.picturemaker.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 class ViewHolderColorsRV extends RecyclerView.ViewHolder {
@@ -37,8 +35,8 @@ class ViewHolderColorsRV extends RecyclerView.ViewHolder {
 
 public class AdapterColorsRV extends RecyclerView.Adapter<ViewHolderColorsRV> {
     int layout_item;
-    int spacing_vertical = 0;
-    int spacing_horizontal = 0;
+    int spacing_vertical;
+    int spacing_horizontal;
     Context context;
     List<Integer> colors;
 

@@ -117,7 +117,7 @@ public class GalleryFragment extends Fragment {
 
         recyclerView = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
         ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        adapterGalleryRV = new AdapterGalleryRV(this.getContext(), getResources(),R.layout.item_pictute_gallery, 30, 30, false);
+        adapterGalleryRV = new AdapterGalleryRV(this.getContext(), R.layout.item_pictute_gallery, 30, 30, false);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         recyclerView.setLayoutManager(layoutManager);
