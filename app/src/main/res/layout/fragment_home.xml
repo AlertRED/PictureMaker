@@ -27,7 +27,7 @@
                 android:layout_weight="0"
                 android:fontFamily="sans-serif"
                 android:paddingLeft="8dp"
-                android:text="Новинки"
+                android:text="@string/fragment_home_news"
                 android:textColor="#000000"
                 android:textSize="24sp" />
 
@@ -50,7 +50,7 @@
                 android:layout_weight="0"
                 android:fontFamily="sans-serif"
                 android:paddingLeft="8dp"
-                android:text="Популярное"
+                android:text="@string/fragment_home_popular"
                 android:textColor="#000000"
                 android:textSize="24sp" />
 

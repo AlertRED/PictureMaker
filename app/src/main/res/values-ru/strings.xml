@@ -5,4 +5,21 @@
     <string name="menu_item_profile">Профиль</string>
     <string name="menu_item_home">Главная</string>
     <string name="menu_item_gallery">Галерея</string>
+    <string name="filter_label_artist">Художник</string>
+    <string name="filter_label_level">Уровень</string>
+    <string name="filter_label_genre">Жанр</string>
+    <string name="filter_button_accept">Применить</string>
+    <string name="actifity_picture_name">Название</string>
+    <string name="activity_picture_my_score">Моя оценка</string>
+    <string name="activity_picture_rating">Рейтинг</string>
+    <string name="activity_picture_start">Начать</string>
+    <string name="activity_rating_title">Рейтинг картины</string>
+    <string name="fragment_gallery_filter">Фильтр</string>
+    <string name="fragment_home_news">Новинки</string>
+    <string name="fragment_home_popular">Популярное</string>
+    <string name="fragment_profile_id">Id</string>
+    <string name="fragment_profile_level">Уровень</string>
+    <string name="fragment_profile_finished">Завершено</string>
+    <string name="fragment_profile_in_process">В процессе</string>
+    <string name="fragment_profile_settings">Настройки</string>
 </resources>

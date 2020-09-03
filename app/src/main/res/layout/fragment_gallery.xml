@@ -30,7 +30,7 @@
             android:layout_weight="4"
             android:gravity="right"
             android:paddingRight="20dp"
-            android:text="Фильтр"
+            android:text="@string/fragment_gallery_filter"
             android:textColor="@color/colorPanelNavigateButton"
             android:textSize="18sp" />
 

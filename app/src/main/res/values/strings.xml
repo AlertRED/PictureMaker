@@ -4,4 +4,21 @@
     <string name="menu_item_profile">Profile</string>
     <string name="menu_item_home">Home</string>
     <string name="menu_item_gallery">Gallery</string>
+    <string name="filter_label_artist">Artist</string>
+    <string name="filter_label_level">Level</string>
+    <string name="filter_label_genre">Genre</string>
+    <string name="filter_button_accept">Accept</string>
+    <string name="actifity_picture_name">Name</string>
+    <string name="activity_picture_my_score">My score</string>
+    <string name="activity_picture_rating">Rating</string>
+    <string name="activity_picture_start">Start</string>
+    <string name="activity_rating_title">Rate the picture</string>
+    <string name="fragment_gallery_filter">Filter</string>
+    <string name="fragment_home_news">News</string>
+    <string name="fragment_home_popular">Popular</string>
+    <string name="fragment_profile_id" translatable="false">Id</string>
+    <string name="fragment_profile_level">Level</string>
+    <string name="fragment_profile_finished">Finished</string>
+    <string name="fragment_profile_in_process">In process</string>
+    <string name="fragment_profile_settings">Settings</string>
 </resources>
