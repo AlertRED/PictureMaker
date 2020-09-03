@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.picturemaker.R;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 class ViewHolderColorsRV extends RecyclerView.ViewHolder {
 
@@ -24,13 +25,20 @@ class ViewHolderColorsRV extends RecyclerView.ViewHolder {
         super(itemView);
         layer = itemView;
         text = itemView.findViewById(R.id.color_shape);
-        Random rnd = new Random();
+    }
 
-        text.setText(String.valueOf(rnd.nextInt(99)));
-
+    public void setBrush(Integer color, Integer n) {
         GradientDrawable drawable = (GradientDrawable) text.getBackground();
-        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         drawable.setColor(color);
+//        int R = color % 256;
+//        int G = (color / 256) % 256;
+//        int B = (color / 256 / 256) % 256;
+//        if (R < 10 || G < 10 || B < 10)
+//            this.text.setTextColor(Color.WHITE);
+//        else
+//            this.text.setTextColor(Color.BLACK);
+        this.text.setText(String.valueOf(n));
+
     }
 }
 
@@ -39,17 +47,20 @@ public class AdapterColorsRV extends RecyclerView.Adapter<ViewHolderColorsRV> {
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
     Context context;
+    List<Integer> colors = new ArrayList<>();
 
     public AdapterColorsRV(Context context, int layout_item) {
         this.context = context;
         this.layout_item = layout_item;
     }
 
-    public AdapterColorsRV(Context context, int layout_item, int spacing_vertical, int spacing_horizontal) {
+
+    public AdapterColorsRV(Context context, List<Integer> colors, int layout_item, int spacing_vertical, int spacing_horizontal) {
         this.context = context;
         this.layout_item = layout_item;
         this.spacing_horizontal = spacing_horizontal;
         this.spacing_vertical = spacing_vertical;
+        this.colors = colors;
     }
 
     @Override
@@ -61,6 +72,9 @@ public class AdapterColorsRV extends RecyclerView.Adapter<ViewHolderColorsRV> {
     @Override
     public void onBindViewHolder(final ViewHolderColorsRV holder, final int position) {
 
+        Integer color = this.colors.get(position);
+        holder.setBrush(color, position + 1);
+
         if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && position < this.getItemCount() - 1) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
             params.setMargins(0, this.spacing_vertical, this.spacing_horizontal, 0);
@@ -70,6 +84,6 @@ public class AdapterColorsRV extends RecyclerView.Adapter<ViewHolderColorsRV> {
 
     @Override
     public int getItemCount() {
-        return 10;
+        return colors.size();
     }
 }
