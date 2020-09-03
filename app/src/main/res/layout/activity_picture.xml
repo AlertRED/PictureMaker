@@ -82,7 +82,7 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="Название"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/text_picture_profile"
                         android:textSize="24sp" />
 
                     <ImageView
@@ -121,7 +121,7 @@
                         android:paddingTop="4dp"
                         android:paddingBottom="4dp"
                         android:text="Моя оценка: 7.9"
-                        android:textColor="#ffffff"
+                        android:textColor="@color/text_picture_profile"
                         android:textSize="18sp" />
 
                     <TextView
@@ -132,7 +132,7 @@
                         android:paddingTop="4dp"
                         android:paddingBottom="4dp"
                         android:text="Рейтинг: 8.1"
-                        android:textColor="#ffffff"
+                        android:textColor="@color/text_picture_profile"
                         android:textSize="18sp" />
 
                 </RelativeLayout>
@@ -152,7 +152,7 @@
                     android:background="@drawable/bg_button_start"
                     android:fontFamily="sans-serif-light"
                     android:text="Начать"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/text_picture_profile"
                     android:textSize="18sp" />
 
             </LinearLayout>

@@ -120,7 +120,7 @@ public class PictureActivity extends AppCompatActivity {
 
         this.button_start.setOnClickListener(v -> {
             Intent intent = new Intent(activity, PaintActivity.class);
-            intent.putExtra("picture_id", picture.public_id);
+            intent.putExtra("picture_id", picture.id);
             startActivity(intent);
         });
 
@@ -136,7 +136,6 @@ public class PictureActivity extends AppCompatActivity {
     private void LoadItem(Picture picture) {
         this.picture = picture;
         RefreshData();
-
     }
 
     private void backArrow(){
