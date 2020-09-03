@@ -82,7 +82,7 @@ public class GalleryFragment extends Fragment {
             if (!this.author.equals("Любой")) {
                 parameters.put("author", this.author);
             }
-            this.storage.LoadPicturesByGallery(getContext(), parameters);
+            this.storage.LoadPicturesByGallery(parameters);
         }
     }
 
@@ -125,6 +125,6 @@ public class GalleryFragment extends Fragment {
 
         LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView("Gallery");
         liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
-        this.storage.LoadPicturesByGallery(getContext(), new Hashtable<>());
+        this.storage.LoadPicturesByGallery(new Hashtable<>());
     }
 }

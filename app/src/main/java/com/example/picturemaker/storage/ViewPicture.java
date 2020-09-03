@@ -15,7 +15,6 @@ import androidx.room.PrimaryKey;
 
 public class ViewPicture {
     @PrimaryKey(autoGenerate = true)
-    @NonNull
     public int id;
     public final String viewName;
     public final long pictureId;

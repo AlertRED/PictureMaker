@@ -1,21 +1,14 @@
 package com.example.picturemaker.storage;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 
 public class LocalStorage {
-    private Dictionary<String, Picture> items;
-    private Dictionary<String, List<String>> history;
     private List<String> genres;
     private List<String> levels;
     private List<String> authors;
 
     public LocalStorage() {
-        this.items = new Hashtable<>();
-        this.history = new Hashtable<>();
         this.levels = Arrays.asList("Легкий", "Средний", "Сложный");
     }
 

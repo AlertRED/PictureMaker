@@ -10,7 +10,6 @@ import androidx.room.PrimaryKey;
 public class Picture {
 
     @PrimaryKey(autoGenerate = true)
-    @NonNull
     @ColumnInfo(name = "id")
     public int id;
 

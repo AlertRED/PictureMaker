@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment {
 
         LiveData<List<Picture>> liveDataNews = this.storage.GetLiveDataFromView("News");
         liveDataNews.observe(getViewLifecycleOwner(), this::RefreshAdapterNews);
-        this.storage.LoadPicturesByNews(getContext());
+        this.storage.LoadPicturesByNews();
 
 
         this.rvHomePopular = (RecyclerView) this.getActivity().findViewById(R.id.rv_popular);
@@ -77,6 +77,6 @@ public class HomeFragment extends Fragment {
 
         LiveData<List<Picture>> liveDataPopular = this.storage.GetLiveDataFromView("Popular");
         liveDataPopular.observe(getViewLifecycleOwner(), this::RefreshAdapterPopular);
-        this.storage.LoadPicturesByPopular(getContext());
+        this.storage.LoadPicturesByPopular();
     }
 }

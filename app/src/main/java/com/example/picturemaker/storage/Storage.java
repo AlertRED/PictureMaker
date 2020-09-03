@@ -77,45 +77,50 @@ public class Storage {
         return this.viewPictureDao.getPicturesFromView(viewName);
     }
 
-    public void LoadPicturesByGallery(Context context, Map<String, Object> parameters) {
+    public void LoadPicturesByGallery(Map<String, Object> parameters) {
         this.DeletePictures("Gallery");
         this.LoadPictures("Gallery", parameters);
     }
 
-    public void LoadPicturesByCollection(Context context, String collectionType) {
+    public void LoadPicturesByCollection(String collectionType) {
         Map<String, Object> parameters = new Hashtable<>();
-        if (collectionType.equals("Favorites"))
-            this.firebase.getFavoriteIds(pictureIds -> {
-                for (String pictureId : pictureIds) {
-                    parameters.put("picture_id", pictureId);
-                    this.LoadPictures(collectionType, parameters);
-                }
-            });
-        else if (collectionType.equals("Process"))
-            this.firebase.getProcessIds(pictureIds -> {
-                for (String pictureId : pictureIds) {
-                    parameters.put("picture_id", pictureId);
-                    this.LoadPictures(collectionType, parameters);
-                }
-            });
-        else if (collectionType.equals("Finish"))
-            this.firebase.getFinishedIds(pictureIds -> {
-                for (String pictureId : pictureIds) {
-                    parameters.put("picture_id", pictureId);
-                    this.LoadPictures(collectionType, parameters);
-                }
-            });
+        switch (collectionType) {
+            case "Favorites":
+                this.firebase.getFavoriteIds(pictureIds -> {
+                    for (String pictureId : pictureIds) {
+                        parameters.put("picture_id", pictureId);
+                        this.LoadPictures(collectionType, parameters);
+                    }
+                });
+                break;
+            case "Process":
+                this.firebase.getProcessIds(pictureIds -> {
+                    for (String pictureId : pictureIds) {
+                        parameters.put("picture_id", pictureId);
+                        this.LoadPictures(collectionType, parameters);
+                    }
+                });
+                break;
+            case "Finish":
+                this.firebase.getFinishedIds(pictureIds -> {
+                    for (String pictureId : pictureIds) {
+                        parameters.put("picture_id", pictureId);
+                        this.LoadPictures(collectionType, parameters);
+                    }
+                });
+                break;
+        }
 
     }
 
-    public void LoadPicturesByNews(Context context) {
+    public void LoadPicturesByNews() {
         Map<String, Object> parameters = new Hashtable<>();
         parameters.put("is_last", true);
         parameters.put("count", 2);
         this.LoadPictures("News", parameters);
     }
 
-    public void LoadPicturesByPopular(Context context) {
+    public void LoadPicturesByPopular() {
         Map<String, Object> parameters = new Hashtable<>();
         parameters.put("is_popular", true);
         this.LoadPictures("Popular", parameters);
@@ -147,7 +152,6 @@ public class Storage {
     }
 
     public void GetImage(Context context, String picture_name, Consumer<Bitmap> foo) {
-
         this.firebase.loadImage(context, picture_name, foo, false);
     }
 

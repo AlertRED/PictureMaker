@@ -88,6 +88,6 @@ public class TabFragment extends Fragment {
 
         LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView(collectionType);
         liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
-        this.storage.LoadPicturesByCollection(getContext(), collectionType);
+        this.storage.LoadPicturesByCollection(collectionType);
     }
 }
