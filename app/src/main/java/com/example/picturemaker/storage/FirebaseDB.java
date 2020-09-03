@@ -82,7 +82,7 @@ public class FirebaseDB {
     }
 
     private void loadFilter(Consumer<List<String>> foo, String filter_name) {
-        DatabaseReference ref = fDatabase.getReference("genres");
+        DatabaseReference ref = fDatabase.getReference(filter_name);
         ref.keepSynced(true);
         Query query = ref;
         query.addListenerForSingleValueEvent(new ValueEventListener() {
