@@ -17,6 +17,8 @@ import com.example.picturemaker.ui.fragments.collection_tabs.TabFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.Objects;
+
 class ViewPagerFragmentAdapter extends FragmentStateAdapter {
 
     public ViewPagerFragmentAdapter(@NonNull FragmentActivity fragmentActivity) {
@@ -63,7 +65,7 @@ public class CollectionFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        TabLayout tabLayout = this.getActivity().findViewById(R.id.tab_layout);
+        TabLayout tabLayout = Objects.requireNonNull(this.getActivity()).findViewById(R.id.tab_layout);
         ViewPager2 viewPager = this.getActivity().findViewById(R.id.view_pager);
         viewPager.setAdapter(new ViewPagerFragmentAdapter(this.getActivity()));
 

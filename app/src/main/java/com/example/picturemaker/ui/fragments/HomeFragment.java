@@ -22,13 +22,12 @@ import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.support.PictureDiffUtilCallback;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class HomeFragment extends Fragment {
 
     Storage storage;
-    private RecyclerView rvHomeNews;
-    private RecyclerView rvHomePopular;
     private AdapterHomeNews rvHomeAdapterNews;
     private AdapterHomePopular rvHomeAdapterPopular;
 
@@ -58,9 +57,9 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         this.storage = Storage.getInstance(this.getContext());
 
-        this.rvHomeNews = (RecyclerView) this.getActivity().findViewById(R.id.rv_news);
-        this.rvHomeNews.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        ((SimpleItemAnimator) rvHomeNews.getItemAnimator()).setSupportsChangeAnimations(false);
+        RecyclerView rvHomeNews = (RecyclerView) Objects.requireNonNull(this.getActivity()).findViewById(R.id.rv_news);
+        rvHomeNews.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        ((SimpleItemAnimator) Objects.requireNonNull(rvHomeNews.getItemAnimator())).setSupportsChangeAnimations(false);
         rvHomeAdapterNews = new AdapterHomeNews(this.getContext(),R.layout.item_pictute_news,0, 30);
         rvHomeNews.setAdapter(rvHomeAdapterNews);
 
@@ -69,9 +68,9 @@ public class HomeFragment extends Fragment {
         this.storage.LoadPicturesByNews();
 
 
-        this.rvHomePopular = (RecyclerView) this.getActivity().findViewById(R.id.rv_popular);
-        this.rvHomePopular.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
-        ((SimpleItemAnimator) rvHomePopular.getItemAnimator()).setSupportsChangeAnimations(false);
+        RecyclerView rvHomePopular = (RecyclerView) this.getActivity().findViewById(R.id.rv_popular);
+        rvHomePopular.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
+        ((SimpleItemAnimator) Objects.requireNonNull(rvHomePopular.getItemAnimator())).setSupportsChangeAnimations(false);
         rvHomeAdapterPopular = new AdapterHomePopular(this.getContext(),R.layout.item_pictute_popular,0, 0);
         rvHomePopular.setAdapter(rvHomeAdapterPopular);
 

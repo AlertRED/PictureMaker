@@ -12,13 +12,11 @@ import com.example.picturemaker.storage.Storage;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private Storage storage;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.storage = Storage.getInstance(this);
-        this.storage.firebase.login(this, this::finish);
+        Storage storage = Storage.getInstance(this);
+        storage.firebase.login(this, this::finish);
     }
 
     @Override

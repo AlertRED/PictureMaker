@@ -14,10 +14,6 @@ import com.example.picturemaker.R;
 
 public class RatingPictureFragment extends Fragment {
 
-    public static RatingPictureFragment newInstance() {
-        return new RatingPictureFragment();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

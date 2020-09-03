@@ -78,7 +78,7 @@ public class AdapterCollectionRV extends RecyclerView.Adapter<ViewHolderCollecti
 
         holder.layer.setOnClickListener(v -> {
             Intent intent = new Intent(context, PictureActivity.class);
-            intent.putExtra("pictureId", picture.id);
+            intent.putExtra("picture_id", picture.id);
             context.startActivity(intent);
         });
 

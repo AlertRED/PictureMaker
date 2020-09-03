@@ -2,7 +2,6 @@ package com.example.picturemaker;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,16 +19,15 @@ import java.util.Random;
 
 public class PaintActivity extends AppCompatActivity {
 
-    private Picture picture;
     private Storage storage;
     private ImageView image;
 
     private void LoadItem(Picture picture) {
         if (picture != null) {
-            this.picture = picture;
-            this.storage.GetImage(this, this.picture.public_picture, image);
+            this.storage.GetImage(this, picture.public_picture, image);
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

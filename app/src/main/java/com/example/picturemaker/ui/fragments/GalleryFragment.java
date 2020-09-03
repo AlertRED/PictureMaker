@@ -28,6 +28,7 @@ import com.example.picturemaker.support.PictureDiffUtilCallback;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -40,10 +41,6 @@ public class GalleryFragment extends Fragment {
     private String author;
     private String genre;
     private String level;
-
-    public static GalleryFragment newInstance() {
-        return new GalleryFragment();
-    }
 
     @Nullable
     @Override
@@ -96,11 +93,8 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        // TODO: Use the ViewModel
-
         this.storage = Storage.getInstance(this.getContext());
-        TextView filter_view = (TextView) this.getActivity().findViewById(R.id.filter_view);
+        TextView filter_view = (TextView) Objects.requireNonNull(this.getActivity()).findViewById(R.id.filter_view);
 
         filter_view.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), FilterGalleryActivity.class);
@@ -110,13 +104,13 @@ public class GalleryFragment extends Fragment {
             startActivityForResult(intent, 0);
         });
 
-        Spinner category = (Spinner) this.getActivity().findViewById(R.id.spinner);
+        Spinner category = (Spinner) Objects.requireNonNull(this.getActivity()).findViewById(R.id.spinner);
         String[] items = new String[]{"Сначало популярное", "Оценки по убыванию", "Оценки по возрастанию", "Сложность по убыванию", "Сложность по возрастанию"};
-        ArrayAdapter<String> category_adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_dropdown_item, items);
+        ArrayAdapter<String> category_adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), android.R.layout.simple_spinner_dropdown_item, items);
         category.setAdapter(category_adapter);
 
         recyclerView = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
-        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
         adapterGalleryRV = new AdapterGalleryRV(this.getContext(), R.layout.item_pictute_gallery, 30, 30, false);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);

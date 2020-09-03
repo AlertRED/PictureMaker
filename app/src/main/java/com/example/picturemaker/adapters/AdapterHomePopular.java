@@ -81,7 +81,7 @@ public class AdapterHomePopular extends RecyclerView.Adapter<ViewHolderHomePopul
 
         holder.getLayer().setOnClickListener(v -> {
             Intent intent = new Intent(context, PictureActivity.class);
-            intent.putExtra("pictureId", picture.id);
+            intent.putExtra("picture_id", picture.id);
             context.startActivity(intent);
         });
     }

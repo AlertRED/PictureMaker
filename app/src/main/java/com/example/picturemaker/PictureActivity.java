@@ -1,20 +1,14 @@
 package com.example.picturemaker;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -99,8 +93,7 @@ public class PictureActivity extends AppCompatActivity {
         RefreshData();
     }
 
-    private void backArrow(){
-        ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_material);
+    private void backArrow() {
         setSupportActionBar(this.toolbar);
         final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_baseline_arrow_back_ios_24);
         assert upArrow != null;
@@ -116,7 +109,7 @@ public class PictureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture);
 
-        long picture_id = getIntent().getIntExtra("pictureId", 0);
+        long picture_id = getIntent().getIntExtra("picture_id", 0);
 
         this.image = findViewById(R.id.picture);
         this.name = findViewById(R.id.activity_picture_name);

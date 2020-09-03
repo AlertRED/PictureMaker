@@ -2,7 +2,6 @@ package com.example.picturemaker;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -13,12 +12,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.picturemaker.storage.Storage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Stack;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Objects;
 
 public class FilterGalleryActivity extends AppCompatActivity {
 
@@ -30,7 +25,7 @@ public class FilterGalleryActivity extends AppCompatActivity {
     private String author;
 
     private void RefreshAuthors(List<String> authors) {
-        List<String> new_list = new ArrayList<String>();
+        List<String> new_list = new ArrayList<>();
         new_list.add("Любой");
         new_list.addAll(authors);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new_list);
@@ -40,7 +35,7 @@ public class FilterGalleryActivity extends AppCompatActivity {
     }
 
     private void RefreshGenres(List<String> genres) {
-        List<String> new_list = new ArrayList<String>();
+        List<String> new_list = new ArrayList<>();
         new_list.add("Любой");
         new_list.addAll(genres);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new_list);
@@ -50,7 +45,7 @@ public class FilterGalleryActivity extends AppCompatActivity {
     }
 
     private void RefreshLevels(List<String> levels) {
-        List<String> new_list = new ArrayList<String>();
+        List<String> new_list = new ArrayList<>();
         new_list.add("Любой");
         new_list.addAll(levels);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new_list);
@@ -58,31 +53,6 @@ public class FilterGalleryActivity extends AppCompatActivity {
         if (this.level != null)
             this.spin_level.setSelection(new_list.indexOf(this.level));
     }
-
-
-//    private void RefreshData() {
-//        ArrayAdapter<String> adapter;
-//        List<String> items = Arrays.asList("Любой", "Абстракционизм", "Анималистика", "Бытовой", "Импрессионизм",
-//                "Исторический", "Натюрморт", "Ню", "Пейзаж", "Портрет");
-//        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-//        this.spin_genre.setAdapter(adapter);
-//        if (this.genre != null)
-//            this.spin_genre.setSelection(items.indexOf(this.genre));
-//
-//
-//        items = Arrays.asList("Любой", "Пабло Пикассо", "Винсент ван Гог", "Сальвадор Дали", "Рембрандт",
-//                "Клод Моне", "Иван Константинович Айвазовский", "Леонардо да Винчи", "Энди Уорхол", "Поль Гоген");
-//        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-//        this.spin_author.setAdapter(adapter);
-//        if (this.act != null)
-//            this.spin_author.setSelection(items.indexOf(this.act));
-//
-//        items = Arrays.asList("Любое", "Легко", "Средне", "Сложно");
-//        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-//        this.spin_level.setAdapter(adapter);
-//        if (this.level != null)
-//            this.spin_level.setSelection(items.indexOf(this.level));
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +70,7 @@ public class FilterGalleryActivity extends AppCompatActivity {
             setResult(RESULT_OK, answerIntent);
             finish();
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("");
 

@@ -14,10 +14,10 @@ import com.example.picturemaker.R;
 import com.example.picturemaker.storage.Storage;
 import com.google.firebase.auth.FirebaseUser;
 
-public class ProfileFragment extends Fragment {
-    private Storage storage;
+import java.util.Objects;
 
-//    private MainViewModel mViewModel;
+public class ProfileFragment extends Fragment {
+
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -33,9 +33,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.storage = Storage.getInstance(this.getContext());
-        FirebaseUser user = this.storage.getUser();
-        TextView tvUsername = this.getActivity().findViewById(R.id.textView10);
+        Storage storage = Storage.getInstance(this.getContext());
+        FirebaseUser user = storage.getUser();
+        TextView tvUsername = Objects.requireNonNull(this.getActivity()).findViewById(R.id.textView10);
         tvUsername.setText("id: ".concat(user.getUid()));
 
     }

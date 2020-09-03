@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,35 +21,12 @@ import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.support.PictureDiffUtilCallback;
 
 import java.util.List;
+import java.util.Objects;
 
 public class TabFragment extends Fragment {
-//    String collectionType;
-//    public TabFragment(String collectionType) {
-//        this.collectionType = collectionType;
-//    }
-//
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//    }
-//
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_collection_tab, container, false);
-//    }
-//
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        TextView t = (TextView) getView().findViewById(R.id.textView9);
-//        t.setText(this.collectionType);
-//    }
 
     String collectionType;
     private AdapterCollectionRV rvMainAdapter;
-    private RecyclerView rvMain;
     private Storage storage;
 
     public TabFragment(String collectionType) {
@@ -76,10 +51,10 @@ public class TabFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        rvMain = (RecyclerView) getView().findViewById(R.id.rv_collection);
+        RecyclerView rvMain = (RecyclerView) Objects.requireNonNull(getView()).findViewById(R.id.rv_collection);
 
-        ((SimpleItemAnimator) rvMain.getItemAnimator()).setSupportsChangeAnimations(false);
-        rvMainAdapter = new AdapterCollectionRV(this.getContext() ,R.layout.item_pictute_gallery, 30,30, false);
+        ((SimpleItemAnimator) Objects.requireNonNull(rvMain.getItemAnimator())).setSupportsChangeAnimations(false);
+        rvMainAdapter = new AdapterCollectionRV(this.getContext(), R.layout.item_pictute_gallery, 30, 30, false);
         rvMain.setAdapter(rvMainAdapter);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
