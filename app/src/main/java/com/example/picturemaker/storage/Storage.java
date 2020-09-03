@@ -26,7 +26,7 @@ public class Storage {
     PictureDao pictureDao;
 
     private Storage(Context context) {
-        this.firebase = FirebaseDB.getInstance(context);
+        this.firebase = FirebaseDB.getInstance();
         this.localStorage = new LocalStorage();
         this.db = InternalDB.getDatabase(context);
         this.pictureDao = this.db.pictureDao();

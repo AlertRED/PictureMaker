@@ -32,8 +32,6 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 
 public class FirebaseDB {
@@ -43,16 +41,16 @@ public class FirebaseDB {
     private FirebaseDatabase fDatabase;
     private FirebaseAuth fAuth;
 
-    private FirebaseDB(Context context) {
+    private FirebaseDB() {
         this.fDatabase = FirebaseDatabase.getInstance();
         this.fDatabase.setPersistenceEnabled(true);
         this.fStorage = FirebaseStorage.getInstance();
         this.fAuth = FirebaseAuth.getInstance();
     }
 
-    static FirebaseDB getInstance(Context context) {
+    static FirebaseDB getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new FirebaseDB(context);
+            INSTANCE = new FirebaseDB();
         }
         return INSTANCE;
     }
@@ -84,8 +82,7 @@ public class FirebaseDB {
     private void loadFilter(Consumer<List<String>> foo, String filter_name) {
         DatabaseReference ref = fDatabase.getReference(filter_name);
         ref.keepSynced(true);
-        Query query = ref;
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<String> genres = new ArrayList<>();
@@ -105,6 +102,7 @@ public class FirebaseDB {
 
     public void SetFavoritePicture(String picture_id, boolean is_favorite, Runnable foo) {
         String uid = fAuth.getUid();
+        assert uid != null;
         DatabaseReference ref = fDatabase.getReference("user-pictures").child("user-".concat(uid)).child(picture_id).child("is_favorite");
         ref.keepSynced(false);
         if (is_favorite) {
@@ -125,14 +123,17 @@ public class FirebaseDB {
         }
         if (parameters.containsKey("is_popular")) {
             Boolean is_popular = (Boolean) parameters.get("is_popular");
+            assert is_popular != null;
             picturesQuery = ref.orderByChild("is_popular").equalTo(is_popular);
         }
         if (parameters.containsKey("is_last")) {
             Integer count = (Integer) parameters.get("count");
+            assert count != null;
             picturesQuery = ref.limitToLast(count);
         }
         if (parameters.containsKey("level")) {
             Integer level = (Integer) parameters.get("level");
+            assert level != null;
             picturesQuery = ref.orderByChild("level").startAt(level).endAt(level);
         }
         if (parameters.containsKey("author")) {
@@ -146,10 +147,11 @@ public class FirebaseDB {
 
         picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Picture> pictures = new ArrayList<>();
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     Picture picture = singleSnapshot.getValue(Picture.class);
+                    assert picture != null;
                     picture.public_id = singleSnapshot.getKey();
                     pictures.add(picture);
                 }
@@ -157,7 +159,7 @@ public class FirebaseDB {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
     }
@@ -190,7 +192,7 @@ public class FirebaseDB {
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<String> pictureIds = new ArrayList<>();
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     pictureIds.add(singleSnapshot.getKey());
@@ -199,14 +201,9 @@ public class FirebaseDB {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-    }
-
-
-    private void returnData(DataSnapshot dataSnapshot, Consumer<List<Picture>> foo) {
-
     }
 
     public void loadImage(Context context, String name, ImageView imageView, boolean is_disk_cache) {
