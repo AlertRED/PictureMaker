@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -32,27 +33,14 @@ class ViewHolderGalleryRV extends RecyclerView.ViewHolder {
     public ImageView image;
 
 
-    public ViewHolderGalleryRV(View itemView, Resources resources) {
+    public ViewHolderGalleryRV(View itemView) {
         super(itemView);
         image = (ImageView) itemView.findViewById(R.id.imageview);
         text = (TextView) itemView.findViewById(R.id.picture_name);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
         layer = itemView;
-        layer.setVisibility(View.VISIBLE);
-//        this.layer.setAlpha(0);
     }
 
-    public void loadImage(Context context, String name) {
-//        Storage.getInstance(context).GetImage(context, name, this::setImage);
-    }
-
-    private void setImage(Bitmap bitmap) {
-        this.image.setImageBitmap(bitmap);
-        layer.setVisibility(View.VISIBLE);
-//        this.image.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-
-//        this.layer.animate().alpha(1f).setDuration(250);
-    }
 }
 
 public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> {
@@ -79,31 +67,28 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
     }
 
 
+    @NonNull
     @Override
     public ViewHolderGalleryRV onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(this.layout_item, parent, false);
-        return new ViewHolderGalleryRV(v, this.resources);
+        return new ViewHolderGalleryRV(v);
     }
 
 
     @Override
     public void onBindViewHolder(final ViewHolderGalleryRV holder, final int position) {
         Picture picture = this.pictures.get(position);
-//        holder.loadImage(context, picture.public_picture);
-        holder.text.setText(picture.name);
-
         storage.GetImage(context, picture.public_picture, holder.image);
 
+        holder.text.setText(picture.name);
+        holder.favorite.setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
+        holder.favorite.setOnClickListener(v -> storage.SetFavoritePicture(picture.id, !picture.is_favorite));
 
         holder.layer.setOnClickListener(v -> {
             Intent intent = new Intent(context, PictureActivity.class);
             intent.putExtra("pictureId", picture.id);
             context.startActivity(intent);
         });
-
-        holder.favorite.setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
-        holder.favorite.setOnClickListener(v -> storage.SetFavoritePicture(picture.id, !picture.is_favorite));
-
 
         if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && (!this.first || position > 0)) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);

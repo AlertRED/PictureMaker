@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -38,17 +39,6 @@ class ViewHolderCollectionRV extends RecyclerView.ViewHolder {
         text = (TextView) itemView.findViewById(R.id.picture_name);
         favorite = (ImageView) itemView.findViewById(R.id.favorite_image_item_gallery);
         layer = itemView;
-
-//        this.layer.setAlpha(0);
-    }
-
-    public void loadImage(Context context, String name) {
-//        Storage.getInstance(context).GetImage(context, name, this::setImage);
-    }
-
-    private void setImage(Bitmap bitmap) {
-        this.image.setImageBitmap(bitmap);
-//        this.layer.animate().alpha(1f).setDuration(250);
     }
 }
 
@@ -74,6 +64,7 @@ public class AdapterCollectionRV extends RecyclerView.Adapter<ViewHolderCollecti
     }
 
 
+    @NonNull
     @Override
     public ViewHolderCollectionRV onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(this.layout_item, parent, false);
@@ -83,9 +74,7 @@ public class AdapterCollectionRV extends RecyclerView.Adapter<ViewHolderCollecti
     @Override
     public void onBindViewHolder(final ViewHolderCollectionRV holder, final int position) {
         Picture picture = this.pictures.get(position);
-//        holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
 
-//        holder.loadImage(context, picture.public_picture);
         storage.GetImage(context, picture.public_picture, holder.image);
         holder.text.setText(picture.name);
 

@@ -36,18 +36,6 @@ class ViewHolderHomeNews extends RecyclerView.ViewHolder {
         text = (TextView) itemView.findViewById(R.id.picture_name);
     }
 
-    public void loadImage(Context context, String name) {
-//        Storage.getInstance(context).GetImage(context, name, this::setImage);
-    }
-
-    public ImageView getImage() {
-        return image;
-    }
-
-    private void setImage(Bitmap bitmap) {
-        this.image.setImageBitmap(bitmap);
-    }
-
     public TextView getText() {
         return text;
     }
@@ -58,10 +46,6 @@ class ViewHolderHomeNews extends RecyclerView.ViewHolder {
 
     public View getLayer() {
         return layer;
-    }
-
-    public void setLayer(View layer) {
-        this.layer = layer;
     }
 }
 
@@ -104,15 +88,6 @@ public class AdapterHomeNews extends RecyclerView.Adapter<ViewHolderHomeNews> {
         });
 
         holder.getText().setText(picture.name);
-
-        holder.loadImage(context, picture.public_picture);
-
-
-//        if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && picture_id < this.getItemCount() - 1) {
-//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
-//            params.setMargins(0, this.spacing_vertical, this.spacing_horizontal, 0);
-//            holder.itemView.setLayoutParams(params);
-//        }
     }
 
     public void setData(List<Picture> pictures){

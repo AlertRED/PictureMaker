@@ -34,28 +34,10 @@ class ViewHolderHomePopular extends RecyclerView.ViewHolder {
         this.title = view.findViewById(R.id.picture_name);
         this.favorite = view.findViewById(R.id.favorite_image_item_home);
         this.layer = view;
-//        this.layer.setAlpha(0);
-    }
-
-    public ImageView getImage() {
-        return image;
-    }
-
-    private void setImage(Bitmap bitmap) {
-        this.image.setImageBitmap(bitmap);
-//        this.layer.animate().alpha(1f).setDuration(250);
-    }
-
-    public void loadImage(Context context, String name) {
-//        Storage.getInstance(context).GetImage(context, name, this::setImage);
     }
 
     public View getLayer() {
         return layer;
-    }
-
-    public TextView getTitle() {
-        return title;
     }
 
     public void setTitle(String  text) {
@@ -65,11 +47,6 @@ class ViewHolderHomePopular extends RecyclerView.ViewHolder {
     public ImageView getFavorite() {
         return favorite;
     }
-
-    public void setFavorite(ImageView favorite) {
-        this.favorite = favorite;
-    }
-
 }
 public class AdapterHomePopular extends RecyclerView.Adapter<ViewHolderHomePopular>{
     int layout_item;
@@ -98,22 +75,17 @@ public class AdapterHomePopular extends RecyclerView.Adapter<ViewHolderHomePopul
     @Override
     public void onBindViewHolder(@NonNull ViewHolderHomePopular holder, int position) {
         Picture picture = this.pictures.get(position);
-//        holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), TestData.get(position).name, Toast.LENGTH_SHORT).show());
-
-//        holder.loadImage(context, picture.public_picture);
         storage.GetImage(context, picture.public_picture, holder.image);
 
         holder.setTitle(picture.name);
-
+        holder.getFavorite().setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
+        holder.getFavorite().setOnClickListener(v -> storage.SetFavoritePicture(picture.id, !picture.is_favorite));
 
         holder.getLayer().setOnClickListener(v -> {
             Intent intent = new Intent(context, PictureActivity.class);
             intent.putExtra("pictureId", picture.id);
             context.startActivity(intent);
         });
-
-        holder.getFavorite().setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
-        holder.getFavorite().setOnClickListener(v -> storage.SetFavoritePicture(picture.id, !picture.is_favorite));
     }
 
     public void setData(List<Picture> pictures){

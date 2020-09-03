@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.picturemaker.R;
@@ -30,15 +31,7 @@ class ViewHolderColorsRV extends RecyclerView.ViewHolder {
     public void setBrush(Integer color, Integer n) {
         GradientDrawable drawable = (GradientDrawable) text.getBackground();
         drawable.setColor(color);
-//        int R = color % 256;
-//        int G = (color / 256) % 256;
-//        int B = (color / 256 / 256) % 256;
-//        if (R < 10 || G < 10 || B < 10)
-//            this.text.setTextColor(Color.WHITE);
-//        else
-//            this.text.setTextColor(Color.BLACK);
         this.text.setText(String.valueOf(n));
-
     }
 }
 
@@ -47,13 +40,7 @@ public class AdapterColorsRV extends RecyclerView.Adapter<ViewHolderColorsRV> {
     int spacing_vertical = 0;
     int spacing_horizontal = 0;
     Context context;
-    List<Integer> colors = new ArrayList<>();
-
-    public AdapterColorsRV(Context context, int layout_item) {
-        this.context = context;
-        this.layout_item = layout_item;
-    }
-
+    List<Integer> colors;
 
     public AdapterColorsRV(Context context, List<Integer> colors, int layout_item, int spacing_vertical, int spacing_horizontal) {
         this.context = context;
@@ -63,6 +50,7 @@ public class AdapterColorsRV extends RecyclerView.Adapter<ViewHolderColorsRV> {
         this.colors = colors;
     }
 
+    @NonNull
     @Override
     public ViewHolderColorsRV onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(this.layout_item, parent, false);
