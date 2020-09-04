@@ -16,7 +16,6 @@ import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +71,6 @@ public class AdapterCollectionRV extends RecyclerView.Adapter<ViewHolderCollecti
 
         storage.GetImage(context, picture.public_picture, holder.image);
         holder.text.setText(picture.name);
-
-        StorageReference i = storage.firebase.fStorage.getReference().child("pictures/".concat(picture.public_picture));
 
 
         holder.layer.setOnClickListener(v -> {
