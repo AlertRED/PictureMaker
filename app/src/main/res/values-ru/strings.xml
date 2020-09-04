@@ -30,4 +30,7 @@
     <string name="sort_ascending_ratings">Оценки по возрастанию</string>
     <string name="sort_descending_difficulty">Сложность по убыванию</string>
     <string name="sort_ascending_difficulty">Сложность по возрастанию</string>
+    <string name="level_type_low">Легкий</string>
+    <string name="level_type_mean">Средний</string>
+    <string name="level_type_high">Сложный</string>
 </resources>

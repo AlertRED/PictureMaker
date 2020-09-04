@@ -29,4 +29,7 @@
     <string name="sort_ascending_ratings">Ascending ratings</string>
     <string name="sort_descending_difficulty">Descending difficulty</string>
     <string name="sort_ascending_difficulty">Ascending difficulty</string>
+    <string name="level_type_low">Low</string>
+    <string name="level_type_mean">Mean</string>
+    <string name="level_type_high">High</string>
 </resources>

@@ -59,19 +59,15 @@ public class GalleryFragment extends Fragment {
             this.author = data.getStringExtra("author");
 
             Map<String, Object> parameters = new Hashtable<>();
+
             if (!this.level.equals("Любой")) {
                 int num_level = 0;
-                switch (this.level) {
-                    case "Легкий":
-                        num_level = 1;
-                        break;
-                    case "Средний":
-                        num_level = 2;
-                        break;
-                    case "Сложный":
-                        num_level = 3;
-                        break;
-                }
+                if (this.level.equals(this.getString(R.string.level_type_low)))
+                    num_level = 1;
+                else if (this.level.equals(this.getString(R.string.level_type_low)))
+                    num_level = 2;
+                else if (this.level.equals(this.getString(R.string.level_type_low)))
+                    num_level = 3;
                 parameters.put("level", num_level);
             }
             if (!this.genre.equals("Любой"))
