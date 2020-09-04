@@ -18,7 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 
-import com.example.picturemaker.storage.Picture;
+import com.example.picturemaker.storage.room_tables.Picture;
 import com.example.picturemaker.storage.Storage;
 
 import java.util.Objects;

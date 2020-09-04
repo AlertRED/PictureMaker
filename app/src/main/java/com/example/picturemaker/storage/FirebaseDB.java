@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.example.picturemaker.R;
+import com.example.picturemaker.storage.room_tables.Picture;
 import com.example.picturemaker.support.GlideApp;
 import com.example.picturemaker.support.GlideRequests;
 import com.google.firebase.auth.FirebaseAuth;
@@ -84,15 +85,14 @@ public class FirebaseDB {
     }
 
     private void loadFilterLevels(Consumer<List<String>> foo) {
-        DatabaseReference ref = fDatabase.getReference("levels");
+        DatabaseReference ref = fDatabase.getReference("localize").child("en").child("levels");
         ref.keepSynced(true);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<String> levels = new ArrayList<>();
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    System.out.println(singleSnapshot.getValue());
-                    String level = (String) singleSnapshot.child("en").getValue();
+                    String level = (String) singleSnapshot.getValue();
                     levels.add(level);
                 }
                 foo.accept(levels);
@@ -106,7 +106,7 @@ public class FirebaseDB {
     }
 
     private void loadFilter(Consumer<List<String>> foo, String filter_name) {
-        DatabaseReference ref = fDatabase.getReference(filter_name);
+        DatabaseReference ref = fDatabase.getReference("localize").child("ru").child(filter_name);
         ref.keepSynced(true);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -196,6 +196,23 @@ public class FirebaseDB {
         Query query = ref.orderByChild("is_favorite").equalTo(true);
         ref.keepSynced(true);
         getFromUserPicture(foo, query);
+    }
+
+    public void getNamesById(Consumer<String> foo, Long name_id) {
+        DatabaseReference ref = fDatabase.getReference("localize").child("en").child("picture_names").child(String.valueOf(name_id));
+        ref.keepSynced(true);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    foo.accept((String) singleSnapshot.getValue());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     public void getProcessIds(Consumer<List<String>> foo) {

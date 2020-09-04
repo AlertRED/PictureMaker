@@ -1,4 +1,4 @@
-package com.example.picturemaker.storage;
+package com.example.picturemaker.storage.room_tables;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -16,14 +16,11 @@ public class Picture {
     @ColumnInfo(name = "public_id")
     public String public_id;
 
+    @ColumnInfo(name = "name_id")
+    public Long name_id;
+
     @ColumnInfo(name = "name")
     public String name;
-
-    @ColumnInfo(name = "height")
-    public Integer height;
-
-    @ColumnInfo(name = "width")
-    public Integer width;
 
     @ColumnInfo(name = "level")
     public int level;
@@ -46,8 +43,10 @@ public class Picture {
     public Picture() {
     }
 
-    public Picture(@NonNull String public_id, Integer height, Integer width,String name, int level, int total_score, String public_picture, boolean is_favorite, int score, int progress) {
+    public Picture(int id, String public_id, Long name_id, String name, int level, int total_score, String public_picture, boolean is_favorite, int score, int progress) {
+        this.id = id;
         this.public_id = public_id;
+        this.name_id = name_id;
         this.name = name;
         this.level = level;
         this.total_score = total_score;
@@ -55,7 +54,5 @@ public class Picture {
         this.is_favorite = is_favorite;
         this.score = score;
         this.progress = progress;
-        this.height = height;
-        this.width = width;
     }
 }

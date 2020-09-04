@@ -2,7 +2,6 @@ package com.example.picturemaker;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.picturemaker.adapters.AdapterColorsRV;
-import com.example.picturemaker.storage.Picture;
+import com.example.picturemaker.storage.room_tables.Picture;
 import com.example.picturemaker.storage.Storage;
 import com.otaliastudios.zoom.ZoomLayout;
 

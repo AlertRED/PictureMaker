@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import com.example.picturemaker.R;
 import com.example.picturemaker.adapters.AdapterHomeNews;
 import com.example.picturemaker.adapters.AdapterHomePopular;
-import com.example.picturemaker.storage.Picture;
+import com.example.picturemaker.storage.room_tables.Picture;
 import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.support.PictureDiffUtilCallback;
 

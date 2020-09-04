@@ -1,6 +1,5 @@
-package com.example.picturemaker.storage;
+package com.example.picturemaker.storage.room_tables;
 
-import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;

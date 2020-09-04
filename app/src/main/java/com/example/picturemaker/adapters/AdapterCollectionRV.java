@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
-import com.example.picturemaker.storage.Picture;
+import com.example.picturemaker.storage.room_tables.Picture;
 import com.example.picturemaker.storage.Storage;
 
 import java.util.ArrayList;

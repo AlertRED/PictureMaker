@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.picturemaker.R;
 import com.example.picturemaker.adapters.AdapterCollectionRV;
-import com.example.picturemaker.storage.Picture;
+import com.example.picturemaker.storage.room_tables.Picture;
 import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.support.PictureDiffUtilCallback;
 

@@ -13,6 +13,9 @@ import androidx.room.RoomDatabase;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import com.example.picturemaker.storage.room_tables.Picture;
+import com.example.picturemaker.storage.room_tables.ViewPicture;
+
 import java.util.List;
 
 @Dao
@@ -65,7 +68,7 @@ interface PictureDao {
     Picture findByPublicId(String public_id);
 }
 
-@Database(entities = {Picture.class, ViewPicture.class}, version = 31, exportSchema = false)
+@Database(entities = {Picture.class, ViewPicture.class}, version = 34, exportSchema = false)
 public abstract class InternalDB extends RoomDatabase {
 
     private static volatile InternalDB INSTANCE;

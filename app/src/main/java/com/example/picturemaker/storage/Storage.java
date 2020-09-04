@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 
+import com.example.picturemaker.storage.room_tables.Picture;
+import com.example.picturemaker.storage.room_tables.ViewPicture;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Hashtable;
@@ -117,7 +119,6 @@ public class Storage {
                 });
                 break;
         }
-
     }
 
     public void LoadPicturesByNews() {
@@ -145,12 +146,15 @@ public class Storage {
     private void LoadPictures(String viewName, Map<String, Object> parameters) {
         this.firebase.LoadPictures(pictures -> {
             Executor myExecutor = Executors.newSingleThreadExecutor();
-            myExecutor.execute(() -> {
                 for (Picture picture : pictures) {
-                    long id = this.pictureDao.insertOrUpdate(picture);
-                    this.viewPictureDao.insert(new ViewPicture(viewName, id));
+                    this.firebase.getNamesById(name -> {
+                        picture.name = name;
+                        myExecutor.execute(() -> {
+                            long id = this.pictureDao.insertOrUpdate(picture);
+                            this.viewPictureDao.insert(new ViewPicture(viewName, id));
+                        });
+                    }, picture.name_id);
                 }
-            });
         }, parameters);
     }
 

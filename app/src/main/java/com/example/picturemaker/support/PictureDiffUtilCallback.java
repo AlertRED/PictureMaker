@@ -2,7 +2,7 @@ package com.example.picturemaker.support;
 
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.example.picturemaker.storage.Picture;
+import com.example.picturemaker.storage.room_tables.Picture;
 
 import java.util.List;
 
