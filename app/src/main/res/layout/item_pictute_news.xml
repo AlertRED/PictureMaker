@@ -24,7 +24,9 @@
             android:layout_weight="0"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            app:srcCompat="@color/cardview_shadow_end_color" />
+            app:srcCompat="@color/cardview_shadow_end_color"
+            android:contentDescription="@null"
+            tools:ignore="PrivateResource" />
 
     </androidx.cardview.widget.CardView>
 
@@ -35,7 +37,8 @@
         android:layout_alignBottom="@+id/card_view"
         android:layout_marginBottom="0dp"
         android:background="@drawable/bg_gradient"
-        android:paddingLeft="4dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="0dp"
         android:paddingTop="4dp"
         android:paddingBottom="8dp"
         android:translationZ="10dp">

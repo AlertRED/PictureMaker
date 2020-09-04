@@ -2,6 +2,7 @@ package com.example.picturemaker;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.picturemaker.adapters.AdapterColorsRV;
 import com.example.picturemaker.storage.Picture;
 import com.example.picturemaker.storage.Storage;
+import com.otaliastudios.zoom.ZoomLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,5 +49,8 @@ public class PaintActivity extends AppCompatActivity {
         rv_top.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         AdapterColorsRV rvMain_adapter = new AdapterColorsRV(this, colors, R.layout.item_color_brush, 0, 20);
         rv_top.setAdapter(rvMain_adapter);
+
+        ZoomLayout zoomLayout = findViewById(R.id.zoom_layout);
+        zoomLayout.zoomTo(0.7f, false);
     }
 }
