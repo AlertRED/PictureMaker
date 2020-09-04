@@ -60,7 +60,7 @@ public class GalleryFragment extends Fragment {
 
             Map<String, Object> parameters = new Hashtable<>();
 
-            if (!this.level.equals("Любой")) {
+            if (!this.level.equals(this.getString(R.string.any))) {
                 int num_level = 0;
                 if (this.level.equals(this.getString(R.string.level_type_low)))
                     num_level = 1;
@@ -70,9 +70,9 @@ public class GalleryFragment extends Fragment {
                     num_level = 3;
                 parameters.put("level", num_level);
             }
-            if (!this.genre.equals("Любой"))
+            if (!this.genre.equals(this.getString(R.string.any)))
                 parameters.put("genre", this.genre);
-            if (!this.author.equals("Любой")) {
+            if (!this.author.equals(this.getString(R.string.any))) {
                 parameters.put("author", this.author);
             }
             this.storage.LoadPicturesByGallery(parameters);

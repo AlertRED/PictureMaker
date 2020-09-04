@@ -1,6 +1,5 @@
 package com.example.picturemaker.storage;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class LocalStorage {
@@ -9,7 +8,10 @@ public class LocalStorage {
     private List<String> authors;
 
     public LocalStorage() {
-        this.levels = Arrays.asList("Легкий", "Средний", "Сложный");
+    }
+
+    public void SaveStorageLevels(List<String> levels) {
+        this.levels = levels;
     }
 
     public void SaveStorageGenres(List<String> genres) {

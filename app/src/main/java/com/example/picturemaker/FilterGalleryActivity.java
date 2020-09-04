@@ -26,7 +26,7 @@ public class FilterGalleryActivity extends AppCompatActivity {
 
     private void RefreshAuthors(List<String> authors) {
         List<String> new_list = new ArrayList<>();
-        new_list.add("Любой");
+        new_list.add(this.getString(R.string.any));
         new_list.addAll(authors);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new_list);
         this.spin_author.setAdapter(adapter);
@@ -36,7 +36,7 @@ public class FilterGalleryActivity extends AppCompatActivity {
 
     private void RefreshGenres(List<String> genres) {
         List<String> new_list = new ArrayList<>();
-        new_list.add("Любой");
+        new_list.add(this.getString(R.string.any));
         new_list.addAll(genres);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new_list);
         this.spin_genre.setAdapter(adapter);
@@ -46,7 +46,7 @@ public class FilterGalleryActivity extends AppCompatActivity {
 
     private void RefreshLevels(List<String> levels) {
         List<String> new_list = new ArrayList<>();
-        new_list.add("Любой");
+        new_list.add(this.getString(R.string.any));
         new_list.addAll(levels);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new_list);
         this.spin_level.setAdapter(adapter);

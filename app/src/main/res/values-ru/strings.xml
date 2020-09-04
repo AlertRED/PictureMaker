@@ -33,4 +33,5 @@
     <string name="level_type_low">Легкий</string>
     <string name="level_type_mean">Средний</string>
     <string name="level_type_high">Сложный</string>
+    <string name="any">Любой</string>
 </resources>

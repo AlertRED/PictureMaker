@@ -75,8 +75,34 @@ public class FirebaseDB {
         loadFilter(foo, "authors");
     }
 
+    public void loadLevels(Consumer<List<String>> foo) {
+        loadFilterLevels(foo);
+    }
+
     public void loadGenres(Consumer<List<String>> foo) {
         loadFilter(foo, "genres");
+    }
+
+    private void loadFilterLevels(Consumer<List<String>> foo) {
+        DatabaseReference ref = fDatabase.getReference("levels");
+        ref.keepSynced(true);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> levels = new ArrayList<>();
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    System.out.println(singleSnapshot.getValue());
+                    String level = (String) singleSnapshot.child("en").getValue();
+                    levels.add(level);
+                }
+                foo.accept(levels);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void loadFilter(Consumer<List<String>> foo, String filter_name) {

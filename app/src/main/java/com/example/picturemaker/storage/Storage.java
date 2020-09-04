@@ -58,7 +58,14 @@ public class Storage {
 
     public void GetLevels(Consumer<List<String>> foo) {
         List<String> levels = this.localStorage.GetLevels();
-        foo.accept(levels);
+        if (levels != null) {
+            foo.accept(levels);
+        } else {
+            this.firebase.loadLevels(levels1 -> {
+                this.localStorage.SaveStorageLevels(levels1);
+                GetLevels(foo);
+            });
+        }
     }
 
     public void GetAuthors(Consumer<List<String>> foo) {
