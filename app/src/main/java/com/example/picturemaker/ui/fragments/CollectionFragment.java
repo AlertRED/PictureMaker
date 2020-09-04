@@ -46,7 +46,6 @@ class ViewPagerFragmentAdapter extends FragmentStateAdapter {
 
 public class CollectionFragment extends Fragment {
 
-    private String[] titles = new String[]{"Лайки", "В процессе", "Завершенные"};
 
 
     @Override
@@ -64,6 +63,10 @@ public class CollectionFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        String[] titles = new String[]{this.getResources().getString(R.string.collection_tab_favorite),
+                this.getResources().getString(R.string.collection_tab_in_process),
+                this.getResources().getString(R.string.collection_tab_finished)};
 
         TabLayout tabLayout = Objects.requireNonNull(this.getActivity()).findViewById(R.id.tab_layout);
         ViewPager2 viewPager = this.getActivity().findViewById(R.id.view_pager);

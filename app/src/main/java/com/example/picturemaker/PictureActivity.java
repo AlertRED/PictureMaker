@@ -72,11 +72,12 @@ public class PictureActivity extends AppCompatActivity {
         this.storage.GetImage(this, this.picture.public_picture, image);
 
         this.name.setText(this.picture.name);
-        this.total_score.setText("Рейтинг: ".concat(String.valueOf(this.picture.total_score)));
+        String str_rating = getString(R.string.activity_picture_rating).concat(": ");
+        this.total_score.setText(str_rating.concat(String.valueOf(this.picture.total_score)));
         this.favorite.setImageResource(this.picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
 
-
-        this.my_score.setText("Ваша оценка: ".concat(String.valueOf(this.picture.score)));
+        String str_my_score = getString(R.string.activity_picture_my_score).concat(": ");
+        this.my_score.setText(str_my_score.concat(String.valueOf(this.picture.score)));
         final Activity activity = this;
 
         this.button_start.setOnClickListener(v -> {

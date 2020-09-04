@@ -22,4 +22,12 @@
     <string name="fragment_profile_finished">Завершено</string>
     <string name="fragment_profile_in_process">В процессе</string>
     <string name="fragment_profile_settings">Настройки</string>
+    <string name="collection_tab_favorite">Лайки</string>
+    <string name="collection_tab_in_process">В процессе</string>
+    <string name="collection_tab_finished">Завершенные</string>
+    <string name="sort_first_popular">Сначала популярные</string>
+    <string name="sort_descending_ratings">Оценки по убыванию</string>
+    <string name="sort_ascending_ratings">Оценки по возрастанию</string>
+    <string name="sort_descending_difficulty">Сложность по убыванию</string>
+    <string name="sort_ascending_difficulty">Сложность по возрастанию</string>
 </resources>

@@ -105,7 +105,13 @@ public class GalleryFragment extends Fragment {
         });
 
         Spinner category = (Spinner) Objects.requireNonNull(this.getActivity()).findViewById(R.id.spinner);
-        String[] items = new String[]{"Сначало популярное", "Оценки по убыванию", "Оценки по возрастанию", "Сложность по убыванию", "Сложность по возрастанию"};
+
+        String[] items = new String[]{this.getString(R.string.sort_first_popular),
+                this.getString(R.string.sort_descending_ratings),
+                this.getString(R.string.sort_ascending_ratings),
+                this.getString(R.string.sort_descending_difficulty),
+                this.getString(R.string.sort_ascending_difficulty)};
+
         ArrayAdapter<String> category_adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), android.R.layout.simple_spinner_dropdown_item, items);
         category.setAdapter(category_adapter);
 

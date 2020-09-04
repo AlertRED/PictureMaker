@@ -16,9 +16,17 @@
     <string name="fragment_gallery_filter">Filter</string>
     <string name="fragment_home_news">News</string>
     <string name="fragment_home_popular">Popular</string>
-    <string name="fragment_profile_id" translatable="false">Id</string>
+    <string name="fragment_profile_id">Id</string>
     <string name="fragment_profile_level">Level</string>
     <string name="fragment_profile_finished">Finished</string>
     <string name="fragment_profile_in_process">In process</string>
     <string name="fragment_profile_settings">Settings</string>
+    <string name="collection_tab_favorite">Favorites</string>
+    <string name="collection_tab_in_process">In process</string>
+    <string name="collection_tab_finished">Finished</string>
+    <string name="sort_first_popular">First popular</string>
+    <string name="sort_descending_ratings">Descending ratings</string>
+    <string name="sort_ascending_ratings">Ascending ratings</string>
+    <string name="sort_descending_difficulty">Descending difficulty</string>
+    <string name="sort_ascending_difficulty">Ascending difficulty</string>
 </resources>
