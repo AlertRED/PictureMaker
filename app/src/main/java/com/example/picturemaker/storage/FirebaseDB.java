@@ -143,32 +143,33 @@ public class FirebaseDB {
         ref.keepSynced(true);
         Query picturesQuery = ref;
 
+
         if (parameters.containsKey("picture_id")) {
-            String is_popular = (String) parameters.get("picture_id");
-            picturesQuery = ref.orderByKey().equalTo(is_popular);
+            String picture_id = (String) parameters.get("picture_id");
+            picturesQuery = picturesQuery.orderByKey().equalTo(picture_id);
         }
         if (parameters.containsKey("is_popular")) {
             Boolean is_popular = (Boolean) parameters.get("is_popular");
             assert is_popular != null;
-            picturesQuery = ref.orderByChild("is_popular").equalTo(is_popular);
+            picturesQuery = picturesQuery.orderByChild("is_popular").equalTo(is_popular);
         }
         if (parameters.containsKey("is_last")) {
             Integer count = (Integer) parameters.get("count");
             assert count != null;
-            picturesQuery = ref.limitToLast(count);
+            picturesQuery = picturesQuery.limitToLast(count);
         }
         if (parameters.containsKey("level")) {
             Integer level = (Integer) parameters.get("level");
             assert level != null;
-            picturesQuery = ref.orderByChild("level").startAt(level).endAt(level);
+            picturesQuery = picturesQuery.orderByChild("level").startAt(level).endAt(level);
         }
         if (parameters.containsKey("author")) {
             String author = (String) parameters.get("author");
-            picturesQuery = ref.orderByChild("author").equalTo(author);
+            picturesQuery = picturesQuery.orderByChild("author").equalTo(author);
         }
         if (parameters.containsKey("genre")) {
             String genre = (String) parameters.get("genre");
-            picturesQuery = ref.orderByChild("genre").equalTo(genre);
+            picturesQuery = picturesQuery.orderByChild("genre").equalTo(genre);
         }
 
         picturesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
