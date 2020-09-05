@@ -102,8 +102,7 @@ public class GalleryFragment extends Fragment {
 
         Spinner category = (Spinner) Objects.requireNonNull(this.getActivity()).findViewById(R.id.spinner);
 
-        String[] items = new String[]{this.getString(R.string.sort_first_popular),
-                this.getString(R.string.sort_descending_ratings),
+        String[] items = new String[]{this.getString(R.string.sort_descending_ratings),
                 this.getString(R.string.sort_ascending_ratings),
                 this.getString(R.string.sort_descending_difficulty),
                 this.getString(R.string.sort_ascending_difficulty)};
