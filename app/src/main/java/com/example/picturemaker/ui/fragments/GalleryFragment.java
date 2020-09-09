@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,10 +22,12 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.example.picturemaker.FilterGalleryActivity;
 import com.example.picturemaker.R;
 import com.example.picturemaker.adapters.AdapterGalleryRV;
-import com.example.picturemaker.storage.room_tables.Picture;
 import com.example.picturemaker.storage.Storage;
+import com.example.picturemaker.storage.room_tables.Picture;
 import com.example.picturemaker.support.PictureDiffUtilCallback;
+import com.example.picturemaker.support.SpacesItemDecoration;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +44,9 @@ public class GalleryFragment extends Fragment {
     private String author;
     private String genre;
     private String level;
+    private Map<String, Object> parametersFilter = new Hashtable<>();
+    private Map<String, Object> parametersSort = new Hashtable<>();
+    private Spinner category;
 
     @Nullable
     @Override
@@ -53,30 +59,26 @@ public class GalleryFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            System.err.println(requestCode);
             this.genre = data.getStringExtra("genre");
             this.level = data.getStringExtra("level");
             this.author = data.getStringExtra("author");
 
             Map<String, Object> parameters = new Hashtable<>();
 
-            if (!this.level.equals(this.getString(R.string.any))) {
-                int num_level = 0;
-                if (this.level.equals(this.getString(R.string.level_type_low)))
-                    num_level = 1;
-                else if (this.level.equals(this.getString(R.string.level_type_low)))
-                    num_level = 2;
-                else if (this.level.equals(this.getString(R.string.level_type_low)))
-                    num_level = 3;
-                parameters.put("level", num_level);
-            }
+            if (!this.level.equals(this.getString(R.string.any)))
+                parameters.put("level", this.level);
             if (!this.genre.equals(this.getString(R.string.any)))
                 parameters.put("genre", this.genre);
-            if (!this.author.equals(this.getString(R.string.any))) {
+            if (!this.author.equals(this.getString(R.string.any)))
                 parameters.put("author", this.author);
-            }
-            this.storage.LoadPicturesByGallery(parameters);
+
+            this.parametersFilter = parameters;
+            this.refreshData();
         }
+    }
+
+    private void refreshData() {
+        this.storage.LoadPicturesByGallery(this.parametersFilter, this.parametersSort);
     }
 
     private void RefreshAdapter(List<Picture> pictures) {
@@ -100,26 +102,59 @@ public class GalleryFragment extends Fragment {
             startActivityForResult(intent, 0);
         });
 
-        Spinner category = (Spinner) Objects.requireNonNull(this.getActivity()).findViewById(R.id.spinner);
+        recyclerView = (RecyclerView) Objects.requireNonNull(this.getActivity()).findViewById(R.id.rv_gallery);
+        ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
+        adapterGalleryRV = new AdapterGalleryRV(this.getContext(), R.layout.item_pictute_gallery, 30, 30, false);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
 
+        recyclerView.addItemDecoration(new SpacesItemDecoration(16));
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapterGalleryRV);
+
+        LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView("Gallery");
+        liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
+
+
+        this.category = (Spinner) Objects.requireNonNull(this.getActivity()).findViewById(R.id.spinner);
         String[] items = new String[]{this.getString(R.string.sort_descending_ratings),
                 this.getString(R.string.sort_ascending_ratings),
                 this.getString(R.string.sort_descending_difficulty),
                 this.getString(R.string.sort_ascending_difficulty)};
 
         ArrayAdapter<String> category_adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), android.R.layout.simple_spinner_dropdown_item, items);
-        category.setAdapter(category_adapter);
+        this.category.setAdapter(category_adapter);
+        this.category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                HashMap<String, Object> parameters = new HashMap<>();
+                switch (i) {
+                    case 0:
+                        parameters.put("order_field", "total_score");
+                        parameters.put("is_asc", false);
+                        break;
+                    case 1:
+                        parameters.put("order_field", "total_score");
+                        parameters.put("is_asc", true);
+                        break;
+                    case 2:
+                        parameters.put("order_field", "level_id");
+                        parameters.put("is_asc", false);
+                        break;
+                    case 3:
+                        parameters.put("order_field", "level_id");
+                        parameters.put("is_asc", true);
+                        break;
+                }
+                parametersSort = parameters;
+                refreshData();
+            }
 
-        recyclerView = (RecyclerView) this.getActivity().findViewById(R.id.rv_gallery);
-        ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
-        adapterGalleryRV = new AdapterGalleryRV(this.getContext(), R.layout.item_pictute_gallery, 30, 30, false);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapterGalleryRV);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-        LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView("Gallery");
-        liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
-        this.storage.LoadPicturesByGallery(new Hashtable<>());
+            }
+        });
     }
 }

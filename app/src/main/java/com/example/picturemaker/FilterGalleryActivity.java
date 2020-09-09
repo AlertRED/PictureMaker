@@ -13,6 +13,7 @@ import com.example.picturemaker.storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class FilterGalleryActivity extends AppCompatActivity {
@@ -24,30 +25,30 @@ public class FilterGalleryActivity extends AppCompatActivity {
     private String level;
     private String author;
 
-    private void RefreshAuthors(List<String> authors) {
+    private void RefreshAuthors(Map<String, Integer> authors) {
         List<String> new_list = new ArrayList<>();
         new_list.add(this.getString(R.string.any));
-        new_list.addAll(authors);
+        new_list.addAll(authors.keySet());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new_list);
         this.spin_author.setAdapter(adapter);
         if (this.author != null)
             this.spin_author.setSelection(new_list.indexOf(this.author));
     }
 
-    private void RefreshGenres(List<String> genres) {
+    private void RefreshGenres(Map<String, Integer> genres) {
         List<String> new_list = new ArrayList<>();
         new_list.add(this.getString(R.string.any));
-        new_list.addAll(genres);
+        new_list.addAll(genres.keySet());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new_list);
         this.spin_genre.setAdapter(adapter);
         if (this.genre != null)
             this.spin_genre.setSelection(new_list.indexOf(this.genre));
     }
 
-    private void RefreshLevels(List<String> levels) {
+    private void RefreshLevels(Map<String, Integer> levels) {
         List<String> new_list = new ArrayList<>();
         new_list.add(this.getString(R.string.any));
-        new_list.addAll(levels);
+        new_list.addAll(levels.keySet());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new_list);
         this.spin_level.setAdapter(adapter);
         if (this.level != null)

@@ -1,36 +1,61 @@
 package com.example.picturemaker.storage;
 
-import java.util.List;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.TreeMap;
+
+class ValueComparator implements Comparator<String> {
+    Map<String, Integer> base;
+
+    public ValueComparator(Map<String, Integer> base) {
+        this.base = base;
+    }
+
+    public int compare(String a, String b) {
+        Integer _a = base.get(a);
+        Integer _b = base.get(b);
+        assert _a != null;
+        assert _b != null;
+        if (_a < _b) {
+            return -1;
+        } else if (_a > _b) {
+            return 1;
+        }
+        return 0;
+    }
+}
 
 public class LocalStorage {
-    private List<String> genres;
-    private List<String> levels;
-    private List<String> authors;
+    private Map<String, Integer> genres;
+    private Map<String, Integer> levels;
+    private Map<String, Integer> authors;
 
     public LocalStorage() {
     }
 
-    public void SaveStorageLevels(List<String> levels) {
-        this.levels = levels;
+    public void SaveStorageLevels(Map<String, Integer> levels) {
+        ValueComparator bvc = new ValueComparator(levels);
+        this.levels = new TreeMap<>(bvc);
+        this.levels.putAll(levels);
     }
 
-    public void SaveStorageGenres(List<String> genres) {
+    public void SaveStorageGenres(Map<String, Integer> genres) {
         this.genres = genres;
     }
 
-    public void SaveStorageAuthors(List<String> authors) {
+    public void SaveStorageAuthors(Map<String, Integer> authors) {
         this.authors = authors;
     }
 
-    public List<String> GetAuthors() {
+    public Map<String, Integer> GetAuthors() {
         return this.authors;
     }
 
-    public List<String> GetGenres() {
+    public Map<String, Integer> GetGenres() {
         return this.genres;
     }
 
-    public List<String> GetLevels() {
+    public Map<String, Integer> GetLevels() {
         return this.levels;
     }
 

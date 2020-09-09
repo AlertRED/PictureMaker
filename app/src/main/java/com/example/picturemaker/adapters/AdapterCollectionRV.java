@@ -81,12 +81,6 @@ public class AdapterCollectionRV extends RecyclerView.Adapter<ViewHolderCollecti
 
         holder.favorite.setImageResource(picture.is_favorite ? R.drawable.ic_favorite_36 : R.drawable.ic_unfavorite_36);
         holder.favorite.setOnClickListener(v -> storage.SetFavoritePicture(picture.id, !picture.is_favorite));
-
-        if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && (!this.first || position > 0)) {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
-            params.setMargins(this.spacing_horizontal, this.spacing_vertical, 0, 0);
-            holder.itemView.setLayoutParams(params);
-        }
     }
 
     public List<Picture> getData() {

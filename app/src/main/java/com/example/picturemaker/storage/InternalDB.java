@@ -27,11 +27,14 @@ interface ViewPictureDao {
     @Query("DELETE FROM view_picture WHERE viewName IS :viewName AND pictureId=:pictureId")
     void deleteByViewAndPicture(String viewName, long pictureId);
 
-    @Query("SELECT picture.* FROM picture INNER JOIN view_picture ON view_picture.viewName=:viewName AND view_picture.pictureId=picture.id  GROUP BY picture.id")
+    @Query("SELECT picture.* FROM picture INNER JOIN view_picture ON view_picture.viewName=:viewName AND view_picture.pictureId=picture.id ORDER BY view_picture.id")
     LiveData<List<Picture>> getPicturesFromView(final String viewName);
 
     @Query("DELETE FROM view_picture WHERE view_picture.viewName=:viewName")
     void deleteAllPicturesFromView(final String viewName);
+
+    @Query("DELETE FROM view_picture")
+    void deleteAll();
 }
 
 @Dao
@@ -68,7 +71,7 @@ interface PictureDao {
     Picture findByPublicId(String public_id);
 }
 
-@Database(entities = {Picture.class, ViewPicture.class}, version = 34, exportSchema = false)
+@Database(entities = {Picture.class, ViewPicture.class}, version = 37, exportSchema = false)
 public abstract class InternalDB extends RoomDatabase {
 
     private static volatile InternalDB INSTANCE;

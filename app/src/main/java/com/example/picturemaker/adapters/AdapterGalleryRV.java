@@ -83,11 +83,6 @@ public class AdapterGalleryRV extends RecyclerView.Adapter<ViewHolderGalleryRV> 
             context.startActivity(intent);
         });
 
-        if ((this.spacing_horizontal > 0 || this.spacing_vertical > 0) && (!this.first || position > 0)) {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.itemView.getLayoutParams().width, holder.itemView.getLayoutParams().height);
-            params.setMargins(this.spacing_horizontal, this.spacing_vertical, 0, 0);
-            holder.itemView.setLayoutParams(params);
-        }
     }
 
     public List<Picture> getData() {

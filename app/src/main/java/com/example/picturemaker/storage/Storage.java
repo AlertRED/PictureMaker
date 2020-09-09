@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import androidx.collection.LongSparseArray;
 import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 
 public class Storage {
 
@@ -46,8 +46,8 @@ public class Storage {
         return this.firebase.getUser();
     }
 
-    public void GetGenres(Consumer<List<String>> foo) {
-        List<String> genres = this.localStorage.GetGenres();
+    public void GetGenres(Consumer<Map<String, Integer>> foo) {
+        Map<String, Integer> genres = this.localStorage.GetGenres();
         if (genres != null) {
             foo.accept(genres);
         } else {
@@ -58,8 +58,8 @@ public class Storage {
         }
     }
 
-    public void GetLevels(Consumer<List<String>> foo) {
-        List<String> levels = this.localStorage.GetLevels();
+    public void GetLevels(Consumer<Map<String, Integer>> foo) {
+        Map<String, Integer> levels = this.localStorage.GetLevels();
         if (levels != null) {
             foo.accept(levels);
         } else {
@@ -70,8 +70,8 @@ public class Storage {
         }
     }
 
-    public void GetAuthors(Consumer<List<String>> foo) {
-        List<String> authors = this.localStorage.GetAuthors();
+    public void GetAuthors(Consumer<Map<String, Integer>> foo) {
+        Map<String, Integer> authors = this.localStorage.GetAuthors();
         if (authors != null) {
             foo.accept(authors);
         } else {
@@ -86,9 +86,27 @@ public class Storage {
         return this.viewPictureDao.getPicturesFromView(viewName);
     }
 
-    public void LoadPicturesByGallery(Map<String, Object> parameters) {
+    public void LoadPicturesByGallery(Map<String, Object> paramsFilter, Map<String, Object>  paramsSort) {
+        Map<String, Object> params = new Hashtable<>();
+
+        if (paramsFilter.containsKey("genre")) {
+            String genre_id = (String) paramsFilter.remove("genre");
+            params.put("genre_id", localStorage.GetGenres().get(genre_id));
+        }
+        if (paramsFilter.containsKey("level")) {
+            String level_id = (String) paramsFilter.remove("level");
+            params.put("level_id", localStorage.GetLevels().get(level_id));
+        }
+        if (paramsFilter.containsKey("author")) {
+            String author_id = (String) paramsFilter.remove("author");
+            params.put("author_id", localStorage.GetAuthors().get(author_id));
+        }
+
+        if (!paramsFilter.containsKey("level") || paramsSort.get("order_field") != "level_id")
+            params.putAll(paramsSort);
+
         this.DeletePictures("Gallery");
-        this.LoadPictures("Gallery", parameters);
+        this.LoadPictures("Gallery", params);
     }
 
     public void LoadPicturesByCollection(String collectionType) {
@@ -143,18 +161,21 @@ public class Storage {
         myExecutor.execute(() -> this.viewPictureDao.deleteAllPicturesFromView(viewName));
     }
 
+    public void LoadFilters(){
+        this.firebase.loadLevels(levels -> this.localStorage.SaveStorageLevels(levels));
+        this.firebase.loadGenres(genres -> this.localStorage.SaveStorageGenres(genres));
+        this.firebase.loadAuthors(authors -> this.localStorage.SaveStorageAuthors(authors));
+    }
+
     private void LoadPictures(String viewName, Map<String, Object> parameters) {
         this.firebase.LoadPictures(pictures -> {
             Executor myExecutor = Executors.newSingleThreadExecutor();
-                for (Picture picture : pictures) {
-                    this.firebase.getNamesById(name -> {
-                        picture.name = name;
-                        myExecutor.execute(() -> {
-                            long id = this.pictureDao.insertOrUpdate(picture);
-                            this.viewPictureDao.insert(new ViewPicture(viewName, id));
-                        });
-                    }, picture.name_id);
-                }
+            for (Picture picture : pictures) {
+                myExecutor.execute(() -> {
+                    long id = this.pictureDao.insertOrUpdate(picture);
+                    this.viewPictureDao.insert(new ViewPicture(viewName, id));
+                });
+            }
         }, parameters);
     }
 
@@ -164,6 +185,11 @@ public class Storage {
 
     public void GetImage(Context context, String picture_name, Consumer<Bitmap> foo) {
         this.firebase.loadImage(context, picture_name, foo, false);
+    }
+
+    public void DeleteAllViewsPictures(){
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> this.viewPictureDao.deleteAll());
     }
 
     public void SetFavoritePicture(long pictureId, boolean isFavorite) {

@@ -17,6 +17,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Storage storage = Storage.getInstance(this);
         storage.firebase.login(this, this::finish);
+        storage.LoadFilters();
+        storage.DeleteAllViewsPictures();
     }
 
     @Override

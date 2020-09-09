@@ -19,6 +19,7 @@ import com.example.picturemaker.adapters.AdapterCollectionRV;
 import com.example.picturemaker.storage.room_tables.Picture;
 import com.example.picturemaker.storage.Storage;
 import com.example.picturemaker.support.PictureDiffUtilCallback;
+import com.example.picturemaker.support.SpacesItemDecoration;
 
 import java.util.List;
 import java.util.Objects;
@@ -60,6 +61,7 @@ public class TabFragment extends Fragment {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         rvMain.setLayoutManager(layoutManager);
+        rvMain.addItemDecoration(new SpacesItemDecoration(16));
 
         LiveData<List<Picture>> liveData = this.storage.GetLiveDataFromView(collectionType);
         liveData.observe(getViewLifecycleOwner(), this::RefreshAdapter);
