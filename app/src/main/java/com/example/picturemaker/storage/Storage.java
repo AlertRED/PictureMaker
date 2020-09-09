@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-import androidx.collection.LongSparseArray;
 import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 
@@ -86,7 +85,7 @@ public class Storage {
         return this.viewPictureDao.getPicturesFromView(viewName);
     }
 
-    public void LoadPicturesByGallery(Map<String, Object> paramsFilter, Map<String, Object>  paramsSort) {
+    public void LoadPicturesByGallery(Map<String, Object> paramsFilter, Map<String, Object> paramsSort) {
         Map<String, Object> params = new Hashtable<>();
 
         if (paramsFilter.containsKey("genre")) {
@@ -161,7 +160,7 @@ public class Storage {
         myExecutor.execute(() -> this.viewPictureDao.deleteAllPicturesFromView(viewName));
     }
 
-    public void LoadFilters(){
+    public void LoadFilters() {
         this.firebase.loadLevels(levels -> this.localStorage.SaveStorageLevels(levels));
         this.firebase.loadGenres(genres -> this.localStorage.SaveStorageGenres(genres));
         this.firebase.loadAuthors(authors -> this.localStorage.SaveStorageAuthors(authors));
@@ -187,7 +186,7 @@ public class Storage {
         this.firebase.loadImage(context, picture_name, foo, false);
     }
 
-    public void DeleteAllViewsPictures(){
+    public void DeleteAllViewsPictures() {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> this.viewPictureDao.deleteAll());
     }

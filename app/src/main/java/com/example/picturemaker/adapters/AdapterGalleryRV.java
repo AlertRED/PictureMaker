@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.picturemaker.PictureActivity;
 import com.example.picturemaker.R;
-import com.example.picturemaker.storage.room_tables.Picture;
 import com.example.picturemaker.storage.Storage;
+import com.example.picturemaker.storage.room_tables.Picture;
 
 import java.util.ArrayList;
 import java.util.List;

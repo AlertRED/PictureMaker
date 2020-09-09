@@ -5,8 +5,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.picturemaker.storage.FirebaseDB;
-import com.example.picturemaker.storage.InternalDB;
 import com.example.picturemaker.storage.Storage;
 
 
